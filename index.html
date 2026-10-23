@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YourName | Technical Artist</title>
+<title>Wayne | Technical Artist</title>
 <style>
 :root{
     --bg:#0f1117;
@@ -19,10 +19,16 @@
     box-sizing:border-box;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
 }
+html, body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 body{
     background-color:var(--bg);
     color:var(--text);
     line-height:1.6;
+    flex: 1;
 }
 /* 导航栏 */
 nav{
@@ -58,11 +64,13 @@ nav{
 .nav-filter button.active{
     color:var(--accent);
 }
-/* 主容器 */
+/* 主容器，占满剩余空间，把footer往下压 */
 .container{
     max-width:1200px;
     margin:0 auto;
     padding:3rem clamp(1rem,5vw,4rem);
+    flex: 1;
+    width:100%;
 }
 /* 卡片网格 */
 .grid{
@@ -105,10 +113,11 @@ nav{
     font-size:0.9rem;
     color:var(--muted);
 }
-/* 底部邮箱 */
+/* 底部邮箱，永久在文档底部 */
 footer{
     max-width:1200px;
-    margin:4rem auto 3rem;
+    width:100%;
+    margin:4rem auto 2rem;
     padding:0 clamp(1rem,5vw,4rem);
     color:var(--muted);
 }
@@ -130,10 +139,10 @@ footer a{
 
 <main class="container">
     <div class="grid" id="cardGrid">
-        <!-- ========== 这里是作品卡片，category="work" ========== -->
+        <!-- ========== 作品 Project / work ========== -->
         <div class="card" data-category="work">
-            <a href="./Res/project1.html">
-                <img class="card-img" src="./Res/thumb/project1.jpg" alt="项目截图">
+            <a href="./Res/Project/BigMapCombat/index.html">
+                <img class="card-img" src="./Res/Project/BigMapCombat/thumb.jpg" alt="项目截图">
                 <div class="card-body">
                     <h3 class="card-title">大地图战斗渲染</h3>
                     <p class="card-desc">URP管线、合批优化、LOD与植被渲染方案</p>
@@ -141,8 +150,8 @@ footer a{
             </a>
         </div>
         <div class="card" data-category="work">
-            <a href="./Res/project2.html">
-                <img class="card-img" src="./Res/thumb/project2.jpg" alt="项目截图">
+            <a href="./Res/Project/CharacterPBR/index.html">
+                <img class="card-img" src="./Res/Project/CharacterPBR/thumb.jpg" alt="项目截图">
                 <div class="card-body">
                     <h3 class="card-title">角色PBR渲染</h3>
                     <p class="card-desc">角色材质、皮肤次表面、贴图烘焙管线</p>
@@ -150,10 +159,10 @@ footer a{
             </a>
         </div>
 
-        <!-- ========== 这里是Demo卡片，category="demo" ========== -->
+        <!-- ========== Demo / demo ========== -->
         <div class="card" data-category="demo">
-            <a href="./Res/demo1.html">
-                <img class="card-img" src="./Res/thumb/demo1.jpg" alt="Demo截图">
+            <a href="./Res/Demo/VertexAnim/index.html">
+                <img class="card-img" src="./Res/Demo/VertexAnim/thumb.jpg" alt="Demo截图">
                 <div class="card-body">
                     <h3 class="card-title">顶点动画Demo</h3>
                     <p class="card-desc">GPU顶点动画、实例化渲染性能测试</p>
@@ -161,8 +170,8 @@ footer a{
             </a>
         </div>
         <div class="card" data-category="demo">
-            <a href="./Res/thumb/demo2.jpg">
-                <img class="card-img" src="./Res/thumb/demo2.jpg" alt="Demo截图">
+            <a href="./Res/Demo/PostProcess/index.html">
+                <img class="card-img" src="./Res/Demo/PostProcess/thumb.jpg" alt="Demo截图">
                 <div class="card-body">
                     <h3 class="card-title">后处理效果Demo</h3>
                     <p class="card-desc">自定义后处理Pass、色调映射、Bloom</p>
@@ -173,7 +182,7 @@ footer a{
 </main>
 
 <footer>
-    Contact: <a href="mailto:yourmail@example.com">yourmail@example.com</a>
+    Contact: <a href="mailto:wywayne@outlook.com">yourmail@example.com</a>
 </footer>
 
 <script>
