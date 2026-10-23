@@ -1,2 +1,199 @@
-<!-- index.html 最简测试 -->
-<h1>Hello GitHub Pages</h1>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YourName | Technical Artist</title>
+<style>
+:root{
+    --bg:#0f1117;
+    --text:#e6edf3;
+    --muted:#8b949e;
+    --accent:#38bdf8;
+    --card-bg:#161b22;
+    --border:#30363d;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+}
+body{
+    background-color:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+}
+/* 导航栏 */
+nav{
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    z-index:10;
+    padding:1.5rem clamp(1rem,5vw,4rem);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.nav-name{
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--text);
+    text-decoration:none;
+}
+.nav-filter{
+    display:flex;
+    gap:1.5rem;
+}
+.nav-filter button{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-size:1rem;
+    cursor:pointer;
+    transition:.2s;
+}
+.nav-filter button:hover,
+.nav-filter button.active{
+    color:var(--accent);
+}
+/* 主容器 */
+.container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:3rem clamp(1rem,5vw,4rem);
+}
+/* 卡片网格 */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:2rem;
+}
+.card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+    transition:transform .2s ease,border-color .2s ease;
+}
+.card:hover{
+    transform:translateY(-4px);
+    border-color:var(--accent);
+}
+.card.hidden{
+    display:none;
+}
+.card a{
+    text-decoration:none;
+    color:inherit;
+    display:block;
+}
+.card-img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+.card-body{
+    padding:1rem;
+}
+.card-title{
+    font-size:1.1rem;
+    margin-bottom:0.4rem;
+}
+.card-desc{
+    font-size:0.9rem;
+    color:var(--muted);
+}
+/* 底部邮箱 */
+footer{
+    max-width:1200px;
+    margin:4rem auto 3rem;
+    padding:0 clamp(1rem,5vw,4rem);
+    color:var(--muted);
+}
+footer a{
+    color:var(--accent);
+    text-decoration:none;
+}
+</style>
+</head>
+<body>
+<nav>
+    <a href="./index.html" class="nav-name">Your Name</a>
+    <div class="nav-filter">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="work">作品</button>
+        <button data-filter="demo">Demo</button>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="grid" id="cardGrid">
+        <!-- ========== 这里是作品卡片，category="work" ========== -->
+        <div class="card" data-category="work">
+            <a href="./Res/project1.html">
+                <img class="card-img" src="./Res/thumb/project1.jpg" alt="项目截图">
+                <div class="card-body">
+                    <h3 class="card-title">大地图战斗渲染</h3>
+                    <p class="card-desc">URP管线、合批优化、LOD与植被渲染方案</p>
+                </div>
+            </a>
+        </div>
+        <div class="card" data-category="work">
+            <a href="./Res/project2.html">
+                <img class="card-img" src="./Res/thumb/project2.jpg" alt="项目截图">
+                <div class="card-body">
+                    <h3 class="card-title">角色PBR渲染</h3>
+                    <p class="card-desc">角色材质、皮肤次表面、贴图烘焙管线</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- ========== 这里是Demo卡片，category="demo" ========== -->
+        <div class="card" data-category="demo">
+            <a href="./Res/demo1.html">
+                <img class="card-img" src="./Res/thumb/demo1.jpg" alt="Demo截图">
+                <div class="card-body">
+                    <h3 class="card-title">顶点动画Demo</h3>
+                    <p class="card-desc">GPU顶点动画、实例化渲染性能测试</p>
+                </div>
+            </a>
+        </div>
+        <div class="card" data-category="demo">
+            <a href="./Res/thumb/demo2.jpg">
+                <img class="card-img" src="./Res/thumb/demo2.jpg" alt="Demo截图">
+                <div class="card-body">
+                    <h3 class="card-title">后处理效果Demo</h3>
+                    <p class="card-desc">自定义后处理Pass、色调映射、Bloom</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    Contact: <a href="mailto:yourmail@example.com">yourmail@example.com</a>
+</footer>
+
+<script>
+const filterBtns = document.querySelectorAll('.nav-filter button');
+const cards = document.querySelectorAll('.card');
+
+filterBtns.forEach(btn=>{
+    btn.onclick = ()=>{
+        filterBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const type = btn.dataset.filter;
+        cards.forEach(card=>{
+            if(type === 'all' || card.dataset.category === type){
+                card.classList.remove('hidden');
+            }else{
+                card.classList.add('hidden');
+            }
+        })
+    }
+})
+</script>
+</body>
+</html>
