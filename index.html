@@ -202,7 +202,61 @@ filterBtns.forEach(btn=>{
             }
         })
     }
-})
+});
+/* ========== 新增：背景星点闪烁效果 ========== */
+const STAR_COUNT = 60;        // 星点数量，建议 40–70
+const STAR_COLOR = "120, 200, 255"; // 淡蓝
+
+function createStars() {
+    const container = document.createElement("div");
+    container.style.cssText = `
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+        background: transparent;
+    `;
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+        const star = document.createElement("span");
+        const size = Math.random() * 1.6 + 0.4;
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const delay = Math.random() * 4;
+        const duration = Math.random() * 3 + 3;
+
+        star.style.cssText = `
+            position: absolute;
+            left: ${left}%;
+            top: ${top}%;
+            width: ${size}px;
+            height: ${size}px;
+            background: rgba(${STAR_COLOR}, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 ${size * 2}px rgba(${STAR_COLOR}, 0.6);
+            animation: twinkle ${duration}s ease-in-out ${delay}s infinite;
+        `;
+
+        container.appendChild(star);
+    }
+
+    document.body.appendChild(container);
+}
+
+// 添加星点闪烁动画
+const style = document.createElement("style");
+style.textContent = `
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.15; }
+        50% { opacity: 0.7; }
+    }
+`;
+document.head.appendChild(style);
+
+createStars();
 </script>
 </body>
 </html>
