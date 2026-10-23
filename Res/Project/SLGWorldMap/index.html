@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目名称 | YourName TA</title>
+<style>
+:root{
+    --bg:#0f1117;
+    --text:#e6edf3;
+    --muted:#8b949e;
+    --accent:#38bdf8;
+    --card-bg:#161b22;
+    --border:#30363d;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+}
+html, body {
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+}
+body{
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+    flex:1;
+}
+/* 导航 */
+nav{
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    z-index:2;
+    padding:1.5rem clamp(1rem,5vw,4rem);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.nav-title{
+    font-size:1.25rem;
+    font-weight:600;
+}
+.nav-back{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:1rem;
+}
+.nav-back:hover{
+    color:var(--accent);
+}
+.container{
+    max-width:900px;
+    margin:0 auto;
+    padding:3rem clamp(1rem,5vw,4rem);
+    flex:1;
+    position:relative;
+    z-index:1;
+}
+/* 主媒体播放区 */
+.media-main{
+    width:100%;
+    background:#000;
+    border-radius:8px;
+    overflow:hidden;
+    margin-bottom:1rem;
+    aspect-ratio:16 / 9;
+}
+.media-main iframe,
+.media-main img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border:none;
+}
+/* 缩略图滚动栏 */
+.thumb-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    margin-bottom:2.5rem;
+}
+.thumb-arrow{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    color:var(--text);
+    background:var(--card-bg);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+    user-select:none;
+}
+.thumb-arrow:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+}
+.thumb-list{
+    display:flex;
+    gap:0.75rem;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    flex:1;
+    padding:0.2rem 0;
+}
+.thumb-list::-webkit-scrollbar{
+    height:4px;
+}
+.thumb-list::-webkit-scrollbar-thumb{
+    background:var(--border);
+    border-radius:2px;
+}
+.thumb-item{
+    width:120px;
+    height:68px;
+    border-radius:4px;
+    overflow:hidden;
+    flex-shrink:0;
+    border:1px solid transparent;
+    cursor:pointer;
+    opacity:0.7;
+    transition:.2s;
+}
+.thumb-item.active{
+    border-color:var(--accent);
+    opacity:1;
+}
+.thumb-item:hover{
+    opacity:1;
+}
+.thumb-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+/* 图文内容区 */
+.content h2{
+    margin:2rem 0 0.8rem;
+    font-size:1.3rem;
+}
+.content p{
+    color:var(--muted);
+    margin-bottom:1rem;
+}
+.content img{
+    width:100%;
+    border-radius:6px;
+    margin:1rem 0;
+}
+footer{
+    max-width:900px;
+    width:100%;
+    margin:4rem auto 2rem;
+    padding:0 clamp(1rem,5vw,4rem);
+    color:var(--muted);
+    position:relative;
+    z-index:1;
+}
+footer a{
+    color:var(--accent);
+    text-decoration:none;
+}
+/* 星点背景 */
+.star-container{
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    background: transparent;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.7; }
+}
+</style>
+</head>
+<body>
+<nav>
+    <div class="nav-title">大地图战斗渲染</div>
+    <a href="../../../index.html" class="nav-back">← Back</a>
+</nav>
+
+<main class="container">
+    <!-- 主媒体显示区 -->
+    <div class="media-main" id="mediaMain">
+    </div>
+
+    <!-- 缩略图 + 左右切换 -->
+    <div class="thumb-wrap">
+        <div class="thumb-arrow" id="prevBtn">‹</div>
+        <div class="thumb-list" id="thumbList">
+            <!-- JS自动渲染缩略图，不要手动写这里 -->
+        </div>
+        <div class="thumb-arrow" id="nextBtn">›</div>
+    </div>
+
+    <!-- 你自己写图文说明 -->
+    <section class="content">
+        <h2>项目概述</h2>
+        <p>这里写项目简介，你的职责、目标平台、管线（URP）、性能指标等。</p>
+
+        <h2>技术方案</h2>
+        <p>合批策略、植被LOD、光照烘焙、自定义Pass、Profiler优化思路等。</p>
+
+        <h2>优化对比</h2>
+        <p>放对比截图、性能数据。</p>
+        <img src="perf.png">
+    </section>
+</main>
+
+<footer>
+    Contact: <a href="mailto:yourmail@example.com">yourmail@example.com</a>
+</footer>
+
+<script>
+// ========== 背景星点（和主页一致） ==========
+const STAR_COUNT = 60;
+const STAR_COLOR = "120, 200, 255";
+function createStars() {
+    const container = document.createElement("div");
+    container.className = "star-container";
+    for (let i = 0; i < STAR_COUNT; i++) {
+        const star = document.createElement("span");
+        const size = Math.random() * 1.6 + 0.4;
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const delay = Math.random() * 4;
+        const duration = Math.random() * 3 + 3;
+        star.style.cssText = `
+            position:absolute;
+            left:${left}%;top:${top}%;
+            width:${size}px;height:${size}px;
+            background:rgba(${STAR_COLOR},0.8);
+            border-radius:50%;
+            box-shadow:0 0 ${size*2}px rgba(${STAR_COLOR},0.6);
+            animation:twinkle ${duration}s ease-in-out ${delay}s infinite;
+        `;
+        container.appendChild(star);
+    }
+    document.body.appendChild(container);
+}
+createStars();
+
+// ========== 媒体列表配置区【你只改这里】 ==========
+const mediaList = [
+    {
+        type: "video",
+        src: "https://player.bilibili.com/player.html?aid=xxxx&cid=xxxx&page=1", // B站嵌入链接
+        thumb: "video-thumb.jpg"
+    },
+    {
+        type: "image",
+        src: "shot1.jpg",
+        thumb: "shot1.jpg"
+    },
+    {
+        type: "image",
+        src: "shot2.jpg",
+        thumb: "shot2.jpg"
+    }
+];
+
+const mediaMain = document.getElementById("mediaMain");
+const thumbList = document.getElementById("thumbList");
+let currentIndex = 0;
+
+// 渲染缩略图
+function renderThumbs(){
+    thumbList.innerHTML = "";
+    mediaList.forEach((item, idx)=>{
+        const div = document.createElement("div");
+        div.className = "thumb-item" + (idx === currentIndex ? " active" : "");
+        div.innerHTML = `<img src="${item.thumb}">`;
+        div.onclick = ()=>{
+            currentIndex = idx;
+            updateMedia();
+            renderThumbs();
+        };
+        thumbList.appendChild(div);
+    })
+}
+
+// 更新主显示内容
+function updateMedia(){
+    const item = mediaList[currentIndex];
+    if(item.type === "video"){
+        mediaMain.innerHTML = `<iframe src="${item.src}" allowfullscreen></iframe>`;
+    }else{
+        mediaMain.innerHTML = `<img src="${item.src}">`;
+    }
+}
+
+// 左右滚动缩略图
+document.getElementById("prevBtn").onclick = ()=>{
+    thumbList.scrollBy({left:-260, behavior:"smooth"});
+}
+document.getElementById("nextBtn").onclick = ()=>{
+    thumbList.scrollBy({left:260, behavior:"smooth"});
+}
+
+// 初始化，默认加载第一个
+renderThumbs();
+updateMedia();
+</script>
+</body>
+</html>
