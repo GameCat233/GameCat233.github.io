@@ -27,6 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.6;
+  position: relative; /* 新增这一行，别的原样不动 */
 }
 /* 顶部栏 */
 header {
@@ -137,6 +138,25 @@ footer a {
   color: var(--accent);
   text-decoration: none;
 }
+
+/* ========== 背景压暗效果 ========== */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: url("/bg.png");
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px);
+      opacity: 0.20;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+    /* 内容容器压一层黑，防止文字/缩略图发糊，很重要 */
+    .container, .thumb-row {
+      background-color: rgba(0,0,0,0.78);
+    }
 </style>
 </head>
 <body>
