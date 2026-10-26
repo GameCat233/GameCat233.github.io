@@ -13,7 +13,7 @@
 }
 :root {
   --media-max-width: 1000px;   /* 多媒体基础最大宽度，改这里统一调媒体大小 */
-  --content-scale: 0.95;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
+  --content-scale: 1;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
   --bg: #0f0f11;
   --text: #e6e6e6;
   --muted: #999;
@@ -57,6 +57,10 @@ header {
 h1 {
   font-size: clamp(1.6rem,3vw,2.4rem);
   font-weight: 500;
+}
+.content-wrap p {
+  margin-bottom: 0.1rem; /* 段落之间距离缩小 */
+  text-indent: 2em; /* 首行缩进2个汉字宽度 */
 }
 .back-btn {
   color: var(--accent);
@@ -134,8 +138,8 @@ main {
   margin: 0 auto;
   color: #ddd;
 }
-.content-wrap p, .content-wrap h2, .content-wrap h3, .content-wrap ul {
-  margin-bottom: 1.2rem;
+.content-wrap h2, .content-wrap h3, .content-wrap ul {
+  margin-bottom: 1.2rem; /* 标题、列表维持原来大间距 */
 }
 .content-wrap h2 {
   margin-top: 2rem;
@@ -144,6 +148,28 @@ main {
 .content-wrap ul {
   padding-left: 1.6rem;
 }
+
+.img-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  align-items: flex-end;
+}
+/* 只有1个figure的时候 */
+.img-row figure:only-child {
+  margin: 0 auto;
+  flex: 0 1 600px;
+}
+/* 多于1个的时候，全部均分 */
+.img-row figure {
+  flex: 1;
+}
+@media (max-width:640px){
+  .img-row{
+    flex-direction:column;
+  }
+}
+
 /* 底部联系栏，一直贴在页面最下方 */
 footer {
   padding: 3rem clamp(1rem,4vw,3rem);
@@ -176,9 +202,21 @@ footer a {
            src="./thumb.png">
 
       <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
-      <!-- <img class="thumb-item"
+      <img class="thumb-item"
            data-type="image"
-           data-src="../assets/big01.jpg"> -->
+           data-src="./Compare.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedConfig.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedFrameDebug.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedCPU.png">
 
       <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
       <!-- <img class="thumb-item"
@@ -192,15 +230,123 @@ footer a {
     </div>
   </div>
   <div class="content-wrap">
-    <p>这里是图文混排说明，现在宽度由上面 --content‑scale 控制。</p>
-    <p>测试：scale=1 和媒体同宽；scale=1.2 加宽；scale=0.9 收窄。</p>
-    <h2>功能说明</h2>
+    <!-- 本地图片 -->
+    <!-- <img src="../assets/screenshot01.jpg" alt="作品截图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 网络外链图片 -->
+    <!-- <img src="https://picsum.photos/id/1011/1200/800" alt="示例图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 本地视频 -->
+    <!-- <video controls style="width:100%;border-radius:6px;margin:1rem 0;" poster="../assets/video-thumb.jpg">
+      <source src="../assets/video/show.mp4" type="video/mp4">
+    </video> -->
+
+    <!-- 外部视频 -->
+    <!-- <div style="width:100%;aspect‑ratio:16/9;border‑radius:6px;overflow:hidden;margin:1rem 0;">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+    </div> -->
+
+    <h1>移动端 SLG 大地图大规模角色渲染与优化</h1>
+    <p><strong>项目简介</strong>：模拟移动端 SLG 大地图百人同屏场景，针对传统骨骼动画（SkinnedMesh）在移动端的 CPU 开销大、无法有效合批等性能瓶颈，通过开发 <strong>顶点动画烘焙工具链</strong> 与 <strong>轻量化模型扩张描边</strong>，在保证视觉效果的前提下实现的性能优化。</p>
+    <img src="./300Vs.png" alt="300+多人战斗" style="width:100%;border-radius:6px;margin:1rem 0;">
+    <h2>核心技术实现</h2>
+    <strong>1. 顶点动画烘焙</strong>
     <ul>
-      <li><strong>data‑type="video"</strong>：本地/直链mp4，HTML5原生video；⚠️本地视频<strong>必须手动填src缩略图，不能自动生成</strong></li>
-      <li><strong>data‑type="iframe"</strong>：Youtube/B站嵌入iframe链接；不写src自动获取yt官方缩略</li>
-      <li><strong>data‑type="image"</strong>：本地/外链图片；不写src自动复用大图作为缩略；写src则使用自定义缩略</li>
-      <li>active标记的条目为页面打开默认加载项，只保留1个active</li>
+      <!-- <p>传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，300 个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批。</p> -->
+        <li><p>工具链开发：编写 C# 导出工具，提取模型各动画帧的顶点位置偏移，并将其编码烘焙至一张 2D 贴图的 RGB 通道中。</p></li>
+        <li><p>GPU 着色器驱动：在 Vertex Shader 中根据当前时间与播放进度，采样 VAT 贴图并计算顶点偏移，实现纯 GPU 端驱动动画。</p></li>
     </ul>
+
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedTools.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">烘焙工具面板</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./BakedConfig.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">烘焙配置</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./BakedMat.png" alt="截图三" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">烘焙后材质球设置</figcaption>
+      </figure>
+    </div>
+
+    <strong>2. 模型空间扩张描边</strong>
+    <ul>
+      <!-- <p>传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，300 个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批。</p> -->
+        <li><p>在 Vertex Shader 中沿顶点法线方向进行适度扩张生成背面描边层，结合模型本身完成轻量化描边。有一定视觉误差,大地图不需要特别精细的描边时可以使用,否则需要考虑烘焙法线或者转为骨骼烘焙,甚至考虑基于后处理的描边方案</p></li>
+    </ul>
+
+    <div class="img-row">
+      <figure>
+        <img src="./OutlinePass.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">描边RenderFeature设置</figcaption>
+      </figure>
+    </div>
+
+    <h2>视觉与性能对比</h2>
+    <strong>1. 烘焙前后模型对比</strong>
+    <p>使用RGBAHalf格式,确保顶点精度足够，不会产生形变和动画瑕疵</p>
+    <div class="img-row">
+      <figure>
+        <img src="./Compare.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">左边烘焙后,右边烘焙前</figcaption>
+      </figure>
+    </div>
+
+    <strong>2. 烘焙后Frame Debug合批展示</strong>
+    <p>同一类兵种将会合批</p>
+
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedFrameDebug.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">使用GPUInstance,Shadow和角色渲染被合并为了一批</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./OutlineFrame.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">描边使用独立RenderPass,方便不同机型决定关闭开启</figcaption>
+      </figure>
+    </div>
+
+    <strong>3. 真机RedMid Note 12 Turbo(CPU:骁龙7+ GEN2,GPU:Adreno 725) Profiler简报</strong>
+    <p>这款手机可以定位为高端机,所以测试数据为60FPS</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedCPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:烘焙动画CPU没有Animaotr和Skinned运算消耗</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./SkinnedMeshCPU.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:SkinnedMesh动画占用接近12ms</figcaption>
+      </figure>
+    </div>
+
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedGPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:烘焙后消耗来到了Shader中顶点采样上,总体只占约3.5ms</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./SkinnedMeshGPU.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:SkinnedMesh在GPU解算占用约6ms</figcaption>
+      </figure>
+    </div>
+
+    <h2>总结</h2>
+    <p>1.传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，巨量个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批,顶点烘焙极大地减轻了 CPU 开销并实现了极致合批，但牺牲了一定的贴图内存（Texture Memory）,在CPU压力巨大的时候较为适合</p>
+
+    <h2>其他优化</h2>
+    <p>1.为了节省带宽,没有烘焙法线到贴图,对于需要精确法线的方案时,可以考虑烘焙,或者更换为<strong>骨骼烘焙</strong>,取决于项目需要</p>
+    <p>2.方案对于做动画混合非常麻烦,对于有精确混合的英雄,可能还是考虑原始SkinnedMesh更为便利</p>
+    <p>3.SLG有根据镜头的LOD策略,在拉高后降低实际运算单位,显示单位合并等等优化方案同样有效</p>
+    <p>4.目前简单的逻辑使用MonoBehaviour驱动,考虑ECS处理大规模的战斗逻辑,进一步提升CPU性能</p>
+    <p>5.BatchRendererGroup解决多单位组件化问题,节省MeshRender消耗</p>
   </div>
 </main>
 <footer>
