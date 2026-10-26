@@ -195,6 +195,42 @@ footer a {
   color: var(--accent);
   text-decoration: none;
 }
+
+/* 图片放大浮窗 */
+.img-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.img-lightbox.show {
+  display: flex;
+}
+.img-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+}
+.img-lightbox .close-btn {
+  position: absolute;
+  top:16px;
+  right:24px;
+  color:#fff;
+  font-size:32px;
+  cursor:pointer;
+  user-select:none;
+}
+/* 给图文图片加鼠标小手，提示可点击 */
+.content-wrap figure img {
+  cursor: zoom-in;
+}
+
 </style>
 </head>
 <body>
@@ -357,9 +393,10 @@ footer a {
     <h2>其他优化</h2>
     <p>1.为了节省带宽,没有烘焙法线到贴图,对于需要精确法线的方案时,可以考虑烘焙,或者更换为<strong>骨骼烘焙</strong>,取决于项目需要</p>
     <p>2.方案对于做动画混合非常麻烦,对于有精确混合的英雄,可能还是考虑原始SkinnedMesh更为便利</p>
-    <p>3.SLG有根据镜头的LOD策略,在拉高后降低实际运算单位,显示单位合并等等优化方案同样有效</p>
-    <p>4.目前简单的逻辑使用MonoBehaviour驱动,考虑ECS处理大规模的战斗逻辑,进一步提升CPU性能</p>
-    <p>5.BatchRendererGroup解决多单位组件化问题,节省MeshRender消耗</p>
+    <p>3.目前使用自带MainShaodw渲染阴影,开销较高,如果对自阴影要求不高,考虑PlaneShadow投射阴影,优化带宽</p>
+    <p>4.SLG有根据镜头的LOD策略,在拉高后降低实际运算单位,显示单位合并等等优化方案同样有效</p>
+    <p>5.目前简单的逻辑使用MonoBehaviour驱动,考虑ECS处理大规模的战斗逻辑,进一步提升CPU性能</p>
+    <p>3.BatchRendererGroup解决多单位组件化问题,节省MeshRender消耗</p>
   </div>
 </main>
 <footer>
@@ -435,6 +472,38 @@ const activeOne = document.querySelector('.thumb-item.active');
 if(activeOne){
   switchMedia(activeOne);
 }
+</script>
+
+<!-- 图片预览浮窗DOM -->
+<div class="img-lightbox" id="lightbox">
+  <span class="close-btn">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeBtn = lightbox.querySelector('.close-btn');
+
+// 绑定content-wrap里面所有图片点击
+document.querySelectorAll('.content-wrap img').forEach(img=>{
+  img.onclick = function(){
+    lightboxImg.src = this.src;
+    lightboxImg.alt = this.alt;
+    lightbox.classList.add('show');
+  }
+})
+
+// 点击叉号关闭
+closeBtn.onclick = ()=> lightbox.classList.remove('show');
+// 点击黑色背景关闭（点图片本身不关闭）
+lightbox.onclick = (e)=>{
+  if(e.target === lightbox) lightbox.classList.remove('show');
+}
+// ESC按键关闭
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') lightbox.classList.remove('show');
+})
 </script>
 </body>
 </html>
