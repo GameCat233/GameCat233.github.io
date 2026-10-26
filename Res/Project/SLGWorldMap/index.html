@@ -84,11 +84,24 @@ main {
   width: 100%;
   margin: 0 auto 2rem;
 }
-.video-container {
-  aspect-ratio: 16 / 9;
-  background: #111;
+#mediaBox {
+  max-width: 1000px;
+  margin: 0 auto;
   border-radius: 8px;
   overflow: hidden;
+  background:#111;
+}
+#mediaBox img {
+  max-width:100%;
+  max-height:70vh; /* 最高不超过视口70%，防止图太高把页面撑爆 */
+  display:block;
+  margin:0 auto;
+}
+#mediaBox video,
+#mediaBox iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
 }
 .video-container iframe,
 .video-container video {
