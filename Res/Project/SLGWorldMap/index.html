@@ -27,7 +27,23 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.6;
+  position: relative; /* 为背景伪元素 */
 }
+/* 模糊氛围背景，子页面路径 ../assets/bg.webp */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../assets/bg.webp");
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px);
+  opacity: 0.20;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
 /* 顶部栏 */
 header {
   display: flex;
@@ -70,10 +86,12 @@ main {
   border-radius: 8px;
   overflow: hidden;
 }
-.video-container iframe {
+.video-container iframe,
+.video-container video {
   width: 100%;
   height: 100%;
   border: none;
+  object-fit: contain;
 }
 /* 主展示区图片样式 */
 .main-img {
@@ -82,13 +100,14 @@ main {
   display: block;
   object-fit: contain;
 }
-
 .thumb-row {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
   padding: 1rem 0;
   scroll-snap-type: x mandatory;
+  background-color: rgba(0,0,0,0.78);
+  border-radius: 6px;
 }
 .thumb-item {
   flex: 0 0 120px;
@@ -147,85 +166,116 @@ footer a {
 <main>
   <div class="media-wrap">
     <div class="video-container" id="mediaBox">
-      <iframe id="mainMedia" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+      <!-- JS 动态填充内容，这里不要硬写iframe -->
     </div>
     <div class="thumb-row">
-      <!-- Youtube视频，自动获取官方缩略图，无需写src -->
+      <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
       <img class="thumb-item active"
            data-type="video"
-           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
+           data-src="../assets/video/demo.mp4"
+           src="../assets/thumb-video-demo.jpg">
 
-      <!-- 本地图片，自动复用大图作为缩略图 -->
+      <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
       <img class="thumb-item"
            data-type="image"
-           data-src="./assets/big01.jpg">
+           data-src="../assets/big01.jpg">
 
-      <!-- 外链网络图片，自动复用大图作为缩略图 -->
+      <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
       <img class="thumb-item"
            data-type="image"
            data-src="https://picsum.photos/id/1011/1200/800">
 
-      <!-- 示例：手动自定义缩略图（写src就会优先使用） -->
+      <!-- Youtube iframe嵌入：不写src自动拉Youtube官方缩略图 -->
       <img class="thumb-item"
-           data-type="image"
-           data-src="./assets/big02.jpg"
-           src="./assets/custom-thumb.jpg">
+           data-type="iframe"
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
     </div>
   </div>
   <div class="content-wrap">
-    <p>这里是图文混排说明，现在宽度由上面 --content-scale 控制。</p>
-    <p>测试：scale=1 和视频同宽；scale=1.2 文字区域更宽；scale=0.9 收窄。</p>
+    <p>这里是图文混排说明，现在宽度由上面 --content‑scale 控制。</p>
+    <p>测试：scale=1 和媒体同宽；scale=1.2 加宽；scale=0.9 收窄。</p>
     <h2>功能说明</h2>
     <ul>
-      <li>视频：iframe嵌入地址，data‑type="video"，Youtube自动拉取官方缩略图</li>
-      <li>图片支持：外网URL、本地相对路径贴图，data‑type="image"，自动复用大图做缩略图</li>
-      <li>需要自定义缩略图时手动补充 src 属性即可覆盖自动逻辑</li>
-      <li>底部缩略图横向滑动，点击切换媒体</li>
-      <li>所有容器都是响应式，小屏幕自动收缩</li>
+      <li><strong>data‑type="video"</strong>：本地/直链mp4，HTML5原生video；⚠️本地视频<strong>必须手动填src缩略图，不能自动生成</strong></li>
+      <li><strong>data‑type="iframe"</strong>：Youtube/B站嵌入iframe链接；不写src自动获取yt官方缩略</li>
+      <li><strong>data‑type="image"</strong>：本地/外链图片；不写src自动复用大图作为缩略；写src则使用自定义缩略</li>
+      <li>active标记的条目为页面打开默认加载项，只保留1个active</li>
     </ul>
   </div>
 </main>
 <footer>
-  <p>联系我：<a href="mailto:yourmail@xxx.com">yourmail@xxx.com</a></p>
+  <p>联系我：<a href="mailto:yourmail@xxx.com">wywayne@outlook.com</a></p>
 </footer>
 <script>
 const thumbs = document.querySelectorAll('.thumb-item');
 const mediaBox = document.getElementById('mediaBox');
 
-// 初始化：自动填充缩略图
+// 初始化缩略图逻辑
 thumbs.forEach(thumb => {
   const type = thumb.dataset.type;
   const dataSrc = thumb.dataset.src;
   // 用户没有手动设置src，则自动生成缩略图
   if(!thumb.src || thumb.src === window.location.href){
     if(type === "image"){
-      // 图片：复用大图地址作为缩略图
       thumb.src = dataSrc;
-    }else if(type === "video"){
-      // youtube embed url 提取ID，获取官方缩略图
+    }else if(type === "iframe"){
+      // 仅iframe(youtube)自动拿缩略；本地video不处理，强制要求手动src
       const match = dataSrc.match(/embed\/([^?&]+)/);
       if(match && match[1]){
         const vid = match[1];
         thumb.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
       }
     }
+    // type=video(本地mp4)：不做自动缩略，要求你手动写src，防止裂图
   }
+});
 
-  thumb.onclick = () => {
-    thumbs.forEach(t => t.classList.remove('active'));
+// 切换媒体函数
+function switchMedia(thumb){
+  const type = thumb.dataset.type;
+  const src = thumb.dataset.src;
+  mediaBox.innerHTML = '';
+
+  if(type === "video"){
+    // 本地mp4 / mp4直链，原生video标签，固定16:9容器
+    mediaBox.style.aspectRatio = "16/9";
+    const v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.autoplay = false;
+    mediaBox.appendChild(v);
+  }else if(type === "iframe"){
+    // youtube / b站 iframe嵌入
+    mediaBox.style.aspectRatio = "16/9";
+    const ifr = document.createElement('iframe');
+    ifr.src = src;
+    ifr.allowFullscreen = true;
+    mediaBox.appendChild(ifr);
+  }else if(type === "image"){
+    // 图片，aspect‑ratio:auto跟随图片原生比例
+    mediaBox.style.aspectRatio = "auto";
+    const img = document.createElement('img');
+    img.className = "main-img";
+    img.src = src;
+    img.alt = "作品大图";
+    mediaBox.appendChild(img);
+  }
+}
+
+// 绑定点击事件
+thumbs.forEach(thumb=>{
+  thumb.onclick = ()=>{
+    thumbs.forEach(t=>t.classList.remove('active'));
     thumb.classList.add('active');
-    const type = thumb.dataset.type;
-    const src = thumb.dataset.src;
-
-    if (type === "video") {
-      mediaBox.style.aspectRatio = "16/9";
-      mediaBox.innerHTML = `<iframe id="mainMedia" src="${src}" allowfullscreen></iframe>`;
-    } else if (type === "image") {
-      mediaBox.style.aspectRatio = "auto";
-      mediaBox.innerHTML = `<img class="main-img" src="${src}" alt="作品大图">`;
-    }
+    switchMedia(thumb);
   }
-})
+});
+
+// 页面加载完初始化渲染active项
+const activeOne = document.querySelector('.thumb-item.active');
+if(activeOne){
+  switchMedia(activeOne);
+}
 </script>
 </body>
 </html>
