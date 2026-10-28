@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目详情</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+:root {
+  --media-max-width: 1000px;   /* 多媒体基础最大宽度，改这里统一调媒体大小 */
+  --content-scale: 1;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
+  --bg: #0f0f11;
+  --text: #e6e6e6;
+  --muted: #999;
+  --accent: #7aa2f7;
+  --card-bg: #18181b;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  position: relative; /* 为背景伪元素 */
+}
+/* 模糊氛围背景，子页面路径 ../assets/bg.webp */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../assets/bg.webp");
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px);
+  opacity: 0.20;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* 顶部栏 */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 2rem clamp(1rem, 4vw, 3rem); */
+  max-width: var(--media-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+h1 {
+  font-size: clamp(1.6rem,3vw,2.4rem);
+  font-weight: 500;
+}
+.content-wrap p {
+  margin-bottom: 0.1rem; /* 段落之间距离缩小 */
+  text-indent: 2em; /* 首行缩进2个汉字宽度 */
+}
+.back-btn {
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: 0.2s ease;
+}
+.back-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+main {
+  flex: 1;
+  padding: 0 clamp(1rem,4vw,3rem) 3rem;
+}
+/* 媒体容器（视频+图片） */
+.media-wrap {
+  max-width: var(--media-max-width);
+  width: 100%;
+  margin: 0 auto 2rem;
+}
+#mediaBox {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background:#111;
+}
+#mediaBox img {
+  max-width:100%;
+  max-height:70vh; /* 最高不超过视口70%，防止图太高把页面撑爆 */
+  display:block;
+  margin:0 auto;
+}
+#mediaBox video,
+#mediaBox iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+}
+.video-container iframe,
+.video-container video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: contain;
+}
+/* 主展示区图片样式 */
+.main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+.thumb-row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  background-color: rgba(0,0,0,0.78);
+  border-radius: 6px;
+}
+.thumb-item {
+  flex: 0 0 120px;
+  height: 70px;
+  border-radius: 4px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: 0.2s;
+  scroll-snap-align: start;
+  border: 2px solid transparent;
+}
+.thumb-item.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+.thumb-item:hover {
+  opacity: 0.9;
+}
+/* ✅ 图文区域，跟随scale系数 */
+.content-wrap {
+  max-width: calc(var(--media-max-width) * var(--content-scale));
+  width: 100%;
+  margin: 0 auto;
+  color: #ddd;
+}
+.content-wrap h2, .content-wrap h3, .content-wrap ul {
+  margin-bottom: 1.2rem; /* 标题、列表维持原来大间距 */
+}
+.content-wrap h2 {
+  margin-top: 2rem;
+  font-size: 1.4rem;
+}
+.content-wrap ul {
+  padding-left: 1.6rem;
+}
+
+.img-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  align-items: flex-end;
+}
+/* 只有1个figure的时候 */
+.img-row figure:only-child {
+  margin: 0 auto;
+  flex: 0 1 600px;
+}
+/* 多于1个的时候，全部均分 */
+.img-row figure {
+  flex: 1;
+}
+@media (max-width:640px){
+  .img-row{
+    flex-direction:column;
+  }
+}
+
+/* 底部联系栏，一直贴在页面最下方 */
+footer {
+  padding: 3rem clamp(1rem,4vw,3rem);
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid #222;
+  margin-top: auto;
+}
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* 图片放大浮窗 */
+.img-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.img-lightbox.show {
+  display: flex;
+}
+.img-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+}
+.img-lightbox .close-btn {
+  position: absolute;
+  top:16px;
+  right:24px;
+  color:#fff;
+  font-size:32px;
+  cursor:pointer;
+  user-select:none;
+}
+/* 给图文图片加鼠标小手，提示可点击 */
+.content-wrap figure img {
+  cursor: zoom-in;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>AI-PSD到Unity UGUI</h1>
+  <a href="/index.html" class="back-btn">← 返回主页</a>
+</header>
+<main>
+  <div class="media-wrap">
+    <div class="video-container" id="mediaBox">
+      <!-- JS 动态填充内容，这里不要硬写iframe -->
+    </div>
+    <div class="thumb-row">
+      <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
+      <!-- <img class="thumb-item active"
+           data-type="video"
+           data-src="./Main.mp4"
+           src="./thumb.png"> -->
+
+      <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
+      <img class="thumb-item active"
+           data-type="image"
+           data-src="./thumb.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./prefab_undo.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedFrameDebug.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedCPU.png">
+
+      <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="https://picsum.photos/id/1011/1200/800"> -->
+
+      <!-- Youtube iframe嵌入：不写src自动拉Youtube官方缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="iframe"
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"> -->
+    </div>
+  </div>
+  <div class="content-wrap">
+    <!-- 本地图片 -->
+    <!-- <img src="../assets/screenshot01.jpg" alt="作品截图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 网络外链图片 -->
+    <!-- <img src="https://picsum.photos/id/1011/1200/800" alt="示例图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 本地视频 -->
+    <!-- <video controls style="width:100%;border-radius:6px;margin:1rem 0;" poster="../assets/video-thumb.jpg">
+      <source src="../assets/video/show.mp4" type="video/mp4">
+    </video> -->
+
+    <!-- 外部视频 -->
+    <!-- <div style="width:100%;aspect‑ratio:16/9;border‑radius:6px;overflow:hidden;margin:1rem 0;">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+    </div> -->
+
+    <h1>从PSD到Unity UGUI预研</h1>
+    <p><strong>项目简介</strong>：传统UI开发中，UI 美术手动切图、程序在Unity中手搭 Prefab、配Anchor、挂组件耗费大量重复性劳动，且极易出现还原度偏差。最终产出的UI和设计的有明显差异，UI和客户端沟通成本非常高</p>
+    <P>这个工具预研构目的是建一套打通 Photoshop 与 Unity 的自动化 UI 还原管线，实现 PSD 图层树到 Unity UGUI Prefab 的 1:1 确定性转换</P>
+    <p><strong>注意:所有PSD来自于商店插件,纯测试使用</strong></p>
+    
+    <h2>效果对比</h2>
+    <strong>1. 原始PSD直接输出</strong>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./thumb.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">原始PSD</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./prefab_undo.png" alt="直接输出" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">不人工干预直接使用工具导出</figcaption>
+      </figure>
+    </div>
+    <p><strong>右侧预制体和PSD有50%相似度,还有很多问题</strong></p>
+    <ul>
+        <li><p>字体不一致,这个需要制作人员提供字体</p></li>
+        <li><p>一些图标用错了,甚至是缺失状态</p></li>
+        <li><p>Mask基本失效</p></li>
+    </ul>
+    <p><strong>其他的位置,层级和PSD能完全对上</strong></p>
+
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+        <img src="./PSD_Layer.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">PSD层级</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./Prefab_Layer.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Prefab层级</figcaption>
+      </figure>
+    </div>
+    <ul>
+        <li><p>Prefab层级和PSD完全一致,名字能对应</p></li>
+        <li><p>相对位置正确,但是没有正确的锚点信息,没法做到自适应</p></li>
+    </ul>
+
+    <!-- <strong>2. 模型空间扩张描边</strong> -->
+    <ul>
+      <!-- <p>传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，300 个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批。</p> -->
+        <!-- <li><p>在 Vertex Shader 中沿顶点法线方向进行适度扩张生成背面描边层，结合模型本身完成轻量化描边。有一定视觉误差,大地图不需要特别精细的描边时可以使用,否则需要考虑烘焙法线或者转为骨骼烘焙,甚至考虑基于后处理的描边方案</p></li> -->
+    </ul>
+
+    <div class="img-row">
+      <figure>
+        <img src="./OutlinePass.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">描边RenderFeature设置</figcaption>
+      </figure>
+    </div>
+
+    <!-- <h2>视觉与性能对比</h2>
+    <strong>1. 烘焙前后模型对比</strong>
+    <p>使用RGBAHalf格式,确保顶点精度足够，不会产生形变和动画瑕疵</p>
+    <div class="img-row">
+      <figure>
+        <img src="./Compare.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">左边烘焙后,右边烘焙前</figcaption>
+      </figure>
+    </div>
+
+    <strong>2. 烘焙后Frame Debug合批展示</strong>
+    <p>同一类兵种将会合批</p>
+
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedFrameDebug.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">使用GPUInstance,Shadow和角色渲染被合并为了一批</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./OutlineFrame.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">描边使用独立RenderPass,方便不同机型决定关闭开启</figcaption>
+      </figure>
+    </div> -->
+
+    <!-- <strong>3. 真机RedMid Note 12 Turbo(CPU:骁龙7+ GEN2,GPU:Adreno 725) Profiler简报</strong>
+    <p>这款手机可以定位为高端机,所以测试数据为60FPS</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedCPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:烘焙动画CPU没有Animaotr和Skinned运算消耗</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./SkinnedMeshCPU.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:SkinnedMesh动画占用接近12ms</figcaption>
+      </figure>
+    </div>
+
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./BakedGPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:烘焙后消耗来到了Shader中顶点采样上,总体只占约3.5ms</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./SkinnedMeshGPU.png" alt="截图二" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:SkinnedMesh在GPU解算占用约6ms</figcaption>
+      </figure>
+    </div> -->
+
+    <h2>总结</h2>
+    <!-- <p>1.传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，巨量个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批,顶点烘焙极大地减轻了 CPU 开销并实现了极致合批，但牺牲了一定的贴图内存（Texture Memory）,在CPU压力巨大的时候较为适合</p> -->
+
+    <h2>其他优化</h2>
+    <!-- <p>1.为了节省带宽,没有烘焙法线到贴图,对于需要精确法线的方案时,可以考虑烘焙,或者更换为<strong>骨骼烘焙</strong>,取决于项目需要</p> -->
+  </div>
+</main>
+<footer>
+  <p>联系我：<a href="mailto:yourmail@xxx.com">wywayne@outlook.com</a></p>
+</footer>
+<script>
+const thumbs = document.querySelectorAll('.thumb-item');
+const mediaBox = document.getElementById('mediaBox');
+
+// 初始化缩略图逻辑
+thumbs.forEach(thumb => {
+  const type = thumb.dataset.type;
+  const dataSrc = thumb.dataset.src;
+  // 用户没有手动设置src，则自动生成缩略图
+  if(!thumb.src || thumb.src === window.location.href){
+    if(type === "image"){
+      thumb.src = dataSrc;
+    }else if(type === "iframe"){
+      // 仅iframe(youtube)自动拿缩略；本地video不处理，强制要求手动src
+      const match = dataSrc.match(/embed\/([^?&]+)/);
+      if(match && match[1]){
+        const vid = match[1];
+        thumb.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+      }
+    }
+    // type=video(本地mp4)：不做自动缩略，要求你手动写src，防止裂图
+  }
+});
+
+// 切换媒体函数
+function switchMedia(thumb){
+  const type = thumb.dataset.type;
+  const src = thumb.dataset.src;
+  mediaBox.innerHTML = '';
+
+  if(type === "video"){
+    // 本地mp4 / mp4直链，原生video标签，固定16:9容器
+    mediaBox.style.aspectRatio = "16/9";
+    const v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.autoplay = false;
+    mediaBox.appendChild(v);
+  }else if(type === "iframe"){
+    // youtube / b站 iframe嵌入
+    mediaBox.style.aspectRatio = "16/9";
+    const ifr = document.createElement('iframe');
+    ifr.src = src;
+    ifr.allowFullscreen = true;
+    mediaBox.appendChild(ifr);
+  }else if(type === "image"){
+    // 图片，aspect‑ratio:auto跟随图片原生比例
+    mediaBox.style.aspectRatio = "auto";
+    const img = document.createElement('img');
+    img.className = "main-img";
+    img.src = src;
+    img.alt = "作品大图";
+    mediaBox.appendChild(img);
+  }
+}
+
+// 绑定点击事件
+thumbs.forEach(thumb=>{
+  thumb.onclick = ()=>{
+    thumbs.forEach(t=>t.classList.remove('active'));
+    thumb.classList.add('active');
+    switchMedia(thumb);
+  }
+});
+
+// 页面加载完初始化渲染active项
+const activeOne = document.querySelector('.thumb-item.active');
+if(activeOne){
+  switchMedia(activeOne);
+}
+</script>
+
+<!-- 图片预览浮窗DOM -->
+<div class="img-lightbox" id="lightbox">
+  <span class="close-btn">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeBtn = lightbox.querySelector('.close-btn');
+
+// 绑定content-wrap里面所有图片点击
+document.querySelectorAll('.content-wrap img').forEach(img=>{
+  img.onclick = function(){
+    lightboxImg.src = this.src;
+    lightboxImg.alt = this.alt;
+    lightbox.classList.add('show');
+  }
+})
+
+// 点击叉号关闭
+closeBtn.onclick = ()=> lightbox.classList.remove('show');
+// 点击黑色背景关闭（点图片本身不关闭）
+lightbox.onclick = (e)=>{
+  if(e.target === lightbox) lightbox.classList.remove('show');
+}
+// ESC按键关闭
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') lightbox.classList.remove('show');
+})
+</script>
+</body>
+</html>
