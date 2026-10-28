@@ -245,13 +245,13 @@ footer a {
     </div>
     <div class="thumb-row">
       <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
-      <!-- <img class="thumb-item active"
+      <img class="thumb-item active"
            data-type="video"
-           data-src="./Main.mp4"
-           src="./thumb.png"> -->
+           data-src="./UI_Create.mp4"
+           src="./Prefab_Auto.png">
 
       <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
-      <img class="thumb-item active"
+      <img class="thumb-item"
            data-type="image"
            data-src="./thumb.png">
 
@@ -261,11 +261,15 @@ footer a {
 
       <img class="thumb-item"
            data-type="image"
-           data-src="./BakedFrameDebug.png">
+           data-src="./PS_Plugs.png">
 
       <img class="thumb-item"
            data-type="image"
-           data-src="./BakedCPU.png">
+           data-src="./Simple_PSD.png">
+
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedCPU.png"> -->
 
       <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
       <!-- <img class="thumb-item"
@@ -337,75 +341,62 @@ footer a {
         <li><p>相对位置正确,但是没有正确的锚点信息,没法做到自适应</p></li>
     </ul>
 
-    <!-- <strong>2. 模型空间扩张描边</strong> -->
+    <strong>2. 简单干涉后的PSD输出</strong>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+        <img src="./Simple_PSD.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">简单的PSD原样</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./Prefab_Auto.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自动生成的Prefab</figcaption>
+      </figure>
+    </div>
+
+    <p><strong>为了快速展示效果,选了一个节点相对较少的PSD,主要在PSD中进行了一些干预,整体还原度更高了</strong></p>
     <ul>
-      <!-- <p>传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，300 个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批。</p> -->
-        <!-- <li><p>在 Vertex Shader 中沿顶点法线方向进行适度扩张生成背面描边层，结合模型本身完成轻量化描边。有一定视觉误差,大地图不需要特别精细的描边时可以使用,否则需要考虑烘焙法线或者转为骨骼烘焙,甚至考虑基于后处理的描边方案</p></li> -->
+        <li><p>首先图标没有缺失了,插件自动导出的贴图按以命名为准,设计PSD不能不同图标是一个相同名字</p></li>
+        <li><p>可以在插件标记锚点Anchor,Pivot,以及一些常用组件,比如Button等等</p></li>
     </ul>
 
-    <div class="img-row">
-      <figure>
-        <img src="./OutlinePass.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">描边RenderFeature设置</figcaption>
+    <div class="img-row" style="width:100%;">
+      <figure style="flex:1;">
+        <img src="./Edited_PSD.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">更新后的PSD层级</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./Edited_Prefab.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自动生成的层级</figcaption>
       </figure>
     </div>
+    <p><strong>PS 插件设置,Unity导出资源预览</strong></p>
+    <div class="img-row" style="width:100%;">
+      <figure style="flex:1;">
+        <img src="./PS_Plugs.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">PS插件</figcaption>
+      </figure>
 
-    <!-- <h2>视觉与性能对比</h2>
-    <strong>1. 烘焙前后模型对比</strong>
-    <p>使用RGBAHalf格式,确保顶点精度足够，不会产生形变和动画瑕疵</p>
-    <div class="img-row">
-      <figure>
-        <img src="./Compare.png" alt="300+多人战斗" style="width:80%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;width:80%">左边烘焙后,右边烘焙前</figcaption>
+      <figure style="flex:1;">
+        <img src="./AssetOut.png" alt="Prefab Layer" style="width:75%;border-radius:6px;">
+        <figcaption style="width:75%;color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">导出的Unity资源,按PSD图层命名</figcaption>
       </figure>
     </div>
+  
+    <h2>当前不足与演进方向</h2>
+    <strong>当前插件还在研发中阶段,有些问题还需要继续跟进</strong>
+      <ul>
+        <li><p>依赖美术在 PS 端的手动标注（将排版工作量部分转移到了美术侧）</p></li>
+        <li><p>对于复杂的动态布局（如嵌套 LayoutGroup）需要调整支持</p></li>
+        <li><p>一些Bug修复等等</p></li>
+    </ul>
+    <strong>演进方向</strong>
+    <ul>
+        <li><p>AI 智能预标注：根据 PSD 图层位置等信息，自动推断 UI 类型与 Anchor 贴边逻辑（替代 PS 插件手动勾选）</p></li>
+        <li><p>规范化 PSD 生成：向前端延伸，利用 AI 自动生成结构合规、图层分明、命名规范的源 PSD 文件，真正实现从“设计概念”到“Unity 界面”的全流程无缝自动化</p></li>
+    </ul>
 
-    <strong>2. 烘焙后Frame Debug合批展示</strong>
-    <p>同一类兵种将会合批</p>
-
-    <div class="img-row">
-      <figure style="flex:1;">
-        <img src="./BakedFrameDebug.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">使用GPUInstance,Shadow和角色渲染被合并为了一批</figcaption>
-      </figure>
-
-      <figure style="flex:1;">
-        <img src="./OutlineFrame.png" alt="截图二" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">描边使用独立RenderPass,方便不同机型决定关闭开启</figcaption>
-      </figure>
-    </div> -->
-
-    <!-- <strong>3. 真机RedMid Note 12 Turbo(CPU:骁龙7+ GEN2,GPU:Adreno 725) Profiler简报</strong>
-    <p>这款手机可以定位为高端机,所以测试数据为60FPS</p>
-    <div class="img-row">
-      <figure style="flex:1;">
-        <img src="./BakedCPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:烘焙动画CPU没有Animaotr和Skinned运算消耗</figcaption>
-      </figure>
-
-      <figure style="flex:1;">
-        <img src="./SkinnedMeshCPU.png" alt="截图二" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CPU:SkinnedMesh动画占用接近12ms</figcaption>
-      </figure>
-    </div>
-
-    <div class="img-row">
-      <figure style="flex:1;">
-        <img src="./BakedGPU.png" alt="300+多人战斗" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:烘焙后消耗来到了Shader中顶点采样上,总体只占约3.5ms</figcaption>
-      </figure>
-
-      <figure style="flex:1;">
-        <img src="./SkinnedMeshGPU.png" alt="截图二" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">GPU:SkinnedMesh在GPU解算占用约6ms</figcaption>
-      </figure>
-    </div> -->
-
-    <h2>总结</h2>
-    <!-- <p>1.传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，巨量个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批,顶点烘焙极大地减轻了 CPU 开销并实现了极致合批，但牺牲了一定的贴图内存（Texture Memory）,在CPU压力巨大的时候较为适合</p> -->
-
-    <h2>其他优化</h2>
-    <!-- <p>1.为了节省带宽,没有烘焙法线到贴图,对于需要精确法线的方案时,可以考虑烘焙,或者更换为<strong>骨骼烘焙</strong>,取决于项目需要</p> -->
   </div>
 </main>
 <footer>
