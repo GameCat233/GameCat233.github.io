@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目详情</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+:root {
+  --media-max-width: 1000px;   /* 多媒体基础最大宽度，改这里统一调媒体大小 */
+  --content-scale: 1;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
+  --bg: #0f0f11;
+  --text: #e6e6e6;
+  --muted: #999;
+  --accent: #7aa2f7;
+  --card-bg: #18181b;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  position: relative; /* 为背景伪元素 */
+}
+/* 模糊氛围背景，子页面路径 ../assets/bg.webp */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../assets/bg.webp");
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px);
+  opacity: 0.20;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* 顶部栏 */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 2rem clamp(1rem, 4vw, 3rem); */
+  max-width: var(--media-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+h1 {
+  font-size: clamp(1.6rem,3vw,2.4rem);
+  font-weight: 500;
+}
+.content-wrap p {
+  margin-bottom: 0.1rem; /* 段落之间距离缩小 */
+  text-indent: 2em; /* 首行缩进2个汉字宽度 */
+}
+.back-btn {
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: 0.2s ease;
+}
+.back-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+main {
+  flex: 1;
+  padding: 0 clamp(1rem,4vw,3rem) 3rem;
+}
+/* 媒体容器（视频+图片） */
+.media-wrap {
+  max-width: var(--media-max-width);
+  width: 100%;
+  margin: 0 auto 2rem;
+}
+#mediaBox {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background:#111;
+}
+#mediaBox img {
+  max-width:100%;
+  max-height:70vh; /* 最高不超过视口70%，防止图太高把页面撑爆 */
+  display:block;
+  margin:0 auto;
+}
+#mediaBox video,
+#mediaBox iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+}
+.video-container iframe,
+.video-container video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: contain;
+}
+/* 主展示区图片样式 */
+.main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+.thumb-row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  background-color: rgba(0,0,0,0.78);
+  border-radius: 6px;
+}
+.thumb-item {
+  flex: 0 0 120px;
+  height: 70px;
+  border-radius: 4px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: 0.2s;
+  scroll-snap-align: start;
+  border: 2px solid transparent;
+}
+.thumb-item.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+.thumb-item:hover {
+  opacity: 0.9;
+}
+/* ✅ 图文区域，跟随scale系数 */
+.content-wrap {
+  max-width: calc(var(--media-max-width) * var(--content-scale));
+  width: 100%;
+  margin: 0 auto;
+  color: #ddd;
+}
+.content-wrap h2, .content-wrap h3, .content-wrap ul {
+  margin-bottom: 1.2rem; /* 标题、列表维持原来大间距 */
+}
+.content-wrap h2 {
+  margin-top: 2rem;
+  font-size: 1.4rem;
+}
+.content-wrap ul {
+  padding-left: 1.6rem;
+}
+
+.img-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  align-items: flex-end;
+}
+/* 只有1个figure的时候 */
+.img-row figure:only-child {
+  margin: 0 auto;
+  flex: 0 1 600px;
+}
+/* 多于1个的时候，全部均分 */
+.img-row figure {
+  flex: 1;
+}
+@media (max-width:640px){
+  .img-row{
+    flex-direction:column;
+  }
+}
+
+/* 底部联系栏，一直贴在页面最下方 */
+footer {
+  padding: 3rem clamp(1rem,4vw,3rem);
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid #222;
+  margin-top: auto;
+}
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* 图片放大浮窗 */
+.img-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.img-lightbox.show {
+  display: flex;
+}
+.img-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+}
+.img-lightbox .close-btn {
+  position: absolute;
+  top:16px;
+  right:24px;
+  color:#fff;
+  font-size:32px;
+  cursor:pointer;
+  user-select:none;
+}
+/* 给图文图片加鼠标小手，提示可点击 */
+.content-wrap figure img {
+  cursor: zoom-in;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>PBR流程 皮肤和眼球渲染</h1>
+  <a href="/index.html" class="back-btn">← 返回主页</a>
+</header>
+<main>
+  <div class="media-wrap">
+    <div class="video-container" id="mediaBox">
+      <!-- JS 动态填充内容，这里不要硬写iframe -->
+    </div>
+    <div class="thumb-row">
+      <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
+      <!-- <img class="thumb-item active"
+           data-type="video"
+           data-src="./UI_Create.mp4"
+           src="./Prefab_Auto.png"> -->
+
+      <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
+      <img class="thumb-item active"
+           data-type="image"
+           data-src="./thumb.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./UnityOrStand2.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./UnityOrStand.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./Skin.png">
+
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedCPU.png"> -->
+
+      <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="https://picsum.photos/id/1011/1200/800"> -->
+
+      <!-- Youtube iframe嵌入：不写src自动拉Youtube官方缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="iframe"
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"> -->
+    </div>
+  </div>
+  <div class="content-wrap">
+    <!-- 本地图片 -->
+    <!-- <img src="../assets/screenshot01.jpg" alt="作品截图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 网络外链图片 -->
+    <!-- <img src="https://picsum.photos/id/1011/1200/800" alt="示例图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 本地视频 -->
+    <!-- <video controls style="width:100%;border-radius:6px;margin:1rem 0;" poster="../assets/video-thumb.jpg">
+      <source src="../assets/video/show.mp4" type="video/mp4">
+    </video> -->
+
+    <!-- 外部视频 -->
+    <!-- <div style="width:100%;aspect‑ratio:16/9;border‑radius:6px;overflow:hidden;margin:1rem 0;">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+    </div> -->
+    <i>(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))</i>
+    <h1>核心技术实现</h1>
+    <strong>1. 标准PBR</strong>
+    <p>标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./UnityOrStand.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">左:URP Stand 右:Cook-Torrance</figcaption>
+      </figure>
+
+      <!-- <figure style="flex:1;">
+        <img src="./prefab_undo.png" alt="直接输出" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">不人工干预直接使用工具导出</figcaption>
+      </figure> -->
+    </div>
+    <p>Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以</p>
+
+    <strong>2. 皮肤渲染</strong>
+    <p>皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射</p>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+        <img src="./Skin.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">简单的PSD原样</figcaption>
+      </figure>
+    </div>
+
+    <strong>3. 眼球渲染</strong>
+    <p>眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差</p>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
+      <source src="./Eyes.mp4" type="video/mp4">
+    </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">简单的PSD原样</figcaption>
+      </figure>
+    </div>
+
+    <strong>4. 阴影渲染</strong>
+    <p>Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影</p>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+        <img src="./UnityShadowMap.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Unity ShadowMap,阴影距离3,相机远平面3</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./CustomShadowMap.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自定义SHadow Map,根据Bounds来</figcaption>
+      </figure>
+    </div>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./unityShadow.png">
+      <source src="./unityShadow.mp4" type="video/mp4">
+      </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Unity Shadow</figcaption>
+      </figure>
+    </div>
+    <div class="img-row" style="width:90%;">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./customShdow.png">
+      <source src="./customShadow.mp4" type="video/mp4">
+      </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Custom Shadow</figcaption>
+      </figure>
+    </div>
+
+  </div>
+</main>
+<footer>
+  <p>联系我：<a href="mailto:yourmail@xxx.com">wywayne@outlook.com</a></p>
+</footer>
+<script>
+const thumbs = document.querySelectorAll('.thumb-item');
+const mediaBox = document.getElementById('mediaBox');
+
+// 初始化缩略图逻辑
+thumbs.forEach(thumb => {
+  const type = thumb.dataset.type;
+  const dataSrc = thumb.dataset.src;
+  // 用户没有手动设置src，则自动生成缩略图
+  if(!thumb.src || thumb.src === window.location.href){
+    if(type === "image"){
+      thumb.src = dataSrc;
+    }else if(type === "iframe"){
+      // 仅iframe(youtube)自动拿缩略；本地video不处理，强制要求手动src
+      const match = dataSrc.match(/embed\/([^?&]+)/);
+      if(match && match[1]){
+        const vid = match[1];
+        thumb.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+      }
+    }
+    // type=video(本地mp4)：不做自动缩略，要求你手动写src，防止裂图
+  }
+});
+
+// 切换媒体函数
+function switchMedia(thumb){
+  const type = thumb.dataset.type;
+  const src = thumb.dataset.src;
+  mediaBox.innerHTML = '';
+
+  if(type === "video"){
+    // 本地mp4 / mp4直链，原生video标签，固定16:9容器
+    mediaBox.style.aspectRatio = "16/9";
+    const v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.autoplay = false;
+    mediaBox.appendChild(v);
+  }else if(type === "iframe"){
+    // youtube / b站 iframe嵌入
+    mediaBox.style.aspectRatio = "16/9";
+    const ifr = document.createElement('iframe');
+    ifr.src = src;
+    ifr.allowFullscreen = true;
+    mediaBox.appendChild(ifr);
+  }else if(type === "image"){
+    // 图片，aspect‑ratio:auto跟随图片原生比例
+    mediaBox.style.aspectRatio = "auto";
+    const img = document.createElement('img');
+    img.className = "main-img";
+    img.src = src;
+    img.alt = "作品大图";
+    mediaBox.appendChild(img);
+  }
+}
+
+// 绑定点击事件
+thumbs.forEach(thumb=>{
+  thumb.onclick = ()=>{
+    thumbs.forEach(t=>t.classList.remove('active'));
+    thumb.classList.add('active');
+    switchMedia(thumb);
+  }
+});
+
+// 页面加载完初始化渲染active项
+const activeOne = document.querySelector('.thumb-item.active');
+if(activeOne){
+  switchMedia(activeOne);
+}
+</script>
+
+<!-- 图片预览浮窗DOM -->
+<div class="img-lightbox" id="lightbox">
+  <span class="close-btn">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeBtn = lightbox.querySelector('.close-btn');
+
+// 绑定content-wrap里面所有图片点击
+document.querySelectorAll('.content-wrap img').forEach(img=>{
+  img.onclick = function(){
+    lightboxImg.src = this.src;
+    lightboxImg.alt = this.alt;
+    lightbox.classList.add('show');
+  }
+})
+
+// 点击叉号关闭
+closeBtn.onclick = ()=> lightbox.classList.remove('show');
+// 点击黑色背景关闭（点图片本身不关闭）
+lightbox.onclick = (e)=>{
+  if(e.target === lightbox) lightbox.classList.remove('show');
+}
+// ESC按键关闭
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') lightbox.classList.remove('show');
+})
+</script>
+</body>
+</html>
