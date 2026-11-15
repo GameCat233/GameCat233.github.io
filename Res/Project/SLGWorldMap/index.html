@@ -298,7 +298,7 @@ footer a {
     <h1>移动端 SLG 大地图大规模角色渲染与优化</h1>
     <p><strong>项目简介</strong>：模拟移动端 SLG 大地图百人同屏场景，针对传统骨骼动画（SkinnedMesh）在移动端的 CPU 开销大、无法有效合批等性能瓶颈，通过开发 <strong>顶点动画烘焙工具链</strong> 与 <strong>轻量化模型扩张描边</strong>，在保证视觉效果的前提下实现的性能优化。</p>
     <img src="./300Vs.png" alt="300+多人战斗" style="width:100%;border-radius:6px;margin:1rem 0;">
-    <h2>核心技术实现</h2>
+    <h2>实现细节</h2>
     <strong>1. 顶点动画烘焙</strong>
     <ul>
       <!-- <p>传统 `SkinnedMeshRenderer` 依靠 CPU 进行骨骼蒙皮计算，300 个小兵会导致严重的 CPU 耗时，且极难进行 Draw Call 合批。</p> -->
