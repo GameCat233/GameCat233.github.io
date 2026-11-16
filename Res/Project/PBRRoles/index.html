@@ -256,6 +256,10 @@ footer a {
 }
 
 </style>
+//公式
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+//代码块引用
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
 <!-- 底部滚动进度条 -->
@@ -328,8 +332,60 @@ footer a {
       <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
     </div> -->
     <i>(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))</i>
-    <h1>实现细节</h1>
+    <h1>PBR和皮肤渲染</h1>
+    <p><strong>项目简介</strong>：写实渲染非常依赖材质的表现,PBR流程非常适合,作为皮肤,眼球,甚至后续所有的渲染框架,有必要提取一版自定义PBR,方便修改。</p>
+    <h2>实现细节</h2>
     <strong>1. 标准PBR</strong>
+    <p>PBR光照积分方程:</p>
+    \[L_o(\boldsymbol{v}) = \int_{\Omega} f_r(\boldsymbol{l},\boldsymbol{v}) \, L_i(\boldsymbol{l}) \, (n\cdot \boldsymbol{l}) \,\boldsymbol{\mathrm{d}\omega}\]
+    <p>fr=BRDF核心光照函数,这里采用Cook-Torrance</p>
+    \[f_r = f_{diffuse} + f_{spec}\]
+    <p>f diffuse漫反射公式</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./diffuse.png" alt="原始psd" style="width:50%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">漫反射公式较为简单</figcaption>
+      </figure>
+    </div>
+    <p>高光反射公式,主要求DFG</p>
+    \[f_{spec} = \frac{DFG}{4(n\cdot l)(n\cdot v)}\]
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./Spec-D.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">D</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Spec-F.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">F</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Spec-G.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">G</figcaption>
+      </figure>
+    </div>
+    <p>直接光有了,Unity中的间接光IBL也需要计算,相对简单,首先是间接光漫反射,就是unity球谐函数SH</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./IBL-diffuse.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">D</figcaption>
+      </figure>
+    </div>
+    <p>间接光高光反射相对麻烦,公式:</p>
+    \[L_{specIBL} = \int_\Omega \frac{DFG}{4(n\cdot v)(n\cdot l)} L_i(\boldsymbol l) \,(n\cdot l) \mathrm d\omega\]
+    <p>实时计算相当复杂,Epic拆分近似公式,可以理解为颜色项预滤波CubeMap,而高光IntegrateBRDF则采样Lut或者拟合公式</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./IBL-CubeMap.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">CubeMap采样unity_SpecCube0</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./IBL-SpecBRDF.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">使用拟合公式</figcaption>
+      </figure>
+    </div>
+    <p><strong>最后直接光和间接光叠加,就是基础的标准PBR流程</strong></p>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+    <h2>应用</h2>
     <p>标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改</p>
     <div class="img-row">
       <figure style="flex:1;">
@@ -343,19 +399,19 @@ footer a {
       </figure> -->
     </div>
     <p>Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以</p>
-
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
     <strong>2. 皮肤渲染</strong>
     <p>皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射</p>
-    <div class="img-row" style="width:90%;">
+    <div class="img-row">
       <figure style="flex:1;">
         <img src="./Skin.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
         <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">内置PBR和自定义PBR,Skin Shader对比</figcaption>
       </figure>
     </div>
-
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
     <strong>3. 眼球渲染</strong>
     <p>眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差</p>
-    <div class="img-row" style="width:90%;">
+    <div class="img-row">
       <figure style="flex:1;">
             <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
       <source src="./Eyes.mp4" type="video/mp4">
@@ -363,10 +419,18 @@ footer a {
         <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">折射和变色,缩放</figcaption>
       </figure>
     </div>
+    <p>这里直接使用了简单的视差效果,UnityCG.cginc的版本,基于物理的视差相对麻烦,具体可以看另一篇,还原UE眼球效果</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./ParallaxOffset.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">unity的视差公式</figcaption>
+      </figure>
+    </div>
 
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
     <strong>4. 阴影渲染</strong>
     <p>Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影</p>
-    <div class="img-row" style="width:90%;">
+    <div class="img-row">
       <figure style="flex:1;">
         <img src="./UnityShadowMap.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
         <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Unity ShadowMap,阴影距离3,相机远平面3</figcaption>
@@ -374,10 +438,18 @@ footer a {
 
       <figure style="flex:1;">
         <img src="./CustomShadowMap.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自定义SHadow Map,根据Bounds来</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自定义Shadow Map,根据Bounds来</figcaption>
       </figure>
     </div>
-    <div class="img-row" style="width:90%;">
+    <p>核心实现是计算需要阴影单位的包围盒,根据包围盒创建视椎体,将视椎体内深度记录到RT,之后就是常规阴影对比流程,在视椎体空间对比NDC Z深度</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./bounds.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">白色包围盒,绿色视椎体</figcaption>
+      </figure>
+    </div>
+    <p>视频动态效果明显</p>
+    <div class="img-row">
       <figure style="flex:1;">
             <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./unityShadow.png">
       <source src="./unityShadow.mp4" type="video/mp4">
@@ -385,7 +457,7 @@ footer a {
         <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Unity Shadow</figcaption>
       </figure>
     </div>
-    <div class="img-row" style="width:90%;">
+    <div class="img-row">
       <figure style="flex:1;">
             <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./customShdow.png">
       <source src="./customShadow.mp4" type="video/mp4">
@@ -393,7 +465,7 @@ footer a {
         <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Custom Shadow</figcaption>
       </figure>
     </div>
-
+    <p>缺点是要给角色多加一张RT来渲染,但是分辨率可控,在角色展示等比较独立的界面,近距离时开启比较合适</p>
   </div>
 </main>
 <footer>
