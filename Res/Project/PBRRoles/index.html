@@ -11,6 +11,18 @@
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+/* 隐藏所有滚动条 */
+html, body {
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
 :root {
   --media-max-width: 1000px;   /* 多媒体基础最大宽度，改这里统一调媒体大小 */
   --content-scale: 1;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
@@ -20,59 +32,42 @@
   --accent: #7aa2f7;
   --card-bg: #18181b;
 }
-body {
-  background-color: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  line-height: 1.6;
-  position: relative; /* 为背景伪元素 */
+body{
+  background-color:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  line-height:1.6;
+  position:relative;
 }
-/* 模糊氛围背景，子页面路径 ../assets/bg.webp */
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+/* 模糊氛围背景，使用第一张缩略图 */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: url("../assets/bg.webp");
+  background-image: url("./thumb.png");
   background-size: cover;
   background-position: center;
-  filter: blur(18px);
-  opacity: 0.20;
+  filter: blur(40px);
+  opacity: 0.3;
   transform: scale(1.1);
   pointer-events: none;
 }
 
-/* 顶部栏 */
+/* 顶部栏 - 隐藏 */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* padding: 2rem clamp(1rem, 4vw, 3rem); */
-  max-width: var(--media-max-width);
-  margin: 0 auto;
-  width: 100%;
-}
-h1 {
-  font-size: clamp(1.6rem,3vw,2.4rem);
-  font-weight: 500;
+  display: none;
 }
 .content-wrap p {
   margin-bottom: 0.1rem; /* 段落之间距离缩小 */
   text-indent: 2em; /* 首行缩进2个汉字宽度 */
-}
-.back-btn {
-  color: var(--accent);
-  text-decoration: none;
-  border: 1px solid var(--accent);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: 0.2s ease;
-}
-.back-btn:hover {
-  background: var(--accent);
-  color: var(--bg);
 }
 main {
   flex: 1;
@@ -150,6 +145,13 @@ main {
   width: 100%;
   margin: 0 auto;
   color: #ddd;
+}
+/* 单独的图片居中显示 */
+.content-wrap > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
 }
 .content-wrap h2, .content-wrap h3, .content-wrap ul {
   margin-bottom: 1.2rem; /* 标题、列表维持原来大间距 */
@@ -231,9 +233,36 @@ footer a {
   cursor: zoom-in;
 }
 
+/* 底部滚动进度条 */
+.scroll-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.scroll-progress.visible {
+  opacity: 1;
+}
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(122, 162, 247, 0.5), rgba(122, 162, 247, 0.8));
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
 </style>
 </head>
 <body>
+<!-- 底部滚动进度条 -->
+<div class="scroll-progress" id="scrollProgress">
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+</div>
+
 <header>
   <h1>PBR流程 皮肤和眼球渲染</h1>
   <a href="/index.html" class="back-btn">← 返回主页</a>
@@ -440,6 +469,36 @@ const activeOne = document.querySelector('.thumb-item.active');
 if(activeOne){
   switchMedia(activeOne);
 }
+
+// 底部滚动进度条逻辑
+const scrollProgress = document.getElementById('scrollProgress');
+const scrollProgressBar = document.getElementById('scrollProgressBar');
+let progressTimeout;
+
+function updateScrollProgress() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrollPercent = (scrollTop / scrollHeight) * 100;
+
+  if(scrollProgressBar) {
+    scrollProgressBar.style.width = scrollPercent + '%';
+  }
+
+  if(scrollProgress) {
+    scrollProgress.classList.add('visible');
+  }
+
+  clearTimeout(progressTimeout);
+  progressTimeout = setTimeout(() => {
+    if(scrollProgress) {
+      scrollProgress.classList.remove('visible');
+    }
+  }, 2000);
+}
+
+window.addEventListener('scroll', updateScrollProgress);
+updateScrollProgress();
+
 </script>
 
 <!-- 图片预览浮窗DOM -->
