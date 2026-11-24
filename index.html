@@ -656,6 +656,10 @@ footer a{
 </main>
 
 <footer>
+    <div style="display: flex; gap: 2rem; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <a href="#" id="aboutLink" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: all 0.2s ease;">关于我/联系我</a>
+        <span>© 2024 Wayne | Technical Artist & Client Developer</span>
+    </div>
 </footer>
 
 <!-- 模态窗口 -->
@@ -857,6 +861,12 @@ filterBtns.forEach(btn => {
         }
     };
 });
+
+// 处理"关于我/联系我"链接
+document.getElementById('aboutLink').onclick = (e) => {
+    e.preventDefault();
+    openModal('关于我/联系我', './unity_ta.html');
+};
 </script>
 </body>
 </html>
