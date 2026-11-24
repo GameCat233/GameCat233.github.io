@@ -132,7 +132,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       <!-- Masthead -->
       <header class="flex flex-col gap-gutter-sm pb-gutter-md border-b border-dark-on-surface">
         <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-gutter-md">
-          <p data-design-text-token="headline-lg" class="font-headline text-headline-lg text-dark-primary font-bold">
+          <p data-design-text-token="headline-lg" class="font-headline text-headline-lg text-dark-primary font-bold" data-i18n="title">
             U3D 客户端开发 / 技术美术 (TA)
           </p>
           <div class="flex flex-wrap items-baseline gap-gutter-md"></div>
@@ -147,22 +147,75 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       <!-- 1. 个人优势 -->
       <section class="print-avoid-break grid grid-cols-1 md:grid-cols-12 gap-gutter-md pb-gutter-md border-b border-dark-outline-variant">
         <div class="md:col-span-2 flex flex-col gap-gutter-xs">
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary">个人优势</h2>
+          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary" data-i18n="sec.strengths">个人优势</h2>
           <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">STRENGTHS</span>
         </div>
 
         <ul class="md:col-span-10 flex flex-col gap-gutter-xs font-body text-body-md text-dark-on-surface-variant text-pretty">
-          <li><strong class="font-title text-dark-on-surface">客户端 + TA 复合背景：</strong><strong class="font-title text-dark-primary">10 年+ Unity</strong> 实战，近 <strong class="font-title text-dark-primary">5.5 年海外 SLG TA</strong> 经验；兼具 <strong class="font-title text-dark-on-surface">UGUI、热更、打包、SDK 与工具开发</strong>能力，熟悉 <strong class="font-title text-dark-on-surface">URP 管线、Shader、RenderFeature 与多机型性能优化</strong>，并能对齐 <strong class="font-title text-dark-on-surface">SP（Substance Painter）与 Unity 渲染效果</strong>。</li>
-          <li><strong class="font-title text-dark-on-surface">全链路与长线迭代经验：</strong>经历休闲 / 混合休闲从 0 到上架，长期参与海外 SLG（含已上线《Age of Apes》《Raft War Survival》）线上版本迭代与新项目推进，擅长平衡美术表现、工程稳定性与性能开销。</li>
-          <li><strong class="font-title text-dark-on-surface">AI 辅助与自动化工作流：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 转换、Skill 规则固化及 PS 端 Prefab 组件插件，提升设计到 Unity 工程的流转效率。</li>
-          <li><strong class="font-title text-dark-on-surface">性能定位与工具链沉淀：</strong>熟悉四档机型分档与真机问题排查（<strong class="font-title text-dark-on-surface">RenderDoc / Unity Profiler / UWA</strong>），具备资源规范检测、AB 包体积对比、渲染/性能检测工具开发经验。</li>
+          <li data-i18n="s1"><strong class="font-title text-dark-on-surface">全链路与长线迭代经验：</strong>经历休闲 / 混合休闲从 0 到上架，长期参与海外 SLG（含已上线《Age of Apes》《Raft War Survival》）线上版本迭代与新项目推进，擅长平衡美术表现、工程稳定性与性能开销。</li>
+          <li data-i18n="s2"><strong class="font-title text-dark-on-surface">客户端 + TA 复合背景：</strong><strong class="font-title text-dark-primary">10 年+ Unity</strong> 实战，近 <strong class="font-title text-dark-primary">5.5 年海外 SLG TA</strong> 经验；兼具 <strong class="font-title text-dark-on-surface">UGUI、热更、打包、SDK 与工具开发</strong>能力，熟悉 <strong class="font-title text-dark-on-surface">URP 管线、Shader、RenderFeature 与多机型性能优化</strong>，并能对齐 <strong class="font-title text-dark-on-surface">SP（Substance Painter）与 Unity 渲染效果</strong>。</li>
+          <li data-i18n="s3"><strong class="font-title text-dark-on-surface">性能定位与工具链沉淀：</strong>熟悉四档机型分档与真机问题排查（<strong class="font-title text-dark-on-surface">RenderDoc / Unity Profiler / UWA</strong>），具备资源规范检测、AB 包体积对比、渲染/性能检测工具开发经验。</li>
+          <li data-i18n="s4"><strong class="font-title text-dark-on-surface">AI 辅助与自动化工作流：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 转换、Skill 规则固化及 PS 端 Prefab 组件插件，提升设计到 Unity 工程的流转效率。</li>
         </ul>
+      </section>
+
+      <!-- 2. 技能清单 -->
+      <section class="print-avoid-break grid grid-cols-1 md:grid-cols-12 gap-gutter-md pb-gutter-md border-b border-dark-outline-variant">
+        <div class="md:col-span-2 flex flex-col gap-gutter-xs">
+          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary" data-i18n="sec.skills">技能清单</h2>
+          <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">TECHNICAL SKILLS</span>
+        </div>
+
+        <div class="md:col-span-10 flex flex-col gap-gutter-sm font-body text-body-md">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-md text-dark-primary" data-i18n="skill.core">核心技术</span>
+            <p class="text-dark-on-surface-variant">
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Unity 2019-2022</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">C#</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">URP Pipeline</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">UGUI</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Hot Update</span>
+            </p>
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-md text-dark-primary" data-i18n="skill.graphics">图形渲染</span>
+            <p class="text-dark-on-surface-variant">
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Shader (HLSL)</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Shader Graph</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">RenderFeature</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Post-processing</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">PBR / SSS</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Substance Painter</span>
+            </p>
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-md text-dark-primary" data-i18n="skill.tools">工具与调试</span>
+            <p class="text-dark-on-surface-variant">
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Git</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Unity Profiler</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">RenderDoc</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">UWA</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Jenkins CI/CD</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Editor Tool Dev</span>
+            </p>
+          </div>
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-md text-dark-primary" data-i18n="skill.platform">平台与性能</span>
+            <p class="text-dark-on-surface-variant">
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">iOS / Android Build</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">SDK Integration</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Multi-tier Optimization</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">Memory / Package Profiling</span>
+              <span class="inline-block bg-dark-surface-container px-2 py-1 rounded text-dark-on-surface mr-2 mb-1">AssetBundle</span>
+            </p>
+          </div>
+        </div>
       </section>
 
       <!-- 2. 工作经历 (4 Roles Compact Editorial Timeline) -->
       <section class="print-avoid-break grid grid-cols-1 md:grid-cols-12 gap-gutter-md pb-gutter-md border-b border-dark-outline-variant">
         <div class="md:col-span-2 flex flex-col gap-gutter-xs">
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary">工作经历</h2>
+          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary" data-i18n="sec.exp">工作经历</h2>
           <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">EXPERIENCE</span>
         </div>
 
@@ -171,11 +224,11 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
               <div class="flex flex-wrap items-baseline gap-gutter-md">
                 <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface">Tap4Fun</h3>
-                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">技术美术 (TA)</span>
+                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary" data-i18n="role.ta">技术美术 (TA)</span>
               </div>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-primary tabular-nums">2021.03 — 2026.09</span>
             </div>
-            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty">
+            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty" data-i18n="exp1">
               承担渲染方案落地、Shader 编写与优化、多档机型性能测试、包体/内存治理、UI 与资源提效工具及 AI 工作流探索，支持《Age of Apes》《Raft War Survival》及在研 4X SLG 等项目研发。
             </p>
           </div>
@@ -183,12 +236,12 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <div class="flex flex-col gap-gutter-xs pt-gutter-xs border-t border-dark-outline-variant">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
               <div class="flex flex-wrap items-baseline gap-gutter-md">
-                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant">成都迷游互娱科技有限公司</h3>
-                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">Unity 客户端开发</span>
+                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant" data-i18n="co.miyou">成都迷游互娱科技有限公司</h3>
+                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary" data-i18n="role.client">Unity 客户端开发</span>
               </div>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary tabular-nums">2020.05 — 2021.03</span>
             </div>
-            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty">
+            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty" data-i18n="exp2">
               负责游戏原型与内部小工具搭建、聚合广告等 SDK 接入、安卓 / iOS 打包及团队 Code Review 规范制定。
             </p>
           </div>
@@ -196,12 +249,12 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <div class="flex flex-col gap-gutter-xs pt-gutter-xs border-t border-dark-outline-variant">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
               <div class="flex flex-wrap items-baseline gap-gutter-md">
-                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant">成都星辰科技有限公司</h3>
-                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">Unity 客户端开发</span>
+                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant" data-i18n="co.xingchen">成都星辰科技有限公司</h3>
+                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary" data-i18n="role.client">Unity 客户端开发</span>
               </div>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary tabular-nums">2018.03 — 2019.11</span>
             </div>
-            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty">
+            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty" data-i18n="exp3">
               独立开发休闲小游戏，完成增量热更新、SDK 接入及打包上架全流程。
             </p>
           </div>
@@ -209,12 +262,12 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <div class="flex flex-col gap-gutter-xs pt-gutter-xs border-t border-dark-outline-variant">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
               <div class="flex flex-wrap items-baseline gap-gutter-md">
-                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant">成都天上友嘉</h3>
-                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">Unity 客户端开发</span>
+                <h3 data-design-text-token="label-sm" class="font-body text-label-sm font-normal text-dark-on-surface-variant" data-i18n="co.youjia">成都天上友嘉</h3>
+                <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary" data-i18n="role.client">Unity 客户端开发</span>
               </div>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary tabular-nums">2016.01 — 2017.06</span>
             </div>
-            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty">
+            <p data-design-text-token="label-sm" class="font-body text-label-sm text-dark-secondary text-pretty" data-i18n="exp4">
               参与卡牌《纯三国》核心战斗模块开发（配置表驱动、表现与逻辑分离），负责 UGUI 图集整理、初步渲染优化及版本/活动迭代。
             </p>
           </div>
@@ -224,7 +277,7 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
       <!-- 3. 项目经历 (Continuous Web Layout) -->
       <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter-md pb-gutter-lg border-b border-dark-outline-variant">
         <div class="md:col-span-2 flex flex-col gap-gutter-xs">
-          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary">项目经历</h2>
+          <h2 data-design-text-token="headline-md" class="font-headline text-headline-md text-dark-primary" data-i18n="sec.projects">项目经历</h2>
           <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary">PROJECTS</span>
         </div>
 
@@ -232,55 +285,55 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
           <!-- Project 1: 内部在研项目 -->
           <div class="print-avoid-break flex flex-col gap-gutter-sm">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
-              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface">内部在研项目（SLG） · 技术美术 (TA)</h3>
+              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface" data-i18n="p1.title">内部在研项目（SLG） · 技术美术 (TA)</h3>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-primary tabular-nums">2025 — 2026</span>
             </div>
-            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty">
+            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty" data-i18n="p1.desc">
               4X SLG 策略游戏（接入地龙小游戏），担任 TA，负责 2D/3D 渲染规范、迷雾系统与工具、地龙战斗渲染、包体治理及 AI 辅助 UI/自动化工具链。
             </p>
             <ul class="flex flex-col gap-gutter-xs list-disc pl-gutter-md font-body text-body-md text-dark-on-surface-variant text-pretty">
-              <li><strong class="font-title text-dark-on-surface">技术选型与渲染规范：</strong>评估 2D 序列片与 3D 转 2D 方案，制定顶点数预算、灯光贴图与 <strong class="font-title text-dark-on-surface">RenderQueue 规范</strong>。</li>
-              <li><strong class="font-title text-dark-on-surface">地龙战斗渲染：</strong>负责战斗场景图集合并、合批优化与阴影/层级标记，保障同屏渲染稳定。</li>
-              <li><strong class="font-title text-dark-on-surface">可配置迷雾与绘制工具：</strong>落地可解锁迷雾与编辑器绘制工具，压缩历史网格内存并精简 Shader，提供低端机简版。</li>
-              <li><strong class="font-title text-dark-on-surface">AI 辅助 UI 生产：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 自动化 Skill 与 PS 端 Prefab 插件，验证设计到工程自动化流程。</li>
-              <li><strong class="font-title text-dark-on-surface">生产提效工具链：</strong>沉淀资源规范检测（FBX/贴图/材质/命名）、AB 包体积对比、DrawCall 与 Overdraw 分析工具。</li>
-              <li><strong class="font-title text-dark-on-surface">包体专项治理（<span class="text-dark-primary tabular-nums">-650M</span>）：</strong>清理遗留资源与冗余视频约 600M，优化贴图与 Shader 变体约 50M。</li>
+              <li data-i18n="p1.b1"><strong class="font-title text-dark-on-surface">技术选型与渲染规范：</strong>评估 2D 序列片与 3D 转 2D 方案，制定顶点数预算、灯光贴图与 <strong class="font-title text-dark-on-surface">RenderQueue 规范</strong>。</li>
+              <li data-i18n="p1.b2"><strong class="font-title text-dark-on-surface">地龙战斗渲染：</strong>负责战斗场景图集合并、合批优化与阴影/层级标记，保障同屏渲染稳定。</li>
+              <li data-i18n="p1.b3"><strong class="font-title text-dark-on-surface">可配置迷雾与绘制工具：</strong>落地可解锁迷雾与编辑器绘制工具，压缩历史网格内存并精简 Shader，提供低端机简版。</li>
+              <li data-i18n="p1.b4"><strong class="font-title text-dark-on-surface">AI 辅助 UI 生产：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 自动化 Skill 与 PS 端 Prefab 插件，验证设计到工程自动化流程。</li>
+              <li data-i18n="p1.b5"><strong class="font-title text-dark-on-surface">生产提效工具链：</strong>沉淀资源规范检测（FBX/贴图/材质/命名）、AB 包体积对比、DrawCall 与 Overdraw 分析工具。</li>
+              <li data-i18n="p1.b6"><strong class="font-title text-dark-on-surface">包体专项治理（<span class="text-dark-primary tabular-nums">-650M</span>）：</strong>清理遗留资源与冗余视频约 600M，优化贴图与 Shader 变体约 50M。</li>
             </ul>
           </div>
 
           <!-- Project 2: Raft War Survival -->
           <div class="print-avoid-break flex flex-col gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
-              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface">Raft War Survival（SLG） · 技术美术 (TA)</h3>
+              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface" data-i18n="p2.title">Raft War Survival（SLG） · 技术美术 (TA)</h3>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-primary tabular-nums">2023 — 2025</span>
             </div>
-            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty">
+            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty" data-i18n="p2.desc">
               SLG 策略手游，前期参与渲染基础搭建，后期独立负责天气、角色渲染、多机型性能优化与生产工具链。
             </p>
             <ul class="flex flex-col gap-gutter-xs list-disc pl-gutter-md font-body text-body-md text-dark-on-surface-variant text-pretty">
-              <li><strong class="font-title text-dark-on-surface">自研 PBR 与 SP 对齐：</strong>自定义 PBR 替代默认 Lit，通过宏裁剪控制变体与内存，并<strong class="font-title text-dark-on-surface">对齐 Substance Painter 与引擎内渲染一致性</strong>。</li>
-              <li><strong class="font-title text-dark-on-surface">配置化天气系统：</strong>落地支持正常、小雨、雪地及平滑过渡的天气系统，对外提供天气与昼夜切换接口。</li>
-              <li><strong class="font-title text-dark-on-surface">角色渲染落地：</strong>实现角色 <strong class="font-title text-dark-on-surface">SSS 皮肤 / 眼球、头发各向异性高光与 MatCap 高光</strong>，接入英雄展示。</li>
-              <li><strong class="font-title text-dark-on-surface">水体表现与压缩（<span class="text-dark-primary tabular-nums">200M → 50M</span>）：</strong>结合竞品截帧优化水体，压缩离线水面高度烘焙数据（200M→50M），基于 FlowMap 实现海水与浮力。</li>
-              <li><strong class="font-title text-dark-on-surface">大规模同屏战斗（<span class="text-dark-primary tabular-nums">100 部队 / 300 人</span>）：</strong>结合纯渲染包定位多部队 CPU 瓶颈并协同优化，按距离切换 LOD 控制面数与开销。</li>
-              <li><strong class="font-title text-dark-on-surface">真机异常排查与四档兼容：</strong>定位修复真机显示异常、卡死与崩溃（覆盖 RT 格式、Spine、视频播放等），保障四档机型稳定运行。</li>
+              <li data-i18n="p2.b1"><strong class="font-title text-dark-on-surface">自研 PBR 与 SP 对齐：</strong>自定义 PBR 替代默认 Lit，通过宏裁剪控制变体与内存，并<strong class="font-title text-dark-on-surface">对齐 Substance Painter 与引擎内渲染一致性</strong>。</li>
+              <li data-i18n="p2.b2"><strong class="font-title text-dark-on-surface">配置化天气系统：</strong>落地支持正常、小雨、雪地及平滑过渡的天气系统，对外提供天气与昼夜切换接口。</li>
+              <li data-i18n="p2.b3"><strong class="font-title text-dark-on-surface">角色渲染落地：</strong>实现角色 <strong class="font-title text-dark-on-surface">SSS 皮肤 / 眼球、头发各向异性高光与 MatCap 高光</strong>，接入英雄展示。</li>
+              <li data-i18n="p2.b4"><strong class="font-title text-dark-on-surface">水体表现与压缩（<span class="text-dark-primary tabular-nums">200M → 50M</span>）：</strong>结合竞品截帧优化水体，压缩离线水面高度烘焙数据（200M→50M），基于 FlowMap 实现海水与浮力。</li>
+              <li data-i18n="p2.b5"><strong class="font-title text-dark-on-surface">大规模同屏战斗（<span class="text-dark-primary tabular-nums">100 部队 / 300 人</span>）：</strong>结合纯渲染包定位多部队 CPU 瓶颈并协同优化，按距离切换 LOD 控制面数与开销。</li>
+              <li data-i18n="p2.b6"><strong class="font-title text-dark-on-surface">真机异常排查与四档兼容：</strong>定位修复真机显示异常、卡死与崩溃（覆盖 RT 格式、Spine、视频播放等），保障四档机型稳定运行。</li>
             </ul>
           </div>
 
           <!-- Project 3: Age of Apes -->
           <div class="print-avoid-break flex flex-col gap-gutter-sm pt-gutter-md border-t border-dark-outline-variant">
             <div class="flex flex-wrap items-baseline justify-between gap-gutter-sm">
-              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface">Age of Apes（SLG，已上线） · 技术美术 (TA)</h3>
+              <h3 data-design-text-token="title-sm" class="font-title text-title-sm text-dark-on-surface" data-i18n="p3.title">Age of Apes（SLG，已上线） · 技术美术 (TA)</h3>
               <span data-design-text-token="label-sm" class="font-label text-label-sm text-dark-secondary tabular-nums">2022 — 2023</span>
             </div>
-            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty">
+            <p data-design-text-token="body-md" class="font-body text-body-md text-dark-on-surface text-pretty" data-i18n="p3.desc">
               SLG 策略手游（已上线），负责 Built-in 向 URP 迁移、Shader 校验、合批修复、角色/场景表现落地及性能测试与监控。
             </p>
             <ul class="flex flex-col gap-gutter-xs list-disc pl-gutter-md font-body text-body-md text-dark-on-surface-variant text-pretty">
-              <li><strong class="font-title text-dark-on-surface">Built-in → URP 迁移与合批：</strong>工具批量转 HLSL 并人工校验数十个自定义 Shader；排查修复移动端 <strong class="font-title text-dark-on-surface">SRP Batcher 失效</strong>与主城 RenderQueue 合批打断。</li>
-              <li><strong class="font-title text-dark-on-surface">角色毛发渲染：</strong>通过 <strong class="font-title text-dark-on-surface">RenderFeature</strong> 实现毛皮/毛发角色 Shader，接入英雄展示表现。</li>
-              <li><strong class="font-title text-dark-on-surface">GPU 动画优化：</strong>实践 GPU 动画法线烘焙与压缩方案。</li>
-              <li><strong class="font-title text-dark-on-surface">地图特效与后处理：</strong>落地 KVK 岩浆、温泉、热扰动与 <strong class="font-title text-dark-on-surface">GrabPass</strong> 水面折射（含 LOD）；实现参数化扫描线、Bloom 调优及受光面调试插件。</li>
+              <li data-i18n="p3.b1"><strong class="font-title text-dark-on-surface">Built-in → URP 迁移与合批：</strong>工具批量转 HLSL 并人工校验数十个自定义 Shader；排查修复移动端 <strong class="font-title text-dark-on-surface">SRP Batcher 失效</strong>与主城 RenderQueue 合批打断。</li>
+              <li data-i18n="p3.b2"><strong class="font-title text-dark-on-surface">角色毛发渲染：</strong>通过 <strong class="font-title text-dark-on-surface">RenderFeature</strong> 实现毛皮/毛发角色 Shader，接入英雄展示表现。</li>
+              <li data-i18n="p3.b3"><strong class="font-title text-dark-on-surface">GPU 动画优化：</strong>实践 GPU 动画法线烘焙与压缩方案。</li>
+              <li data-i18n="p3.b4"><strong class="font-title text-dark-on-surface">地图特效与后处理：</strong>落地 KVK 岩浆、温泉、热扰动与 <strong class="font-title text-dark-on-surface">GrabPass</strong> 水面折射（含 LOD）；实现参数化扫描线、Bloom 调优及受光面调试插件。</li>
             </ul>
           </div>
         </div>
@@ -290,5 +343,108 @@ if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
 
   </main>
 
+<script>
+const I18N = {
+  en: {
+    "title": "Unity Client Developer / Technical Artist (TA)",
+    "co.miyou": "Chengdu Miyou Interactive Entertainment Technology Co., Ltd.",
+    "co.xingchen": "Chengdu Xingchen Technology Co., Ltd.",
+    "co.youjia": "Chengdu Tianshang Youjia",
+    "sec.strengths": "Strengths",
+    "sec.skills": "Technical Skills",
+    "sec.exp": "Experience",
+    "sec.projects": "Projects",
+    "skill.core": "Core Technologies",
+    "skill.graphics": "Graphics & Rendering",
+    "skill.tools": "Tools & Debugging",
+    "skill.platform": "Platform & Performance",
+    "role.ta": "Technical Artist (TA)",
+    "role.client": "Unity Client Developer",
+    "s1": '<strong class="font-title text-dark-on-surface">Hybrid Client + TA background: </strong><strong class="font-title text-dark-primary">10+ years Unity</strong> hands-on, nearly <strong class="font-title text-dark-primary">5.5 years as overseas SLG TA</strong>; skilled in <strong class="font-title text-dark-on-surface">UGUI, hot update, packaging, SDK integration and tooling</strong>, familiar with <strong class="font-title text-dark-on-surface">URP pipeline, Shaders, RenderFeatures and cross-device performance optimization</strong>, and able to align <strong class="font-title text-dark-on-surface">Substance Painter assets with in-engine rendering</strong>.',
+    "s2": '<strong class="font-title text-dark-on-surface">End-to-end & live-ops experience: </strong>Shipped casual / hybrid-casual titles from zero to launch; long-term involvement in live iteration of overseas SLGs (including released <em>Age of Apes</em> and <em>Raft War Survival</em>) and new projects; balances visual fidelity, engineering stability and runtime performance budget.',
+    "s3": '<strong class="font-title text-dark-on-surface">AI-assisted & automated workflows: </strong>Researched <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> conversion, reusable Skill rules and a Photoshop Prefab component plugin to streamline the design-to-Unity handoff.',
+    "s4": '<strong class="font-title text-dark-on-surface">Profiling & toolchain: </strong>Experienced in tiered device grading and on-device debugging (<strong class="font-title text-dark-on-surface">RenderDoc / Unity Profiler / UWA</strong>); built asset validation, AB bundle size comparison and rendering / performance monitoring tools.',
+    "exp1": "Owned rendering pipeline implementation, Shader authoring and optimization, multi-tier performance testing, build size / memory governance, UI & asset efficiency tools, and AI-assisted workflow exploration; supported <em>Age of Apes</em>, <em>Raft War Survival</em> and an in-development 4X SLG.",
+    "exp2": "Built game prototypes and internal utilities, integrated monetization / ad SDKs, handled Android / iOS packaging, and established team code review standards.",
+    "exp3": "Independently developed casual mini-games; delivered incremental hot update, SDK integration, packaging and store launch end-to-end.",
+    "exp4": "Contributed to the core combat system of card game <em>Pure Three Kingdoms</em> (data-driven config, logic / presentation separation); managed UGUI atlas organization, initial rendering optimization, and version / event iteration.",
+    "p1.title": "In-Development 4X SLG · Technical Artist (TA)",
+    "p1.desc": "4X strategy SLG (with mini-game layer). Acted as TA: defined 2D / 3D rendering guidelines, built fog-of-war system and editor tools, implemented underground battle rendering, governed build size, and developed AI-assisted UI / automation tooling.",
+    "p1.b1": '<strong class="font-title text-dark-on-surface">Technical selection & rendering standards: </strong>Evaluated 2D sprite sequences vs 3D-to-2D approaches; set polygon budgets, lightmap rules and <strong class="font-title text-dark-on-surface">RenderQueue conventions</strong>.',
+    "p1.b2": '<strong class="font-title text-dark-on-surface">Underground battle rendering: </strong>Packed atlases, improved batching, and controlled shadow / layer marking to keep same-screen rendering stable.',
+    "p1.b3": '<strong class="font-title text-dark-on-surface">Configurable fog & painting tool: </strong>Shippable unlockable fog system with editor painting tool; compressed historical mesh memory, simplified Shaders and provided a low-end fallback variant.',
+    "p1.b4": '<strong class="font-title text-dark-on-surface">AI-assisted UI production: </strong>Researched automated <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> Skill and Photoshop Prefab plugin to validate the design-to-engine automation pipeline.',
+    "p1.b5": '<strong class="font-title text-dark-on-surface">Efficiency toolchain: </strong>Built asset validation (FBX / textures / materials / naming), AB bundle size diff, DrawCall and Overdraw analysis tools.',
+    "p1.b6": '<strong class="font-title text-dark-on-surface">Build size reduction (<span class="text-dark-primary tabular-nums">-650M</span>): </strong>Cleaned legacy assets and redundant videos (~600M); optimized textures and Shader variants (~50M).',
+    "p2.title": "Raft War Survival (SLG) · Technical Artist (TA)",
+    "p2.desc": "Strategy SLG mobile title. Built initial rendering foundation; later owned weather system, character rendering, multi-tier performance optimization and production tooling.",
+    "p2.b1": '<strong class="font-title text-dark-on-surface">Custom PBR & SP alignment: </strong>Replaced default Lit with a custom PBR shader; controlled variants and memory via macro branching; <strong class="font-title text-dark-on-surface">matched Substance Painter look with in-engine rendering</strong>.',
+    "p2.b2": '<strong class="font-title text-dark-on-surface">Configurable weather system: </strong>Implemented clear, light rain, snow and smooth transitions; exposed weather / day-night switching APIs.',
+    "p2.b3": '<strong class="font-title text-dark-on-surface">Character rendering: </strong>Built <strong class="font-title text-dark-on-surface">SSS skin / eyeball, anisotropic hair specular and MatCap highlights</strong> for hero showcases.',
+    "p2.b4": '<strong class="font-title text-dark-on-surface">Water optimization (<span class="text-dark-primary tabular-nums">200M → 50M</span>): </strong>Optimized water using competitor frame references; compressed offline water-height baking data (200M → 50M); implemented ocean and buoyancy with FlowMap.',
+    "p2.b5": '<strong class="font-title text-dark-on-surface">Large-scale battles (<span class="text-dark-primary tabular-nums">100 units / 300 characters</span>): </strong>Profiled CPU bottlenecks for mass unit rendering and coordinated optimization; distance-based LOD to control poly count and overhead.',
+    "p2.b6": '<strong class="font-title text-dark-on-surface">On-device troubleshooting & 4-tier compatibility: </strong>Fixed display glitches, freezes and crashes (RT formats, Spine, video playback); ensured stable performance across four device tiers.',
+    "p3.title": "Age of Apes (SLG, Live) · Technical Artist (TA)",
+    "p3.desc": "Live SLG mobile title. Led Built-in → URP migration, Shader validation, batching fixes, character / scene rendering, and performance testing & monitoring.",
+    "p3.b1": '<strong class="font-title text-dark-on-surface">Built-in → URP migration & batching: </strong>Bulk-converted custom Shaders to HLSL with manual review; fixed mobile <strong class="font-title text-dark-on-surface">SRP Batcher failures</strong> and main-city RenderQueue batching interruptions.',
+    "p3.b2": '<strong class="font-title text-dark-on-surface">Character fur / hair rendering: </strong>Implemented fur / hair Shaders via <strong class="font-title text-dark-on-surface">RenderFeature</strong> for hero showcases.',
+    "p3.b3": '<strong class="font-title text-dark-on-surface">GPU animation optimization: </strong>Practiced GPU animation normal baking and compression.',
+    "p3.b4": '<strong class="font-title text-dark-on-surface">Map FX & post-processing: </strong>Implemented KVK lava, hot springs, heat distortion and <strong class="font-title text-dark-on-surface">GrabPass</strong> water refraction (with LOD); tuned parameterized scanlines, Bloom and lit-surface debugging plugin.'
+  },
+  zh: {
+    "title": "U3D 客户端开发 / 技术美术 (TA)",
+    "co.miyou": "成都迷游互娱科技有限公司",
+    "co.xingchen": "成都星辰科技有限公司",
+    "co.youjia": "成都天上友嘉",
+    "sec.strengths": "个人优势",
+    "sec.skills": "技能清单",
+    "sec.exp": "工作经历",
+    "skill.core": "核心技术",
+    "skill.graphics": "图形渲染",
+    "skill.tools": "工具与调试",
+    "skill.platform": "平台与性能",
+    "sec.projects": "项目经历",
+    "role.ta": "技术美术 (TA)",
+    "role.client": "Unity 客户端开发",
+    "s1": '<strong class="font-title text-dark-on-surface">客户端 + TA 复合背景：</strong><strong class="font-title text-dark-primary">10 年+ Unity</strong> 实战，近 <strong class="font-title text-dark-primary">5.5 年海外 SLG TA</strong> 经验；兼具 <strong class="font-title text-dark-on-surface">UGUI、热更、打包、SDK 与工具开发</strong>能力，熟悉 <strong class="font-title text-dark-on-surface">URP 管线、Shader、RenderFeature 与多机型性能优化</strong>，并能对齐 <strong class="font-title text-dark-on-surface">SP（Substance Painter）与 Unity 渲染效果</strong>。',
+    "s2": '<strong class="font-title text-dark-on-surface">全链路与长线迭代经验：</strong>经历休闲 / 混合休闲从 0 到上架，长期参与海外 SLG（含已上线《Age of Apes》《Raft War Survival》）线上版本迭代与新项目推进，擅长平衡美术表现、工程稳定性与性能开销。',
+    "s3": '<strong class="font-title text-dark-on-surface">AI 辅助与自动化工作流：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 转换、Skill 规则固化及 PS 端 Prefab 组件插件，提升设计到 Unity 工程的流转效率。',
+    "s4": '<strong class="font-title text-dark-on-surface">性能定位与工具链沉淀：</strong>熟悉四档机型分档与真机问题排查（<strong class="font-title text-dark-on-surface">RenderDoc / Unity Profiler / UWA</strong>），具备资源规范检测、AB 包体积对比、渲染/性能检测工具开发经验。',
+    "exp1": "承担渲染方案落地、Shader 编写与优化、多档机型性能测试、包体/内存治理、UI 与资源提效工具及 AI 工作流探索，支持《Age of Apes》《Raft War Survival》及在研 4X SLG 等项目研发。",
+    "exp2": "负责游戏原型与内部小工具搭建、聚合广告等 SDK 接入、安卓 / iOS 打包及团队 Code Review 规范制定。",
+    "exp3": "独立开发休闲小游戏，完成增量热更新、SDK 接入及打包上架全流程。",
+    "exp4": "参与卡牌《纯三国》核心战斗模块开发（配置表驱动、表现与逻辑分离），负责 UGUI 图集整理、初步渲染优化及版本/活动迭代。",
+    "p1.title": "内部在研项目（SLG） · 技术美术 (TA)",
+    "p1.desc": "4X SLG 策略游戏（接入地龙小游戏），担任 TA，负责 2D/3D 渲染规范、迷雾系统与工具、地龙战斗渲染、包体治理及 AI 辅助 UI/自动化工具链。",
+    "p1.b1": '<strong class="font-title text-dark-on-surface">技术选型与渲染规范：</strong>评估 2D 序列片与 3D 转 2D 方案，制定顶点数预算、灯光贴图与 <strong class="font-title text-dark-on-surface">RenderQueue 规范</strong>。',
+    "p1.b2": '<strong class="font-title text-dark-on-surface">地龙战斗渲染：</strong>负责战斗场景图集合并、合批优化与阴影/层级标记，保障同屏渲染稳定。',
+    "p1.b3": '<strong class="font-title text-dark-on-surface">可配置迷雾与绘制工具：</strong>落地可解锁迷雾与编辑器绘制工具，压缩历史网格内存并精简 Shader，提供低端机简版。',
+    "p1.b4": '<strong class="font-title text-dark-on-surface">AI 辅助 UI 生产：</strong>预研 <strong class="font-title text-dark-on-surface">PSD → UGUI</strong> 自动化 Skill 与 PS 端 Prefab 插件，验证设计到工程自动化流程。',
+    "p1.b5": '<strong class="font-title text-dark-on-surface">生产提效工具链：</strong>沉淀资源规范检测（FBX/贴图/材质/命名）、AB 包体积对比、DrawCall 与 Overdraw 分析工具。',
+    "p1.b6": '<strong class="font-title text-dark-on-surface">包体专项治理（<span class="text-dark-primary tabular-nums">-650M</span>）：</strong>清理遗留资源与冗余视频约 600M，优化贴图与 Shader 变体约 50M。',
+    "p2.title": "Raft War Survival（SLG） · 技术美术 (TA)",
+    "p2.desc": "SLG 策略手游，前期参与渲染基础搭建，后期独立负责天气、角色渲染、多机型性能优化与生产工具链。",
+    "p2.b1": '<strong class="font-title text-dark-on-surface">自研 PBR 与 SP 对齐：</strong>自定义 PBR 替代默认 Lit，通过宏裁剪控制变体与内存，并<strong class="font-title text-dark-on-surface">对齐 Substance Painter 与引擎内渲染一致性</strong>。',
+    "p2.b2": '<strong class="font-title text-dark-on-surface">配置化天气系统：</strong>落地支持正常、小雨、雪地及平滑过渡的天气系统，对外提供天气与昼夜切换接口。',
+    "p2.b3": '<strong class="font-title text-dark-on-surface">角色渲染落地：</strong>实现角色 <strong class="font-title text-dark-on-surface">SSS 皮肤 / 眼球、头发各向异性高光与 MatCap 高光</strong>，接入英雄展示。',
+    "p2.b4": '<strong class="font-title text-dark-on-surface">水体表现与压缩（<span class="text-dark-primary tabular-nums">200M → 50M</span>）：</strong>结合竞品截帧优化水体，压缩离线水面高度烘焙数据（200M→50M），基于 FlowMap 实现海水与浮力。',
+    "p2.b5": '<strong class="font-title text-dark-on-surface">大规模同屏战斗（<span class="text-dark-primary tabular-nums">100 部队 / 300 人</span>）：</strong>结合纯渲染包定位多部队 CPU 瓶颈并协同优化，按距离切换 LOD 控制面数与开销。',
+    "p2.b6": '<strong class="font-title text-dark-on-surface">真机异常排查与四档兼容：</strong>定位修复真机显示异常、卡死与崩溃（覆盖 RT 格式、Spine、视频播放等），保障四档机型稳定运行。',
+    "p3.title": "Age of Apes（SLG，已上线） · 技术美术 (TA)",
+    "p3.desc": "SLG 策略手游（已上线），负责 Built-in 向 URP 迁移、Shader 校验、合批修复、角色/场景表现落地及性能测试与监控。",
+    "p3.b1": '<strong class="font-title text-dark-on-surface">Built-in → URP 迁移与合批：</strong>工具批量转 HLSL 并人工校验数十个自定义 Shader；排查修复移动端 <strong class="font-title text-dark-on-surface">SRP Batcher 失效</strong>与主城 RenderQueue 合批打断。',
+    "p3.b2": '<strong class="font-title text-dark-on-surface">角色毛发渲染：</strong>通过 <strong class="font-title text-dark-on-surface">RenderFeature</strong> 实现毛皮/毛发角色 Shader，接入英雄展示表现。',
+    "p3.b3": '<strong class="font-title text-dark-on-surface">GPU 动画优化：</strong>实践 GPU 动画法线烘焙与压缩方案。',
+    "p3.b4": '<strong class="font-title text-dark-on-surface">地图特效与后处理：</strong>落地 KVK 岩浆、温泉、热扰动与 <strong class="font-title text-dark-on-surface">GrabPass</strong> 水面折射（含 LOD）；实现参数化扫描线、Bloom 调优及受光面调试插件。'
+  }
+};
+
+const lang = localStorage.getItem('lang') || 'en';
+document.documentElement.lang = lang;
+document.querySelectorAll('[data-i18n]').forEach(el => {
+  const key = el.dataset.i18n;
+  if (I18N[lang] && I18N[lang][key] !== undefined) el.innerHTML = I18N[lang][key];
+});
+</script>
 
 </body></html>

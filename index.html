@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,6 +107,101 @@ nav{
 .nav-filter button.active{
     color:var(--text);
     background:var(--accent);
+}
+/* 语言切换按钮 */
+.lang-switch{
+    display:flex;
+    gap:0.5rem;
+    background:rgba(22, 27, 34, 0.6);
+    padding:0.25rem;
+    border-radius:12px;
+}
+.lang-switch button{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-size:0.95rem;
+    cursor:pointer;
+    padding:0.5rem 1.25rem;
+    border-radius:8px;
+    transition:all 0.2s ease;
+    font-weight:500;
+}
+.lang-switch button:hover{
+    color:var(--text);
+    background:rgba(255,255,255,0.05);
+}
+.lang-switch button.active{
+    color:var(--text);
+    background:var(--accent);
+}
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+}
+/* 首次访问语言选择弹窗 */
+.lang-modal-overlay{
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:1rem;
+    animation:fadeIn 0.3s ease;
+}
+.lang-modal-overlay.active{
+    display:flex;
+}
+.lang-modal{
+    background:rgba(22,27,34,0.95);
+    backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:2.5rem;
+    max-width:420px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    animation:modalSlideIn 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.lang-modal h3{
+    font-size:1.4rem;
+    margin-bottom:0.75rem;
+    color:var(--text);
+}
+.lang-modal p{
+    color:var(--muted);
+    font-size:0.95rem;
+    margin-bottom:1.75rem;
+    line-height:1.6;
+}
+.lang-modal-btns{
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+}
+.lang-modal-btns button{
+    flex:1;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    color:var(--text);
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    padding:0.9rem 1rem;
+    border-radius:12px;
+    transition:all 0.2s ease;
+}
+.lang-modal-btns button:hover{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#0f1117;
 }
 /* Hero 区域 */
 .hero {
@@ -559,18 +654,24 @@ footer a{
     <div class="nav-content">
         <div class="nav-brand">
             <span class="brand-name">Wayne</span>
-            <span class="brand-subtitle">/ 技术美术&客户端开发</span>
+            <span class="brand-subtitle" data-i18n="brand.sub">/ 技术美术&amp;客户端开发</span>
         </div>
-        <div class="nav-filter">
-            <button data-filter="work" class="active">作品</button>
-            <button data-filter="demo">Demo</button>
+        <div class="nav-right">
+            <div class="nav-filter">
+                <button data-filter="work" class="active" data-i18n="nav.work">作品</button>
+                <button data-filter="demo" data-i18n="nav.demo">Demo</button>
+            </div>
+            <div class="lang-switch">
+                <button data-lang="en" class="active">EN</button>
+                <button data-lang="zh">中</button>
+            </div>
         </div>
     </div>
 </nav>
 
 <main class="container">
     <!-- 分类大标题 -->
-    <h2 class="category-title" id="categoryTitle">作品</h2>
+    <h2 class="category-title" id="categoryTitle" data-i18n="nav.work">作品</h2>
 
     <div class="project-list" id="projectList">
         <!-- ========== 作品 Project / work ========== -->
@@ -578,15 +679,14 @@ footer a{
             <a href="./Res/Project/SLGWorldMap/index.html">
                 <div class="project-image-wrapper">
                     <div class="project-tags">
-                        <span class="tag">URP</span>
-                        <span class="tag">合批优化</span>
-                        <span class="tag">描边</span>
+                        <span class="tag" data-i18n="tag.batching">合批优化</span>
+                        <span class="tag" data-i18n="tag.outline">描边</span>
                     </div>
                     <img class="project-image" src="./Res/Project/SLGWorldMap/thumb.png" alt="项目截图">
                 </div>
                 <div class="project-content">
-                    <h3 class="project-title">大地图战斗渲染</h3>
-                    <p class="project-desc">URP管线、合批优化、简单描边方案</p>
+                    <h3 class="project-title" data-i18n="proj1.title">大地图战斗渲染</h3>
+                    <p class="project-desc" data-i18n="proj1.desc">URP管线、合批优化、简单描边方案</p>
                 </div>
             </a>
         </div>
@@ -595,14 +695,14 @@ footer a{
             <a href="./Res/Project/AIPsd2UnityPrefab/index.html">
                 <div class="project-image-wrapper">
                     <div class="project-tags">
-                        <span class="tag">工具</span>
-                        <span class="tag">自动化</span>
+                        <span class="tag" data-i18n="tag.tool">工具</span>
+                        <span class="tag" data-i18n="tag.auto">自动化</span>
                     </div>
                     <img class="project-image" src="./Res/Project/AIPsd2UnityPrefab/thumb.png" alt="项目截图">
                 </div>
                 <div class="project-content">
-                    <h3 class="project-title">AI-PSD到Unity UGUI预研</h3>
-                    <p class="project-desc">PSD插件,UGUI自动生成和代码生成</p>
+                    <h3 class="project-title" data-i18n="proj2.title">AI-PSD到Unity UGUI预研</h3>
+                    <p class="project-desc" data-i18n="proj2.desc">PSD插件,UGUI自动生成和代码生成</p>
                 </div>
             </a>
         </div>
@@ -613,13 +713,13 @@ footer a{
                     <div class="project-tags">
                         <span class="tag">PBR</span>
                         <span class="tag">SSS</span>
-                        <span class="tag">眼球渲染</span>
+                        <span class="tag" data-i18n="tag.eyeball">眼球渲染</span>
                     </div>
                     <img class="project-image" src="./Res/Project/PBRRoles/thumb.png" alt="项目截图">
                 </div>
                 <div class="project-content">
-                    <h3 class="project-title">基于PBR 皮肤和眼球渲染</h3>
-                    <p class="project-desc">PBR 写实角色渲染 皮肤 眼球 阴影</p>
+                    <h3 class="project-title" data-i18n="proj3.title">基于PBR 皮肤和眼球渲染</h3>
+                    <p class="project-desc" data-i18n="proj3.desc">PBR 写实角色渲染 皮肤 眼球 阴影</p>
                 </div>
             </a>
         </div>
@@ -657,8 +757,8 @@ footer a{
 
 <footer>
     <div style="display: flex; gap: 2rem; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-        <a href="#" id="aboutLink" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: all 0.2s ease;">关于我/联系我</a>
-        <span>© 2026 Wayne | Technical Artist & Client Developer</span>
+        <a href="#" id="aboutLink" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: all 0.2s ease;" data-i18n="footer.about">关于我/联系我</a>
+        <span>© 2026 Wayne | Technical Artist &amp; Client Developer</span>
     </div>
 </footer>
 
@@ -666,7 +766,7 @@ footer a{
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-container">
         <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle">项目详情</h2>
+            <h2 class="modal-title" id="modalTitle" data-i18n="modal.detail">项目详情</h2>
             <button class="modal-close" id="modalClose">&times;</button>
         </div>
         <div class="modal-body" id="modalBody">
@@ -679,7 +779,96 @@ footer a{
     </div>
 </div>
 
+<!-- 首次访问语言选择弹窗 -->
+<div class="lang-modal-overlay" id="langModal">
+    <div class="lang-modal">
+        <h3 data-i18n="lang.title">Choose Language / 选择语言</h3>
+        <p data-i18n="lang.desc">Please select your preferred language. Your choice will be saved on this device.<br>请选择您偏好的语言，选择将保存在本机。</p>
+        <div class="lang-modal-btns">
+            <button data-lang="en">English</button>
+            <button data-lang="zh">中文</button>
+        </div>
+    </div>
+</div>
+
 <script>
+// ============ 多语言 i18n ============
+const I18N = {
+    en: {
+        "brand.sub": "/ Technical Artist & Client Developer",
+        "nav.work": "Works",
+        "nav.demo": "Demo",
+        "tag.batching": "Batching Optimization",
+        "tag.outline": "Outline",
+        "tag.tool": "Tool",
+        "tag.auto": "Automation",
+        "tag.eyeball": "Eye Rendering",
+        "proj1.title": "World Map Combat Rendering",
+        "proj1.desc": "URP pipeline, batching optimization, simple outline solution",
+        "proj2.title": "AI PSD-to-Unity UGUI Prototype",
+        "proj2.desc": "PSD plugin for automated UGUI and code generation",
+        "proj3.title": "PBR Skin & Eye Rendering",
+        "proj3.desc": "PBR realistic character rendering: skin, eyes, shadow",
+        "footer.about": "About / Contact",
+        "modal.detail": "Project Details",
+        "modal.about": "About / Contact",
+        "empty.title": "Nothing here yet",
+        "empty.desc": "No projects in this category yet.",
+        "loading": "Loading...",
+        "loadfail": "Failed to load",
+        "lang.title": "Choose Language",
+        "lang.desc": "Please select your preferred language. Your choice will be saved on this device."
+    },
+    zh: {
+        "brand.sub": "/ 技术美术&客户端开发",
+        "nav.work": "作品",
+        "nav.demo": "Demo",
+        "tag.batching": "合批优化",
+        "tag.outline": "描边",
+        "tag.tool": "工具",
+        "tag.auto": "自动化",
+        "tag.eyeball": "眼球渲染",
+        "proj1.title": "大地图战斗渲染",
+        "proj1.desc": "URP管线、合批优化、简单描边方案",
+        "proj2.title": "AI-PSD到Unity UGUI预研",
+        "proj2.desc": "PSD插件,UGUI自动生成和代码生成",
+        "proj3.title": "基于PBR 皮肤和眼球渲染",
+        "proj3.desc": "PBR 写实角色渲染 皮肤 眼球 阴影",
+        "footer.about": "关于我/联系我",
+        "modal.detail": "项目详情",
+        "modal.about": "关于我/联系我",
+        "empty.title": "暂无内容",
+        "empty.desc": "该分类下还没有项目",
+        "loading": "加载中...",
+        "loadfail": "加载失败",
+        "lang.title": "选择语言",
+        "lang.desc": "请选择您偏好的语言，选择将保存在本机。"
+    }
+};
+
+// 自动检测浏览器语言，中文浏览器默认中文，其他默认英文
+let browserLang = navigator.language || navigator.userLanguage;
+let currentLang = localStorage.getItem('lang') || (browserLang.startsWith('zh') ? 'zh' : 'en');
+
+function applyLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
+    const dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    // 语言按钮高亮
+    document.querySelectorAll('.lang-switch button').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    // 筛选标题
+    titleMap.work = dict['nav.work'];
+    titleMap.demo = dict['nav.demo'];
+    categoryTitleEl.textContent = dict['nav.work'];
+}
+
 // 映射filter和显示标题
 const titleMap = {
     work: "作品",
@@ -706,7 +895,7 @@ function createProgressRing() {
                 <circle class="loading-ring-progress" cx="44" cy="44" r="40" id="progressCircle"></circle>
             </svg>
         </div>
-        <div class="loading-text">加载中...</div>
+        <div class="loading-text">${I18N[currentLang]['loading']}</div>
     `;
 }
 
@@ -718,7 +907,7 @@ function createSpinnerRing() {
                 <circle class="loading-spinner-circle" cx="25" cy="25" r="20"></circle>
             </svg>
         </div>
-        <div class="loading-text">加载中...</div>
+        <div class="loading-text">${I18N[currentLang]['loading']}</div>
     `;
 }
 
@@ -767,7 +956,7 @@ function openModal(title, url) {
     // 监听 iframe 加载错误
     modalIframe.onerror = () => {
         loadingContainer.innerHTML = `
-            <div class="loading-text" style="color: #f87171;">加载失败</div>
+            <div class="loading-text" style="color: #f87171;">${I18N[currentLang]['loadfail']}</div>
         `;
         setTimeout(() => {
             hideLoading();
@@ -805,11 +994,13 @@ document.addEventListener('keydown', (e) => {
 // 拦截项目卡片点击，改为打开模态窗口
 projectItems.forEach(item => {
     const link = item.querySelector('a');
-    const title = item.querySelector('.project-title').textContent;
+    const titleEl = item.querySelector('.project-title');
     const url = link.getAttribute('href');
 
     link.onclick = (e) => {
         e.preventDefault();
+        // 实时获取当前语言下的标题
+        const title = titleEl.textContent;
         openModal(title, url);
     };
 });
@@ -846,7 +1037,7 @@ filterBtns.forEach(btn => {
             // 显示空状态
             const emptyState = document.createElement('div');
             emptyState.className = 'empty-state';
-            emptyState.innerHTML = '<h3>暂无内容</h3><p>该分类下还没有项目</p>';
+            emptyState.innerHTML = `<h3>${I18N[currentLang]['empty.title']}</h3><p>${I18N[currentLang]['empty.desc']}</p>`;
             projectList.appendChild(emptyState);
         } else {
             // 延迟显示匹配的项目，带淡入动画
@@ -865,8 +1056,25 @@ filterBtns.forEach(btn => {
 // 处理"关于我/联系我"链接
 document.getElementById('aboutLink').onclick = (e) => {
     e.preventDefault();
-    openModal('关于我/联系我', './unity_ta.html');
+    openModal(I18N[currentLang]['modal.about'], './unity_ta.html');
 };
+
+// ============ 语言切换 & 首次访问弹窗 ============
+const langModal = document.getElementById('langModal');
+document.querySelectorAll('.lang-switch button').forEach(btn => {
+    btn.onclick = () => {
+        applyLang(btn.dataset.lang);
+    };
+});
+langModal.querySelectorAll('button').forEach(btn => {
+    btn.onclick = () => {
+        applyLang(btn.dataset.lang);
+        langModal.classList.remove('active');
+    };
+});
+
+// 初始化：直接应用语言设置
+applyLang(currentLang);
 </script>
 </body>
 </html>

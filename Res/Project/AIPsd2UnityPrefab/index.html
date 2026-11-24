@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>项目详情</title>
+<title data-i18n="doc.title">项目详情</title>
 <style>
 * {
   margin: 0;
@@ -264,7 +264,7 @@ footer a {
 </div>
 
 <header>
-  <h1>AI-PSD到Unity UGUI</h1>
+  <h1 data-i18n="header.title">AI-PSD到Unity UGUI</h1>
   <a href="/index.html" class="back-btn">← 返回主页</a>
 </header>
 <main>
@@ -328,102 +328,102 @@ footer a {
       <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
     </div> -->
 
-    <h1>从PSD到Unity UGUI预研</h1>
-    <p><strong>项目简介</strong>：传统UI开发中，UI 美术手动切图、程序在Unity中手搭 Prefab、配Anchor、挂组件耗费大量重复性劳动，且极易出现还原度偏差。最终产出的UI和设计的有明显差异，UI和客户端沟通成本非常高</p>
-    <P>这个工具预研构目的是建一套打通 Photoshop 与 Unity 的自动化 UI 还原管线，实现 PSD 图层树到 Unity UGUI Prefab 的 1:1 确定性转换</P>
-    <p><strong>注意:所有PSD来自于商店插件,纯测试使用</strong></p>
-    
-    <h2>效果对比</h2>
-    <strong>1. 原始PSD直接输出</strong>
+    <h1 data-i18n="doc.h1">从PSD到Unity UGUI预研</h1>
+    <p data-i18n="doc.intro"><strong>项目简介</strong>：传统UI开发中，UI 美术手动切图、程序在Unity中手搭 Prefab、配Anchor、挂组件耗费大量重复性劳动，且极易出现还原度偏差。最终产出的UI和设计的有明显差异，UI和客户端沟通成本非常高</p>
+    <P data-i18n="doc.goal">这个工具预研构目的是建一套打通 Photoshop 与 Unity 的自动化 UI 还原管线，实现 PSD 图层树到 Unity UGUI Prefab 的 1:1 确定性转换</P>
+    <p data-i18n="doc.notice"><strong>注意:所有PSD来自于商店插件,纯测试使用</strong></p>
+
+    <h2 data-i18n="doc.h2.cmp">效果对比</h2>
+    <strong data-i18n="doc.sub.raw">1. 原始PSD直接输出</strong>
     <div class="img-row">
       <figure style="flex:1;">
         <img src="./thumb.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">原始PSD</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.raw">原始PSD</figcaption>
       </figure>
 
       <figure style="flex:1;">
         <img src="./prefab_undo.png" alt="直接输出" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">不人工干预直接使用工具导出</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.undo">不人工干预直接使用工具导出</figcaption>
       </figure>
     </div>
-    <p><strong>右侧预制体和PSD有50%相似度,还有很多问题</strong></p>
+    <p data-i18n="doc.raw.verdict"><strong>右侧预制体和PSD有50%相似度,还有很多问题</strong></p>
     <ul>
-        <li><p>字体不一致,这个需要制作人员提供字体</p></li>
-        <li><p>一些图标用错了,甚至是缺失状态</p></li>
-        <li><p>Mask基本失效</p></li>
+        <li><p data-i18n="doc.raw.b1">字体不一致,这个需要制作人员提供字体</p></li>
+        <li><p data-i18n="doc.raw.b2">一些图标用错了,甚至是缺失状态</p></li>
+        <li><p data-i18n="doc.raw.b3">Mask基本失效</p></li>
     </ul>
-    <p><strong>其他的位置,层级和PSD能完全对上</strong></p>
+    <p data-i18n="doc.raw.match"><strong>其他的位置,层级和PSD能完全对上</strong></p>
 
     <div class="img-row" style="width:90%;">
       <figure style="flex:1;">
         <img src="./PSD_Layer.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">PSD层级</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.psdlayer">PSD层级</figcaption>
       </figure>
 
       <figure style="flex:1;">
         <img src="./Prefab_Layer.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">Prefab层级</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.pfblayer">Prefab层级</figcaption>
       </figure>
     </div>
     <ul>
-        <li><p>Prefab层级和PSD完全一致,名字能对应</p></li>
-        <li><p>相对位置正确,但是没有正确的锚点信息,没法做到自适应</p></li>
+        <li><p data-i18n="doc.raw.b4">Prefab层级和PSD完全一致,名字能对应</p></li>
+        <li><p data-i18n="doc.raw.b5">相对位置正确,但是没有正确的锚点信息,没法做到自适应</p></li>
     </ul>
 
-    <strong>2. 简单干涉后的PSD输出</strong>
+    <strong data-i18n="doc.sub.simple">2. 简单干涉后的PSD输出</strong>
     <div class="img-row" style="width:90%;">
       <figure style="flex:1;">
         <img src="./Simple_PSD.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">简单的PSD原样</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.simple">简单的PSD原样</figcaption>
       </figure>
 
       <figure style="flex:1;">
         <img src="./Prefab_Auto.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自动生成的Prefab</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.auto">自动生成的Prefab</figcaption>
       </figure>
     </div>
 
-    <p><strong>为了快速展示效果,选了一个节点相对较少的PSD,主要在PSD中进行了一些干预,整体还原度更高了</strong></p>
+    <p data-i18n="doc.simple.verdict"><strong>为了快速展示效果,选了一个节点相对较少的PSD,主要在PSD中进行了一些干预,整体还原度更高了</strong></p>
     <ul>
-        <li><p>首先图标没有缺失了,插件自动导出的贴图按以命名为准,设计PSD不能不同图标是一个相同名字</p></li>
-        <li><p>可以在插件标记锚点Anchor,Pivot,以及一些常用组件,比如Button等等</p></li>
+        <li><p data-i18n="doc.simple.b1">首先图标没有缺失了,插件自动导出的贴图按以命名为准,设计PSD不能不同图标是一个相同名字</p></li>
+        <li><p data-i18n="doc.simple.b2">可以在插件标记锚点Anchor,Pivot,以及一些常用组件,比如Button等等</p></li>
     </ul>
 
     <div class="img-row" style="width:100%;">
       <figure style="flex:1;">
         <img src="./Edited_PSD.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">更新后的PSD层级</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.editedpsd">更新后的PSD层级</figcaption>
       </figure>
 
       <figure style="flex:1;">
         <img src="./Edited_Prefab.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">自动生成的层级</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.editedpfb">自动生成的层级</figcaption>
       </figure>
     </div>
-    <p><strong>PS 插件设置,Unity导出资源预览</strong></p>
+    <p data-i18n="doc.psset"><strong>PS 插件设置,Unity导出资源预览</strong></p>
     <div class="img-row" style="width:100%;">
       <figure style="flex:1;">
         <img src="./PS_Plugs.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">PS插件</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.psplug">PS插件</figcaption>
       </figure>
 
       <figure style="flex:1;">
         <img src="./AssetOut.png" alt="Prefab Layer" style="width:75%;border-radius:6px;">
-        <figcaption style="width:75%;color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">导出的Unity资源,按PSD图层命名</figcaption>
+        <figcaption style="width:75%;color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.assetout">导出的Unity资源,按PSD图层命名</figcaption>
       </figure>
     </div>
-  
-    <h2>当前不足与演进方向</h2>
-    <strong>当前插件还在研发中阶段,有些问题还需要继续跟进</strong>
+
+    <h2 data-i18n="doc.h2.future">当前不足与演进方向</h2>
+    <strong data-i18n="doc.cur">当前插件还在研发中阶段,有些问题还需要继续跟进</strong>
       <ul>
-        <li><p>依赖美术在 PS 端的手动标注（将排版工作量部分转移到了美术侧）</p></li>
-        <li><p>对于复杂的动态布局（如嵌套 LayoutGroup）需要调整支持</p></li>
-        <li><p>一些Bug修复等等</p></li>
+        <li><p data-i18n="doc.cur.b1">依赖美术在 PS 端的手动标注（将排版工作量部分转移到了美术侧）</p></li>
+        <li><p data-i18n="doc.cur.b2">对于复杂的动态布局（如嵌套 LayoutGroup）需要调整支持</p></li>
+        <li><p data-i18n="doc.cur.b3">一些Bug修复等等</p></li>
     </ul>
-    <strong>演进方向</strong>
+    <strong data-i18n="doc.evolve">演进方向</strong>
     <ul>
-        <li><p>AI 智能预标注：根据 PSD 图层位置等信息，自动推断 UI 类型与 Anchor 贴边逻辑（替代 PS 插件手动勾选）</p></li>
-        <li><p>规范化 PSD 生成：向前端延伸，利用 AI 自动生成结构合规、图层分明、命名规范的源 PSD 文件，真正实现从“设计概念”到“Unity 界面”的全流程无缝自动化</p></li>
+        <li><p data-i18n="doc.ev.b1">AI 智能预标注：根据 PSD 图层位置等信息，自动推断 UI 类型与 Anchor 贴边逻辑（替代 PS 插件手动勾选）</p></li>
+        <li><p data-i18n="doc.ev.b2">规范化 PSD 生成：向前端延伸，利用 AI 自动生成结构合规、图层分明、命名规范的源 PSD 文件，真正实现从“设计概念”到“Unity 界面”的全流程无缝自动化</p></li>
     </ul>
 
   </div>
@@ -562,6 +562,104 @@ lightbox.onclick = (e)=>{
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') lightbox.classList.remove('show');
 })
+</script>
+
+<script>
+// ============ 多语言 i18n（跟随主页 localStorage('lang')） ============
+const PROJ_I18N = {
+  en: {
+    "doc.title": "Project Details",
+    "header.title": "AI-PSD to Unity UGUI",
+    "doc.h1": "PSD-to-Unity UGUI Research",
+    "doc.intro": '<strong>Project Brief: </strong>In traditional UI development, UI artists cut assets manually and programmers hand-build Prefabs, set Anchors and attach components in Unity — heavy repetitive labor that easily drifts from the design; the final UI differs visibly from the mockup and UI/engine communication costs are high.',
+    "doc.goal": "The goal of this research is an automated UI restoration pipeline bridging Photoshop and Unity: a 1:1 deterministic conversion from the PSD layer tree to a Unity UGUI Prefab.",
+    "doc.notice": '<strong>Note: all PSD files come from a marketplace plugin and are for testing only.</strong>',
+    "doc.h2.cmp": "Before / After Comparison",
+    "doc.sub.raw": "1. Raw PSD Direct Export",
+    "cap.raw": "Original PSD",
+    "cap.undo": "Tool export with no manual intervention",
+    "doc.raw.verdict": '<strong>Right-side Prefab matches the PSD by about 50%; many issues remain.</strong>',
+    "doc.raw.b1": "Fonts differ; the artist must provide the font.",
+    "doc.raw.b2": "Some icons are wrong or even missing.",
+    "doc.raw.b3": "Mask largely fails.",
+    "doc.raw.match": '<strong>Positions and hierarchy otherwise match the PSD exactly.</strong>',
+    "cap.psdlayer": "PSD layers",
+    "cap.pfblayer": "Prefab hierarchy",
+    "doc.raw.b4": "Prefab hierarchy matches the PSD exactly, and names correspond.",
+    "doc.raw.b5": "Relative positions are correct, but anchor info is missing, so responsive layout does not work.",
+    "doc.sub.simple": "2. PSD with Light Manual Intervention",
+    "cap.simple": "Simple PSD as-is",
+    "cap.auto": "Auto-generated Prefab",
+    "doc.simple.verdict": '<strong>To demo quickly, a PSD with few nodes was chosen; light intervention in the PSD improved overall fidelity.</strong>',
+    "doc.simple.b1": "Icons are no longer missing; exported textures follow layer naming, so distinct icons in the design PSD cannot share the same name.",
+    "doc.simple.b2": "Anchors, Pivots and common components such as Button can be marked in the plugin.",
+    "cap.editedpsd": "Updated PSD layers",
+    "cap.editedpfb": "Auto-generated hierarchy",
+    "doc.psset": '<strong>PS plugin settings and Unity exported-asset preview</strong>',
+    "cap.psplug": "PS plugin",
+    "cap.assetout": "Exported Unity assets, named by PSD layer",
+    "doc.h2.future": "Current Gaps & Roadmap",
+    "doc.cur": "<strong>The plugin is still in R&D; some issues need follow-up.</strong>",
+    "doc.cur.b1": "Relies on artists' manual marking on the PS side (shifts part of layout work to the artist).",
+    "doc.cur.b2": "Complex dynamic layouts (e.g. nested LayoutGroups) need adjusted support.",
+    "doc.cur.b3": "Bug fixes and so on.",
+    "doc.evolve": "Roadmap",
+    "doc.ev.b1": "AI smart pre-annotation: infer UI type and Anchor edge logic from PSD layer positions automatically (replacing manual checkbox in the PS plugin).",
+    "doc.ev.b2": "Normalized PSD generation: extend upstream so AI produces structurally compliant, clearly-layered, consistently-named source PSDs — a truly seamless pipeline from design concept to Unity UI."
+  },
+  zh: {
+    "doc.title": "项目详情",
+    "header.title": "AI-PSD到Unity UGUI",
+    "doc.h1": "从PSD到Unity UGUI预研",
+    "doc.intro": '<strong>项目简介</strong>：传统UI开发中，UI 美术手动切图、程序在Unity中手搭 Prefab、配Anchor、挂组件耗费大量重复性劳动，且极易出现还原度偏差。最终产出的UI和设计的有明显差异，UI和客户端沟通成本非常高',
+    "doc.goal": "这个工具预研构目的是建一套打通 Photoshop 与 Unity 的自动化 UI 还原管线，实现 PSD 图层树到 Unity UGUI Prefab 的 1:1 确定性转换",
+    "doc.notice": '<strong>注意:所有PSD来自于商店插件,纯测试使用</strong>',
+    "doc.h2.cmp": "效果对比",
+    "doc.sub.raw": "1. 原始PSD直接输出",
+    "cap.raw": "原始PSD",
+    "cap.undo": "不人工干预直接使用工具导出",
+    "doc.raw.verdict": '<strong>右侧预制体和PSD有50%相似度,还有很多问题</strong>',
+    "doc.raw.b1": "字体不一致,这个需要制作人员提供字体",
+    "doc.raw.b2": "一些图标用错了,甚至是缺失状态",
+    "doc.raw.b3": "Mask基本失效",
+    "doc.raw.match": '<strong>其他的位置,层级和PSD能完全对上</strong>',
+    "cap.psdlayer": "PSD层级",
+    "cap.pfblayer": "Prefab层级",
+    "doc.raw.b4": "Prefab层级和PSD完全一致,名字能对应",
+    "doc.raw.b5": "相对位置正确,但是没有正确的锚点信息,没法做到自适应",
+    "doc.sub.simple": "2. 简单干涉后的PSD输出",
+    "cap.simple": "简单的PSD原样",
+    "cap.auto": "自动生成的Prefab",
+    "doc.simple.verdict": '<strong>为了快速展示效果,选了一个节点相对较少的PSD,主要在PSD中进行了一些干预,整体还原度更高了</strong>',
+    "doc.simple.b1": "首先图标没有缺失了,插件自动导出的贴图按以命名为准,设计PSD不能不同图标是一个相同名字",
+    "doc.simple.b2": "可以在插件标记锚点Anchor,Pivot,以及一些常用组件,比如Button等等",
+    "cap.editedpsd": "更新后的PSD层级",
+    "cap.editedpfb": "自动生成的层级",
+    "doc.psset": '<strong>PS 插件设置,Unity导出资源预览</strong>',
+    "cap.psplug": "PS插件",
+    "cap.assetout": "导出的Unity资源,按PSD图层命名",
+    "doc.h2.future": "当前不足与演进方向",
+    "doc.cur": "<strong>当前插件还在研发中阶段,有些问题还需要继续跟进</strong>",
+    "doc.cur.b1": "依赖美术在 PS 端的手动标注（将排版工作量部分转移到了美术侧）",
+    "doc.cur.b2": "对于复杂的动态布局（如嵌套 LayoutGroup）需要调整支持",
+    "doc.cur.b3": "一些Bug修复等等",
+    "doc.evolve": "演进方向",
+    "doc.ev.b1": "AI 智能预标注：根据 PSD 图层位置等信息，自动推断 UI 类型与 Anchor 贴边逻辑（替代 PS 插件手动勾选）",
+    "doc.ev.b2": "规范化 PSD 生成：向前端延伸，利用 AI 自动生成结构合规、图层分明、命名规范的源 PSD 文件，真正实现从“设计概念”到“Unity 界面”的全流程无缝自动化"
+  }
+};
+
+(function(){
+  const lang = localStorage.getItem('lang') || 'en';
+  document.documentElement.lang = lang;
+  const dict = PROJ_I18N[lang] || PROJ_I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key] === undefined) return;
+    if (/<[a-z/]/.test(dict[key])) el.innerHTML = dict[key];
+    else el.textContent = dict[key];
+  });
+})();
 </script>
 </body>
 </html>
