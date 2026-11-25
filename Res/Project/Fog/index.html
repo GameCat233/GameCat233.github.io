@@ -268,7 +268,7 @@ footer a {
 </div>
 
 <header>
-  <h1 data-en="PBR Workflow — Skin & Eye Rendering">迷雾渲染和工具</h1>
+  <h1 data-en="Fog Rendering & Tools">迷雾渲染和工具</h1>
   <a href="/index.html" class="back-btn">← 返回主页</a>
 </header>
 <main>
@@ -329,70 +329,70 @@ footer a {
     </div> -->
 
     <!-- ✅ i18n约定：中文写在标签里（zh真源），英文写在 data-en 属性；lang=en时自动替换，无需底部字典 -->
-    <i data-en="(Note: model from Unreal FAB Marketplace — Ninja 01, Basic Version)">(注:模型来自 Unity 商城资源，仅展示使用)</i>
-    <h1 data-en="PBR & Skin Rendering">迷雾</h1>
-    <p data-en="<strong>Project Brief: </strong>Realistic rendering heavily depends on material expression, and the PBR workflow fits naturally. As a framework for skin, eyes and everything that follows, it was worth extracting a custom PBR layer that is easy to tweak."><strong>项目简介</strong>：迷雾可以分为渲染和功能两个互不干扰的模块。</p>
-    <h2 data-en="Implementation Details">渲染</h2>
-    <strong data-en="1. Standard PBR">1. 以片渲染迷雾</strong>
-    <p data-en="PBR lighting integral equation:">片迷雾是实现最简单,性能也最好的一种方式,只需要一个Plane和贴图+噪声模拟:</p>
+    <i data-en="(Note: assets from the Unity Asset Store, used for demonstration only.)">(注:模型来自 Unity 商城资源，仅展示使用)</i>
+    <h1 data-en="Fog">迷雾</h1>
+    <p data-en="<strong>Project Brief: </strong>Fog can be split into two independent modules: rendering and functionality."><strong>项目简介</strong>：迷雾可以分为渲染和功能两个互不干扰的模块。</p>
+    <h2 data-en="Rendering">渲染</h2>
+    <strong data-en="1. Plane-Based Fog">1. 以片渲染迷雾</strong>
+    <p data-en="Plane fog is the simplest to implement and the most performant option: all it takes is a single plane, a texture, and some noise.">片迷雾是实现最简单,性能也最好的一种方式,只需要一个Plane和贴图+噪声模拟:</p>
     <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
         <img src="./Plane/FogMesh.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="The diffuse formula is relatively simple">将相机拉到特定角度可以看到Plane穿帮</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="The plane artifact shows up when the camera tilts to a certain angle">将相机拉到特定角度可以看到Plane穿帮</figcaption>
       </figure>
       <figure style="flex:1;">
         <img src="./Plane/fogNoise.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="F (Fresnel)">主纹理和Noise</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="Base texture and noise">主纹理和Noise</figcaption>
       </figure>
     </div>
-    <p data-en="Specular reflection formula; DFG is solved for.">为了模拟雾从下到上的浓厚感,加入高度雾和深度计算</p>
+    <p data-en="To mimic the denser fog near the ground, height fog and depth sampling are added.">为了模拟雾从下到上的浓厚感,加入高度雾和深度计算</p>
     <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
         <img src="./Plane/PlaneUeFog.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="D (Normal Distribution)">高度雾,做出下实上虚的效果</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="Height fog creates a dense-at-the-bottom, fading-off-at-the-top look">高度雾,做出下实上虚的效果</figcaption>
       </figure>
       <figure style="flex:1;">
         <img src="./Plane/fogUEDepth.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="F (Fresnel)">加入深度计算,解决雾和物体边缘衔接问题</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="Depth sampling fixes the seam between the fog and object edges">加入深度计算,解决雾和物体边缘衔接问题</figcaption>
       </figure>
     </div>
-    <p data-en="(SH).">理论上雾效差不多就可以这样,但是一些游戏为了 功能性 做得更像云</p>
+    <p data-en="This is enough for a basic fog, but some games push it further to look like clouds, depending on gameplay needs.">理论上雾效差不多就可以这样,但是一些游戏为了 功能性 做得更像云</p>
     <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
         <img src="./Plane/fogSingle.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="D">Plane雾，像云</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="Plane fog styled to look like clouds">Plane雾，像云</figcaption>
       </figure>
     </div>
-    <p data-en="Indirect specular reflection is more involved; formula:">Plane雾还有个问题是难以做出体积感,所以在性能更好的设备上,可以开启更多层数,也可以增加阴影提供视觉的体积</p>
+    <p data-en="Another weakness of plane fog is its lack of volume. On more powerful hardware you can stack extra layers or add shadows to give it a sense of depth.">Plane雾还有个问题是难以做出体积感,所以在性能更好的设备上,可以开启更多层数,也可以增加阴影提供视觉的体积</p>
     <div class="img-row">
       <figure style="flex:1;">
       <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
         <source src="./Plane/PlaneFogMoreVideo.mp4" type="video/mp4">
       </video>
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="cap.eyes">更多的层,但是还是不如体积雾</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="More layers, but still not as convincing as volumetric fog">更多的层,但是还是不如体积雾</figcaption>
       </figure>
     </div>
-    <strong data-en="1. Standard PBR">2. 局部Raymarch雾</strong>
+    <strong data-en="2. Local Raymarched Fog">2. 局部Raymarch雾</strong>
     <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
 
-    <h2 data-en="Application">功能性</h2>
-    <p data-en="Standar for skin, eyes and similar materials.">迷雾常用来做战争迷雾,SLG里面则多按块解锁，不管表现方式,一般都是按笔刷的方式渲染RT，之后采样渲染</p>
+    <h2 data-en="Functionality">功能性</h2>
+    <p data-en="Fog is most commonly used for fog of war; in SLGs it typically unlocks tile by tile. Whatever the visual style, the usual approach is to paint into a render texture with a brush and sample it at render time.">迷雾常用来做战争迷雾,SLG里面则多按块解锁，不管表现方式,一般都是按笔刷的方式渲染RT，之后采样渲染</p>
 
-    <strong data-en="1. Standard PBR">1.按块解锁</strong>
-    <p data-en="Standar for skin, eyes and similar materials.">按块解锁主要是方便策划配置,在合适的地方调用</p>
+    <strong data-en="1. Tile-Based Unlocking">1.按块解锁</strong>
+    <p data-en="Tile-based unlocking mainly exists to make designer setup easy: configure it in the editor and call it wherever needed.">按块解锁主要是方便策划配置,在合适的地方调用</p>
     <div class="img-row">
       <figure style="flex:1;">
       <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
         <source src="./ToolVideo.mp4" type="video/mp4">
       </video>
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="cap.eyes">和Scene窗口同步的工具,方便配置</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="An editor tool synced with the Scene view for convenient setup">和Scene窗口同步的工具,方便配置</figcaption>
       </figure>
     </div>
-    <p data-en="Unity's builble.">只使用矩形存储,数据量少,功能满足的情况非常适合</p>
+    <p data-en="Only rectangles are stored, so the data footprint stays small — a great fit when it meets the requirements.">只使用矩形存储,数据量少,功能满足的情况非常适合</p>
         <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
         <img src="./Plane/FogTools.png" alt="原始psd" style="width:50%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="The diffuse formula is relatively simple">只存储Rect,矩形数据足够了</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="Only rects are stored; rectangular data is all you need">只存储Rect,矩形数据足够了</figcaption>
       </figure>
     </div>
     <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
