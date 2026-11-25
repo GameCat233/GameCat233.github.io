@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-i18n="doc.title">项目详情</title>
+<title data-en="Project Details">项目详情</title>
 <style>
 * {
   margin: 0;
@@ -268,7 +268,7 @@ footer a {
 </div>
 
 <header>
-  <h1 data-i18n="header.title">PBR流程 皮肤和眼球渲染</h1>
+  <h1 data-en="PBR Workflow — Skin & Eye Rendering">迷雾渲染和工具</h1>
   <a href="/index.html" class="back-btn">← 返回主页</a>
 </header>
 <main>
@@ -278,27 +278,23 @@ footer a {
     </div>
     <div class="thumb-row">
       <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
-      <!-- <img class="thumb-item active"
+      <img class="thumb-item active"
            data-type="video"
-           data-src="./UI_Create.mp4"
-           src="./Prefab_Auto.png"> -->
+           data-src="./Plane/PlaneFogVideo.mp4"
+           src="./Plane/thumb.png">
 
       <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
-      <img class="thumb-item active"
+      <img class="thumb-item"
            data-type="image"
-           data-src="./thumb.png">
+           data-src="./Plane/fogOpen.png">
 
       <img class="thumb-item"
            data-type="image"
-           data-src="./customShdow.png">
+           data-src="./Plane/FogTools.png">
 
-      <img class="thumb-item"
+      <!-- <img class="thumb-item"
            data-type="image"
-           data-src="./UnityOrStand.png">
-
-      <img class="thumb-item"
-           data-type="image"
-           data-src="./Skin.png">
+           data-src="./fogMask.png"> -->
 
       <!-- <img class="thumb-item"
            data-type="image"
@@ -331,141 +327,75 @@ footer a {
     <!-- <div style="width:100%;aspect‑ratio:16/9;border‑radius:6px;overflow:hidden;margin:1rem 0;">
       <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
     </div> -->
-    <i data-i18n="doc.credit">(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))</i>
-    <h1 data-i18n="doc.h1">PBR和皮肤渲染</h1>
-    <p data-i18n="doc.intro"><strong>项目简介</strong>：写实渲染非常依赖材质的表现,PBR流程非常适合,作为皮肤,眼球,甚至后续所有的渲染框架,有必要提取一版自定义PBR,方便修改。</p>
-    <h2 data-i18n="doc.h2.detail">实现细节</h2>
-    <strong data-i18n="doc.sub.std">1. 标准PBR</strong>
-    <p data-i18n="doc.p.eq">PBR光照积分方程:</p>
-    \[L_o(\boldsymbol{v}) = \int_{\Omega} f_r(\boldsymbol{l},\boldsymbol{v}) \, L_i(\boldsymbol{l}) \, (n\cdot \boldsymbol{l}) \,\boldsymbol{\mathrm{d}\omega}\]
-    <p data-i18n="doc.p.brdf">fr=BRDF核心光照函数,这里采用Cook-Torrance</p>
-    \[f_r = f_{diffuse} + f_{spec}\]
-    <p data-i18n="doc.p.diff">f diffuse漫反射公式</p>
-    <div class="img-row" style="text-align:center;margin:16px 0;">
-      <figure style="flex:1;">
-        <img src="./diffuse.png" alt="原始psd" style="width:50%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.diffuse">漫反射公式较为简单</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.spec">高光反射公式,主要求DFG</p>
-    \[f_{spec} = \frac{DFG}{4(n\cdot l)(n\cdot v)}\]
-    <div class="img-row" style="text-align:center;margin:16px 0;">
-      <figure style="flex:1;">
-        <img src="./Spec-D.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.d">D</figcaption>
-      </figure>
-      <figure style="flex:1;">
-        <img src="./Spec-F.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.f">F</figcaption>
-      </figure>
-      <figure style="flex:1;">
-        <img src="./Spec-G.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.g">G</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.ibldiff">直接光有了,Unity中的间接光IBL也需要计算,相对简单,首先是间接光漫反射,就是unity球谐函数SH</p>
-    <div class="img-row" style="text-align:center;margin:16px 0;">
-      <figure style="flex:1;">
-        <img src="./IBL-diffuse.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.ibldiff">D</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.iblspec">间接光高光反射相对麻烦,公式:</p>
-    \[L_{specIBL} = \int_\Omega \frac{DFG}{4(n\cdot v)(n\cdot l)} L_i(\boldsymbol l) \,(n\cdot l) \mathrm d\omega\]
-    <p data-i18n="doc.p.iblapprox">实时计算相当复杂,Epic拆分近似公式,可以理解为颜色项预滤波CubeMap,而高光IntegrateBRDF则采样Lut或者拟合公式</p>
-    <div class="img-row" style="text-align:center;margin:16px 0;">
-      <figure style="flex:1;">
-        <img src="./IBL-CubeMap.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cubemap">CubeMap采样unity_SpecCube0</figcaption>
-      </figure>
-      <figure style="flex:1;">
-        <img src="./IBL-SpecBRDF.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.fit">使用拟合公式</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.stack"><strong>最后直接光和间接光叠加,就是基础的标准PBR流程</strong></p>
-    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
-    <h2 data-i18n="doc.h2.app">应用</h2>
-    <p data-i18n="doc.p.app">标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改</p>
-    <div class="img-row">
-      <figure style="flex:1;">
-        <img src="./UnityOrStand.png" alt="原始psd" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.stand">左:URP Stand 右:Cook-Torrance</figcaption>
-      </figure>
 
-      <!-- <figure style="flex:1;">
-        <img src="./prefab_undo.png" alt="直接输出" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">不人工干预直接使用工具导出</figcaption>
-      </figure> -->
-    </div>
-    <p data-i18n="doc.p.unitypbr">Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以</p>
-    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
-    <strong data-i18n="doc.sub.skin">2. 皮肤渲染</strong>
-    <p data-i18n="doc.p.skin">皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射</p>
-    <div class="img-row">
+    <!-- ✅ i18n约定：中文写在标签里（zh真源），英文写在 data-en 属性；lang=en时自动替换，无需底部字典 -->
+    <i data-en="(Note: model from Unreal FAB Marketplace — Ninja 01, Basic Version)">(注:模型来自 Unity 商城资源，仅展示使用)</i>
+    <h1 data-en="PBR & Skin Rendering">迷雾</h1>
+    <p data-en="<strong>Project Brief: </strong>Realistic rendering heavily depends on material expression, and the PBR workflow fits naturally. As a framework for skin, eyes and everything that follows, it was worth extracting a custom PBR layer that is easy to tweak."><strong>项目简介</strong>：迷雾可以分为渲染和功能两个互不干扰的模块。</p>
+    <h2 data-en="Implementation Details">渲染</h2>
+    <strong data-en="1. Standard PBR">1. 以片渲染迷雾</strong>
+    <p data-en="PBR lighting integral equation:">片迷雾是实现最简单,性能也最好的一种方式,只需要一个Plane和贴图+噪声模拟:</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
-        <img src="./Skin.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.skin">内置PBR和自定义PBR,Skin Shader对比</figcaption>
+        <img src="./Plane/FogMesh.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="The diffuse formula is relatively simple">将相机拉到特定角度可以看到Plane穿帮</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Plane/fogNoise.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="F (Fresnel)">主纹理和Noise</figcaption>
       </figure>
     </div>
-    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
-    <strong data-i18n="doc.sub.eye">3. 眼球渲染</strong>
-    <p data-i18n="doc.p.eye">眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差</p>
-    <div class="img-row">
+    <p data-en="Specular reflection formula; DFG is solved for.">为了模拟雾从下到上的浓厚感,加入高度雾和深度计算</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
-            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
-      <source src="./Eyes.mp4" type="video/mp4">
-    </video>
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.eyes">折射和变色,缩放</figcaption>
+        <img src="./Plane/PlaneUeFog.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="D (Normal Distribution)">高度雾,做出下实上虚的效果</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Plane/fogUEDepth.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="F (Fresnel)">加入深度计算,解决雾和物体边缘衔接问题</figcaption>
       </figure>
     </div>
-    <p data-i18n="doc.p.parallax">这里直接使用了简单的视差效果,UnityCG.cginc的版本,基于物理的视差相对麻烦,具体可以看另一篇,还原UE眼球效果</p>
-    <div class="img-row">
+    <p data-en="(SH).">理论上雾效差不多就可以这样,但是一些游戏为了 功能性 做得更像云</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
       <figure style="flex:1;">
-        <img src="./ParallaxOffset.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.parallax">unity的视差公式</figcaption>
+        <img src="./Plane/fogSingle.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="D">Plane雾，像云</figcaption>
       </figure>
     </div>
-
-    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
-    <strong data-i18n="doc.sub.shadow">4. 阴影渲染</strong>
-    <p data-i18n="doc.p.shadow">Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影</p>
+    <p data-en="Indirect specular reflection is more involved; formula:">Plane雾还有个问题是难以做出体积感,所以在性能更好的设备上,可以开启更多层数,也可以增加阴影提供视觉的体积</p>
     <div class="img-row">
       <figure style="flex:1;">
-        <img src="./UnityShadowMap.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.ushadow">Unity ShadowMap,阴影距离3,相机远平面3</figcaption>
-      </figure>
-
-      <figure style="flex:1;">
-        <img src="./CustomShadowMap.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cshadow">自定义Shadow Map,根据Bounds来</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.core">核心实现是计算需要阴影单位的包围盒,根据包围盒创建视椎体,将视椎体内深度记录到RT,之后就是常规阴影对比流程,在视椎体空间对比NDC Z深度</p>
-    <div class="img-row">
-      <figure style="flex:1;">
-        <img src="./bounds.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.bounds">白色包围盒,绿色视椎体</figcaption>
-      </figure>
-    </div>
-    <p data-i18n="doc.p.vid">视频动态效果明显</p>
-    <div class="img-row">
-      <figure style="flex:1;">
-            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./unityShadow.png">
-      <source src="./unityShadow.mp4" type="video/mp4">
+      <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
+        <source src="./Plane/PlaneFogMoreVideo.mp4" type="video/mp4">
       </video>
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.uvid">Unity Shadow</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="cap.eyes">更多的层,但是还是不如体积雾</figcaption>
       </figure>
     </div>
+    <strong data-en="1. Standard PBR">2. 局部Raymarch雾</strong>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+
+    <h2 data-en="Application">功能性</h2>
+    <p data-en="Standar for skin, eyes and similar materials.">迷雾常用来做战争迷雾,SLG里面则多按块解锁，不管表现方式,一般都是按笔刷的方式渲染RT，之后采样渲染</p>
+
+    <strong data-en="1. Standard PBR">1.按块解锁</strong>
+    <p data-en="Standar for skin, eyes and similar materials.">按块解锁主要是方便策划配置,在合适的地方调用</p>
     <div class="img-row">
       <figure style="flex:1;">
-            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./customShdow.png">
-      <source src="./customShadow.mp4" type="video/mp4">
+      <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
+        <source src="./ToolVideo.mp4" type="video/mp4">
       </video>
-        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cvid">Custom Shadow</figcaption>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="cap.eyes">和Scene窗口同步的工具,方便配置</figcaption>
       </figure>
     </div>
-    <p data-i18n="doc.p.cons">缺点是要给角色多加一张RT来渲染,但是分辨率可控,在角色展示等比较独立的界面,近距离时开启比较合适</p>
+    <p data-en="Unity's builble.">只使用矩形存储,数据量少,功能满足的情况非常适合</p>
+        <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./Plane/FogTools.png" alt="原始psd" style="width:50%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-en="The diffuse formula is relatively simple">只存储Rect,矩形数据足够了</figcaption>
+      </figure>
+    </div>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
   </div>
 </main>
 <footer>
@@ -607,110 +537,17 @@ document.addEventListener('keydown', (e)=>{
 
 <script>
 // ============ 多语言 i18n（跟随主页 localStorage('lang')） ============
-const PROJ_I18N = {
-  en: {
-    "doc.title": "Project Details",
-    "doc.credit": "(Note: model from Unreal FAB Marketplace — Ninja 01, Basic Version)",
-    "header.title": "PBR Workflow — Skin & Eye Rendering",
-    "doc.h1": "PBR & Skin Rendering",
-    "doc.intro": '<strong>Project Brief: </strong>Realistic rendering heavily depends on material expression, and the PBR workflow fits naturally. As a framework for skin, eyes and everything that follows, it was worth extracting a custom PBR layer that is easy to tweak.',
-    "doc.h2.detail": "Implementation Details",
-    "doc.sub.std": "1. Standard PBR",
-    "doc.p.eq": "PBR lighting integral equation:",
-    "doc.p.brdf": "fr = core BRDF lighting function; Cook-Torrance is used here.",
-    "doc.p.diff": "f diffuse — the diffuse reflection formula.",
-    "cap.diffuse": "The diffuse formula is relatively simple",
-    "doc.p.spec": "Specular reflection formula; DFG is solved for.",
-    "cap.d": "D (Normal Distribution)",
-    "cap.f": "F (Fresnel)",
-    "cap.g": "G (Geometry)",
-    "doc.p.ibldiff": "With direct light done, Unity's indirect light (IBL) also needs computing. First comes indirect diffuse, i.e. Unity's spherical harmonics (SH).",
-    "cap.ibldiff": "D",
-    "doc.p.iblspec": "Indirect specular reflection is more involved; formula:",
-    "doc.p.iblapprox": "Real-time computation is complex, so Epic splits an approximation: treat the color term as a pre-filtered CubeMap, and sample a LUT (or a fitted function) for the specular IntegrateBRDF.",
-    "cap.cubemap": "CubeMap sampling unity_SpecCube0",
-    "cap.fit": "Using the fitted function",
-    "doc.p.stack": "<strong>Finally, direct and indirect light are stacked to form the basic standard PBR pipeline.</strong>",
-    "doc.h2.app": "Application",
-    "doc.p.app": "Standard PBR renders metals, wood and plastics well, but special lighting equations are needed for skin, eyes and similar materials.",
-    "cap.stand": "Left: UP Standard; Right: Cook-Torrance",
-    "doc.p.unitypbr": "Unity's built-in PBR is nearly identical to the common Cook-Torrance BRDF; it only replaces the FG terms with approximate functions in the specular, so highlights differ subtly. The character's mask uses metal material and looks acceptable.",
-    "doc.sub.skin": "2. Skin Rendering",
-    "doc.p.skin": "Subsurface scattering is approximated with an SSS LUT, replacing the raw PBR N·L term to add a reddish tone; a second fine highlight layer simulates the oil-layer reflection.",
-    "cap.skin": "Built-in PBR vs custom PBR / Skin Shader comparison",
-    "doc.sub.eye": "3. Eye Rendering",
-    "doc.p.eye": "The eye mainly handles iris refraction, via parallax mapping or physically based parallax.",
-    "cap.eyes": "Refraction, color change, zoom",
-    "doc.p.parallax": "A simple parallax (UnityCG.cginc version) is used here; physically based parallax is more involved — see the separate write-up on reproducing UE eye rendering.",
-    "cap.parallax": "Unity parallax formula",
-    "doc.sub.shadow": "4. Shadow Rendering",
-    "doc.p.shadow": "Unity samples the whole-scene depth for comparison, leaving little resolution budget for characters; shadows jitter badly when the model moves, and CSM does not help much. CSM only applies to directional light under URP. Independently rendering key characters' shadows gives better results in showcases.",
-    "cap.ushadow": "Unity ShadowMap, shadow distance 3, camera far plane 3",
-    "cap.cshadow": "Custom Shadow Map, built from Bounds",
-    "doc.p.core": "Core implementation: compute the bounding box of units needing shadows, build a frustum from it, record depth inside the frustum to an RT, then run the usual shadow comparison against NDC Z depth in frustum space.",
-    "cap.bounds": "White bounding box, green frustum",
-    "doc.p.vid": "Dynamic effect is obvious in the videos.",
-    "cap.uvid": "Unity Shadow",
-    "cap.cvid": "Custom Shadow",
-    "doc.p.cons": "The trade-off: an extra RT per character for rendering, but resolution stays controllable; best enabled up-close in independent scenes such as character showcases."
-  },
-  zh: {
-    "doc.title": "项目详情",
-    "doc.credit": "(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))",
-    "header.title": "PBR流程 皮肤和眼球渲染",
-    "doc.h1": "PBR和皮肤渲染",
-    "doc.intro": '<strong>项目简介</strong>：写实渲染非常依赖材质的表现,PBR流程非常适合,作为皮肤,眼球,甚至后续所有的渲染框架,有必要提取一版自定义PBR,方便修改。',
-    "doc.h2.detail": "实现细节",
-    "doc.sub.std": "1. 标准PBR",
-    "doc.p.eq": "PBR光照积分方程:",
-    "doc.p.brdf": "fr=BRDF核心光照函数,这里采用Cook-Torrance",
-    "doc.p.diff": "f diffuse漫反射公式",
-    "cap.diffuse": "漫反射公式较为简单",
-    "doc.p.spec": "高光反射公式,主要求DFG",
-    "cap.d": "D",
-    "cap.f": "F",
-    "cap.g": "G",
-    "doc.p.ibldiff": "直接光有了,Unity中的间接光IBL也需要计算,相对简单,首先是间接光漫反射,就是unity球谐函数SH",
-    "cap.ibldiff": "D",
-    "doc.p.iblspec": "间接光高光反射相对麻烦,公式:",
-    "doc.p.iblapprox": "实时计算相当复杂,Epic拆分近似公式,可以理解为颜色项预滤波CubeMap,而高光IntegrateBRDF则采样Lut或者拟合公式",
-    "cap.cubemap": "CubeMap采样unity_SpecCube0",
-    "cap.fit": "使用拟合公式",
-    "doc.p.stack": "<strong>最后直接光和间接光叠加,就是基础的标准PBR流程</strong>",
-    "doc.h2.app": "应用",
-    "doc.p.app": "标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改",
-    "cap.stand": "左:URP Stand 右:Cook-Torrance",
-    "doc.p.unitypbr": "Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以",
-    "doc.sub.skin": "2. 皮肤渲染",
-    "doc.p.skin": "皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射",
-    "cap.skin": "内置PBR和自定义PBR,Skin Shader对比",
-    "doc.sub.eye": "3. 眼球渲染",
-    "doc.p.eye": "眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差",
-    "cap.eyes": "折射和变色,缩放",
-    "doc.p.parallax": "这里直接使用了简单的视差效果,UnityCG.cginc的版本,基于物理的视差相对麻烦,具体可以看另一篇,还原UE眼球效果",
-    "cap.parallax": "unity的视差公式",
-    "doc.sub.shadow": "4. 阴影渲染",
-    "doc.p.shadow": "Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影",
-    "cap.ushadow": "Unity ShadowMap,阴影距离3,相机远平面3",
-    "cap.cshadow": "自定义Shadow Map,根据Bounds来",
-    "doc.p.core": "核心实现是计算需要阴影单位的包围盒,根据包围盒创建视椎体,将视椎体内深度记录到RT,之后就是常规阴影对比流程,在视椎体空间对比NDC Z深度",
-    "cap.bounds": "白色包围盒,绿色视椎体",
-    "doc.p.vid": "视频动态效果明显",
-    "cap.uvid": "Unity Shadow",
-    "cap.cvid": "Custom Shadow",
-    "doc.p.cons": "缺点是要给角色多加一张RT来渲染,但是分辨率可控,在角色展示等比较独立的界面,近距离时开启比较合适"
-  }
-};
-
+// 约定：中文直接写在标签里（zh真源），英文写在 data-en 属性。
+// lang=zh：原样显示正文；lang=en：用 data-en 替换。无需底部字典，新增内容就地写即可。
 (function(){
   const lang = localStorage.getItem('lang') || 'en';
   document.documentElement.lang = lang;
-  const dict = PROJ_I18N[lang] || PROJ_I18N.en;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    if (dict[key] === undefined) return;
-    if (/<[a-z/]/.test(dict[key])) el.innerHTML = dict[key];
-    else el.textContent = dict[key];
+  if (lang !== 'en') return;
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const en = el.getAttribute('data-en');
+    if (!en) return;
+    if (el.tagName === 'TITLE') el.textContent = en;
+    else el.innerHTML = en;
   });
 })();
 </script>
