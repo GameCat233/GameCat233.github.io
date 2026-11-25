@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="doc.title">项目详情</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+/* 隐藏所有滚动条 */
+html, body {
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+:root {
+  --media-max-width: 1000px;   /* 多媒体基础最大宽度，改这里统一调媒体大小 */
+  --content-scale: 1;         /* ✅ 图文宽度系数：1=和媒体同宽，>1加宽，<1收窄 */
+  --bg: #0f0f11;
+  --text: #e6e6e6;
+  --muted: #999;
+  --accent: #7aa2f7;
+  --card-bg: #18181b;
+}
+body{
+  background-color:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  line-height:1.6;
+  position:relative;
+}
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+/* 模糊氛围背景，使用第一张缩略图 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("./thumb.png");
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px);
+  opacity: 0.3;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* 顶部栏 - 隐藏 */
+header {
+  display: none;
+}
+.content-wrap p {
+  margin-bottom: 0.1rem; /* 段落之间距离缩小 */
+  text-indent: 2em; /* 首行缩进2个汉字宽度 */
+}
+main {
+  flex: 1;
+  padding: 0 clamp(1rem,4vw,3rem) 3rem;
+}
+/* 媒体容器（视频+图片） */
+.media-wrap {
+  max-width: var(--media-max-width);
+  width: 100%;
+  margin: 0 auto 2rem;
+}
+#mediaBox {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background:#111;
+}
+#mediaBox img {
+  max-width:100%;
+  max-height:70vh; /* 最高不超过视口70%，防止图太高把页面撑爆 */
+  display:block;
+  margin:0 auto;
+}
+#mediaBox video,
+#mediaBox iframe {
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+}
+.video-container iframe,
+.video-container video {
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: contain;
+}
+/* 主展示区图片样式 */
+.main-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+.thumb-row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  background-color: rgba(0,0,0,0.78);
+  border-radius: 6px;
+}
+.thumb-item {
+  flex: 0 0 120px;
+  height: 70px;
+  border-radius: 4px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: 0.2s;
+  scroll-snap-align: start;
+  border: 2px solid transparent;
+}
+.thumb-item.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+.thumb-item:hover {
+  opacity: 0.9;
+}
+/* ✅ 图文区域，跟随scale系数 */
+.content-wrap {
+  max-width: calc(var(--media-max-width) * var(--content-scale));
+  width: 100%;
+  margin: 0 auto;
+  color: #ddd;
+}
+/* 单独的图片居中显示 */
+.content-wrap > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+}
+.content-wrap h2, .content-wrap h3, .content-wrap ul {
+  margin-bottom: 1.2rem; /* 标题、列表维持原来大间距 */
+}
+.content-wrap h2 {
+  margin-top: 2rem;
+  font-size: 1.4rem;
+}
+.content-wrap ul {
+  padding-left: 1.6rem;
+}
+
+.img-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  align-items: flex-end;
+}
+/* 只有1个figure的时候 */
+.img-row figure:only-child {
+  margin: 0 auto;
+  flex: 0 1 600px;
+}
+/* 多于1个的时候，全部均分 */
+.img-row figure {
+  flex: 1;
+}
+@media (max-width:640px){
+  .img-row{
+    flex-direction:column;
+  }
+}
+
+/* 底部联系栏，一直贴在页面最下方 */
+footer {
+  padding: 3rem clamp(1rem,4vw,3rem);
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid #222;
+  margin-top: auto;
+}
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* 图片放大浮窗 */
+.img-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.img-lightbox.show {
+  display: flex;
+}
+.img-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+}
+.img-lightbox .close-btn {
+  position: absolute;
+  top:16px;
+  right:24px;
+  color:#fff;
+  font-size:32px;
+  cursor:pointer;
+  user-select:none;
+}
+/* 给图文图片加鼠标小手，提示可点击 */
+.content-wrap figure img {
+  cursor: zoom-in;
+}
+
+/* 底部滚动进度条 */
+.scroll-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.scroll-progress.visible {
+  opacity: 1;
+}
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(122, 162, 247, 0.5), rgba(122, 162, 247, 0.8));
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
+</style>
+<!-- 公式 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- 代码块引用 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+<!-- 底部滚动进度条 -->
+<div class="scroll-progress" id="scrollProgress">
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+</div>
+
+<header>
+  <h1 data-i18n="header.title">PBR流程 皮肤和眼球渲染</h1>
+  <a href="/index.html" class="back-btn">← 返回主页</a>
+</header>
+<main>
+  <div class="media-wrap">
+    <div class="video-container" id="mediaBox">
+      <!-- JS 动态填充内容，这里不要硬写iframe -->
+    </div>
+    <div class="thumb-row">
+      <!-- ========== 本地MP4视频：必须手动写src给缩略图！无法自动截取视频帧 ========== -->
+      <!-- <img class="thumb-item active"
+           data-type="video"
+           data-src="./UI_Create.mp4"
+           src="./Prefab_Auto.png"> -->
+
+      <!-- 本地图片：不写src自动复用data‑src作为缩略图 -->
+      <img class="thumb-item active"
+           data-type="image"
+           data-src="./thumb.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./customShdow.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./UnityOrStand.png">
+
+      <img class="thumb-item"
+           data-type="image"
+           data-src="./Skin.png">
+
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="./BakedCPU.png"> -->
+
+      <!-- 外链图片：不写src自动复用data‑src作为缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="image"
+           data-src="https://picsum.photos/id/1011/1200/800"> -->
+
+      <!-- Youtube iframe嵌入：不写src自动拉Youtube官方缩略图 -->
+      <!-- <img class="thumb-item"
+           data-type="iframe"
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"> -->
+    </div>
+  </div>
+  <div class="content-wrap">
+    <!-- 本地图片 -->
+    <!-- <img src="../assets/screenshot01.jpg" alt="作品截图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 网络外链图片 -->
+    <!-- <img src="https://picsum.photos/id/1011/1200/800" alt="示例图" style="width:100%;border-radius:6px;margin:1rem 0;"> -->
+
+    <!-- 本地视频 -->
+    <!-- <video controls style="width:100%;border-radius:6px;margin:1rem 0;" poster="../assets/video-thumb.jpg">
+      <source src="../assets/video/show.mp4" type="video/mp4">
+    </video> -->
+
+    <!-- 外部视频 -->
+    <!-- <div style="width:100%;aspect‑ratio:16/9;border‑radius:6px;overflow:hidden;margin:1rem 0;">
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>
+    </div> -->
+    <i data-i18n="doc.credit">(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))</i>
+    <h1 data-i18n="doc.h1">PBR和皮肤渲染</h1>
+    <p data-i18n="doc.intro"><strong>项目简介</strong>：写实渲染非常依赖材质的表现,PBR流程非常适合,作为皮肤,眼球,甚至后续所有的渲染框架,有必要提取一版自定义PBR,方便修改。</p>
+    <h2 data-i18n="doc.h2.detail">实现细节</h2>
+    <strong data-i18n="doc.sub.std">1. 标准PBR</strong>
+    <p data-i18n="doc.p.eq">PBR光照积分方程:</p>
+    \[L_o(\boldsymbol{v}) = \int_{\Omega} f_r(\boldsymbol{l},\boldsymbol{v}) \, L_i(\boldsymbol{l}) \, (n\cdot \boldsymbol{l}) \,\boldsymbol{\mathrm{d}\omega}\]
+    <p data-i18n="doc.p.brdf">fr=BRDF核心光照函数,这里采用Cook-Torrance</p>
+    \[f_r = f_{diffuse} + f_{spec}\]
+    <p data-i18n="doc.p.diff">f diffuse漫反射公式</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./diffuse.png" alt="原始psd" style="width:50%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.diffuse">漫反射公式较为简单</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.spec">高光反射公式,主要求DFG</p>
+    \[f_{spec} = \frac{DFG}{4(n\cdot l)(n\cdot v)}\]
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./Spec-D.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.d">D</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Spec-F.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.f">F</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./Spec-G.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.g">G</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.ibldiff">直接光有了,Unity中的间接光IBL也需要计算,相对简单,首先是间接光漫反射,就是unity球谐函数SH</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./IBL-diffuse.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.ibldiff">D</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.iblspec">间接光高光反射相对麻烦,公式:</p>
+    \[L_{specIBL} = \int_\Omega \frac{DFG}{4(n\cdot v)(n\cdot l)} L_i(\boldsymbol l) \,(n\cdot l) \mathrm d\omega\]
+    <p data-i18n="doc.p.iblapprox">实时计算相当复杂,Epic拆分近似公式,可以理解为颜色项预滤波CubeMap,而高光IntegrateBRDF则采样Lut或者拟合公式</p>
+    <div class="img-row" style="text-align:center;margin:16px 0;">
+      <figure style="flex:1;">
+        <img src="./IBL-CubeMap.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cubemap">CubeMap采样unity_SpecCube0</figcaption>
+      </figure>
+      <figure style="flex:1;">
+        <img src="./IBL-SpecBRDF.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.fit">使用拟合公式</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.stack"><strong>最后直接光和间接光叠加,就是基础的标准PBR流程</strong></p>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+    <h2 data-i18n="doc.h2.app">应用</h2>
+    <p data-i18n="doc.p.app">标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./UnityOrStand.png" alt="原始psd" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.stand">左:URP Stand 右:Cook-Torrance</figcaption>
+      </figure>
+
+      <!-- <figure style="flex:1;">
+        <img src="./prefab_undo.png" alt="直接输出" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;">不人工干预直接使用工具导出</figcaption>
+      </figure> -->
+    </div>
+    <p data-i18n="doc.p.unitypbr">Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以</p>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+    <strong data-i18n="doc.sub.skin">2. 皮肤渲染</strong>
+    <p data-i18n="doc.p.skin">皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./Skin.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.skin">内置PBR和自定义PBR,Skin Shader对比</figcaption>
+      </figure>
+    </div>
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+    <strong data-i18n="doc.sub.eye">3. 眼球渲染</strong>
+    <p data-i18n="doc.p.eye">眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./Eyes.png">
+      <source src="./Eyes.mp4" type="video/mp4">
+    </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.eyes">折射和变色,缩放</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.parallax">这里直接使用了简单的视差效果,UnityCG.cginc的版本,基于物理的视差相对麻烦,具体可以看另一篇,还原UE眼球效果</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./ParallaxOffset.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.parallax">unity的视差公式</figcaption>
+      </figure>
+    </div>
+
+    <hr style="border: none; height: 1px; background: #444; margin: 24px 0;">
+    <strong data-i18n="doc.sub.shadow">4. 阴影渲染</strong>
+    <p data-i18n="doc.p.shadow">Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./UnityShadowMap.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.ushadow">Unity ShadowMap,阴影距离3,相机远平面3</figcaption>
+      </figure>
+
+      <figure style="flex:1;">
+        <img src="./CustomShadowMap.png" alt="Prefab Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cshadow">自定义Shadow Map,根据Bounds来</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.core">核心实现是计算需要阴影单位的包围盒,根据包围盒创建视椎体,将视椎体内深度记录到RT,之后就是常规阴影对比流程,在视椎体空间对比NDC Z深度</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+        <img src="./bounds.png" alt="PSD Layer" style="width:100%;border-radius:6px;">
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.bounds">白色包围盒,绿色视椎体</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.vid">视频动态效果明显</p>
+    <div class="img-row">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./unityShadow.png">
+      <source src="./unityShadow.mp4" type="video/mp4">
+      </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.uvid">Unity Shadow</figcaption>
+      </figure>
+    </div>
+    <div class="img-row">
+      <figure style="flex:1;">
+            <video controls style="width:100%;aspect-ratio:16/9;border-radius:6px;margin:1rem 0;" poster="./customShdow.png">
+      <source src="./customShadow.mp4" type="video/mp4">
+      </video>
+        <figcaption style="color:#aaa;font-size:0.9rem;margin-top:0.4rem;text-align:center;" data-i18n="cap.cvid">Custom Shadow</figcaption>
+      </figure>
+    </div>
+    <p data-i18n="doc.p.cons">缺点是要给角色多加一张RT来渲染,但是分辨率可控,在角色展示等比较独立的界面,近距离时开启比较合适</p>
+  </div>
+</main>
+<footer>
+  <!-- <p>const</p> -->
+</footer>
+<script>
+const thumbs = document.querySelectorAll('.thumb-item');
+const mediaBox = document.getElementById('mediaBox');
+
+// 初始化缩略图逻辑
+thumbs.forEach(thumb => {
+  const type = thumb.dataset.type;
+  const dataSrc = thumb.dataset.src;
+  // 用户没有手动设置src，则自动生成缩略图
+  if(!thumb.src || thumb.src === window.location.href){
+    if(type === "image"){
+      thumb.src = dataSrc;
+    }else if(type === "iframe"){
+      // 仅iframe(youtube)自动拿缩略；本地video不处理，强制要求手动src
+      const match = dataSrc.match(/embed\/([^?&]+)/);
+      if(match && match[1]){
+        const vid = match[1];
+        thumb.src = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+      }
+    }
+    // type=video(本地mp4)：不做自动缩略，要求你手动写src，防止裂图
+  }
+});
+
+// 切换媒体函数
+function switchMedia(thumb){
+  const type = thumb.dataset.type;
+  const src = thumb.dataset.src;
+  mediaBox.innerHTML = '';
+
+  if(type === "video"){
+    // 本地mp4 / mp4直链，原生video标签，固定16:9容器
+    mediaBox.style.aspectRatio = "16/9";
+    const v = document.createElement('video');
+    v.src = src;
+    v.controls = true;
+    v.autoplay = false;
+    mediaBox.appendChild(v);
+  }else if(type === "iframe"){
+    // youtube / b站 iframe嵌入
+    mediaBox.style.aspectRatio = "16/9";
+    const ifr = document.createElement('iframe');
+    ifr.src = src;
+    ifr.allowFullscreen = true;
+    mediaBox.appendChild(ifr);
+  }else if(type === "image"){
+    // 图片，aspect‑ratio:auto跟随图片原生比例
+    mediaBox.style.aspectRatio = "auto";
+    const img = document.createElement('img');
+    img.className = "main-img";
+    img.src = src;
+    img.alt = "作品大图";
+    mediaBox.appendChild(img);
+  }
+}
+
+// 绑定点击事件
+thumbs.forEach(thumb=>{
+  thumb.onclick = ()=>{
+    thumbs.forEach(t=>t.classList.remove('active'));
+    thumb.classList.add('active');
+    switchMedia(thumb);
+  }
+});
+
+// 页面加载完初始化渲染active项
+const activeOne = document.querySelector('.thumb-item.active');
+if(activeOne){
+  switchMedia(activeOne);
+}
+
+// 底部滚动进度条逻辑
+const scrollProgress = document.getElementById('scrollProgress');
+const scrollProgressBar = document.getElementById('scrollProgressBar');
+let progressTimeout;
+
+function updateScrollProgress() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrollPercent = (scrollTop / scrollHeight) * 100;
+
+  if(scrollProgressBar) {
+    scrollProgressBar.style.width = scrollPercent + '%';
+  }
+
+  if(scrollProgress) {
+    scrollProgress.classList.add('visible');
+  }
+
+  clearTimeout(progressTimeout);
+  progressTimeout = setTimeout(() => {
+    if(scrollProgress) {
+      scrollProgress.classList.remove('visible');
+    }
+  }, 2000);
+}
+
+window.addEventListener('scroll', updateScrollProgress);
+updateScrollProgress();
+
+</script>
+
+<!-- 图片预览浮窗DOM -->
+<div class="img-lightbox" id="lightbox">
+  <span class="close-btn">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const closeBtn = lightbox.querySelector('.close-btn');
+
+// 绑定content-wrap里面所有图片点击
+document.querySelectorAll('.content-wrap img').forEach(img=>{
+  img.onclick = function(){
+    lightboxImg.src = this.src;
+    lightboxImg.alt = this.alt;
+    lightbox.classList.add('show');
+  }
+})
+
+// 点击叉号关闭
+closeBtn.onclick = ()=> lightbox.classList.remove('show');
+// 点击黑色背景关闭（点图片本身不关闭）
+lightbox.onclick = (e)=>{
+  if(e.target === lightbox) lightbox.classList.remove('show');
+}
+// ESC按键关闭
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') lightbox.classList.remove('show');
+})
+</script>
+
+<script>
+// ============ 多语言 i18n（跟随主页 localStorage('lang')） ============
+const PROJ_I18N = {
+  en: {
+    "doc.title": "Project Details",
+    "doc.credit": "(Note: model from Unreal FAB Marketplace — Ninja 01, Basic Version)",
+    "header.title": "PBR Workflow — Skin & Eye Rendering",
+    "doc.h1": "PBR & Skin Rendering",
+    "doc.intro": '<strong>Project Brief: </strong>Realistic rendering heavily depends on material expression, and the PBR workflow fits naturally. As a framework for skin, eyes and everything that follows, it was worth extracting a custom PBR layer that is easy to tweak.',
+    "doc.h2.detail": "Implementation Details",
+    "doc.sub.std": "1. Standard PBR",
+    "doc.p.eq": "PBR lighting integral equation:",
+    "doc.p.brdf": "fr = core BRDF lighting function; Cook-Torrance is used here.",
+    "doc.p.diff": "f diffuse — the diffuse reflection formula.",
+    "cap.diffuse": "The diffuse formula is relatively simple",
+    "doc.p.spec": "Specular reflection formula; DFG is solved for.",
+    "cap.d": "D (Normal Distribution)",
+    "cap.f": "F (Fresnel)",
+    "cap.g": "G (Geometry)",
+    "doc.p.ibldiff": "With direct light done, Unity's indirect light (IBL) also needs computing. First comes indirect diffuse, i.e. Unity's spherical harmonics (SH).",
+    "cap.ibldiff": "D",
+    "doc.p.iblspec": "Indirect specular reflection is more involved; formula:",
+    "doc.p.iblapprox": "Real-time computation is complex, so Epic splits an approximation: treat the color term as a pre-filtered CubeMap, and sample a LUT (or a fitted function) for the specular IntegrateBRDF.",
+    "cap.cubemap": "CubeMap sampling unity_SpecCube0",
+    "cap.fit": "Using the fitted function",
+    "doc.p.stack": "<strong>Finally, direct and indirect light are stacked to form the basic standard PBR pipeline.</strong>",
+    "doc.h2.app": "Application",
+    "doc.p.app": "Standard PBR renders metals, wood and plastics well, but special lighting equations are needed for skin, eyes and similar materials.",
+    "cap.stand": "Left: UP Standard; Right: Cook-Torrance",
+    "doc.p.unitypbr": "Unity's built-in PBR is nearly identical to the common Cook-Torrance BRDF; it only replaces the FG terms with approximate functions in the specular, so highlights differ subtly. The character's mask uses metal material and looks acceptable.",
+    "doc.sub.skin": "2. Skin Rendering",
+    "doc.p.skin": "Subsurface scattering is approximated with an SSS LUT, replacing the raw PBR N·L term to add a reddish tone; a second fine highlight layer simulates the oil-layer reflection.",
+    "cap.skin": "Built-in PBR vs custom PBR / Skin Shader comparison",
+    "doc.sub.eye": "3. Eye Rendering",
+    "doc.p.eye": "The eye mainly handles iris refraction, via parallax mapping or physically based parallax.",
+    "cap.eyes": "Refraction, color change, zoom",
+    "doc.p.parallax": "A simple parallax (UnityCG.cginc version) is used here; physically based parallax is more involved — see the separate write-up on reproducing UE eye rendering.",
+    "cap.parallax": "Unity parallax formula",
+    "doc.sub.shadow": "4. Shadow Rendering",
+    "doc.p.shadow": "Unity samples the whole-scene depth for comparison, leaving little resolution budget for characters; shadows jitter badly when the model moves, and CSM does not help much. CSM only applies to directional light under URP. Independently rendering key characters' shadows gives better results in showcases.",
+    "cap.ushadow": "Unity ShadowMap, shadow distance 3, camera far plane 3",
+    "cap.cshadow": "Custom Shadow Map, built from Bounds",
+    "doc.p.core": "Core implementation: compute the bounding box of units needing shadows, build a frustum from it, record depth inside the frustum to an RT, then run the usual shadow comparison against NDC Z depth in frustum space.",
+    "cap.bounds": "White bounding box, green frustum",
+    "doc.p.vid": "Dynamic effect is obvious in the videos.",
+    "cap.uvid": "Unity Shadow",
+    "cap.cvid": "Custom Shadow",
+    "doc.p.cons": "The trade-off: an extra RT per character for rendering, but resolution stays controllable; best enabled up-close in independent scenes such as character showcases."
+  },
+  zh: {
+    "doc.title": "项目详情",
+    "doc.credit": "(注:模型来自Unreal FAB商城,Ninja 01 (Basic Version))",
+    "header.title": "PBR流程 皮肤和眼球渲染",
+    "doc.h1": "PBR和皮肤渲染",
+    "doc.intro": '<strong>项目简介</strong>：写实渲染非常依赖材质的表现,PBR流程非常适合,作为皮肤,眼球,甚至后续所有的渲染框架,有必要提取一版自定义PBR,方便修改。',
+    "doc.h2.detail": "实现细节",
+    "doc.sub.std": "1. 标准PBR",
+    "doc.p.eq": "PBR光照积分方程:",
+    "doc.p.brdf": "fr=BRDF核心光照函数,这里采用Cook-Torrance",
+    "doc.p.diff": "f diffuse漫反射公式",
+    "cap.diffuse": "漫反射公式较为简单",
+    "doc.p.spec": "高光反射公式,主要求DFG",
+    "cap.d": "D",
+    "cap.f": "F",
+    "cap.g": "G",
+    "doc.p.ibldiff": "直接光有了,Unity中的间接光IBL也需要计算,相对简单,首先是间接光漫反射,就是unity球谐函数SH",
+    "cap.ibldiff": "D",
+    "doc.p.iblspec": "间接光高光反射相对麻烦,公式:",
+    "doc.p.iblapprox": "实时计算相当复杂,Epic拆分近似公式,可以理解为颜色项预滤波CubeMap,而高光IntegrateBRDF则采样Lut或者拟合公式",
+    "cap.cubemap": "CubeMap采样unity_SpecCube0",
+    "cap.fit": "使用拟合公式",
+    "doc.p.stack": "<strong>最后直接光和间接光叠加,就是基础的标准PBR流程</strong>",
+    "doc.h2.app": "应用",
+    "doc.p.app": "标准PBR渲染,对金属,木头,塑料等等渲染效果较好,但是涉及皮肤,眼睛等等特殊光照方程,需要一定修改",
+    "cap.stand": "左:URP Stand 右:Cook-Torrance",
+    "doc.p.unitypbr": "Unity自带的PBR和常用的BRDF:Cook-Torrance几乎一致,只在高光项用近似函数替代了FG项,所以高光有非常细微的不同,模型的面罩为金属材质,表现还可以",
+    "doc.sub.skin": "2. 皮肤渲染",
+    "doc.p.skin": "皮肤散射效果用SSS Lut模拟,替代原始PBR NL项,增加红润质感,叠加另一层细腻高光,模拟油脂层反射",
+    "cap.skin": "内置PBR和自定义PBR,Skin Shader对比",
+    "doc.sub.eye": "3. 眼球渲染",
+    "doc.p.eye": "眼球部分主要是虹膜折射的处理,视差贴图或者基于物理的视差",
+    "cap.eyes": "折射和变色,缩放",
+    "doc.p.parallax": "这里直接使用了简单的视差效果,UnityCG.cginc的版本,基于物理的视差相对麻烦,具体可以看另一篇,还原UE眼球效果",
+    "cap.parallax": "unity的视差公式",
+    "doc.sub.shadow": "4. 阴影渲染",
+    "doc.p.shadow": "Unity阴影会采集整个场景的深度进行比较,分配给人物的占比较少,当模型移动时抖动较大,即使开启CSM,效果也不太理想,且CSM在URP下仅对平行光作用,独立渲染关键角色的阴影可以在角色展示等界面提供更好的阴影",
+    "cap.ushadow": "Unity ShadowMap,阴影距离3,相机远平面3",
+    "cap.cshadow": "自定义Shadow Map,根据Bounds来",
+    "doc.p.core": "核心实现是计算需要阴影单位的包围盒,根据包围盒创建视椎体,将视椎体内深度记录到RT,之后就是常规阴影对比流程,在视椎体空间对比NDC Z深度",
+    "cap.bounds": "白色包围盒,绿色视椎体",
+    "doc.p.vid": "视频动态效果明显",
+    "cap.uvid": "Unity Shadow",
+    "cap.cvid": "Custom Shadow",
+    "doc.p.cons": "缺点是要给角色多加一张RT来渲染,但是分辨率可控,在角色展示等比较独立的界面,近距离时开启比较合适"
+  }
+};
+
+(function(){
+  const lang = localStorage.getItem('lang') || 'en';
+  document.documentElement.lang = lang;
+  const dict = PROJ_I18N[lang] || PROJ_I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key] === undefined) return;
+    if (/<[a-z/]/.test(dict[key])) el.innerHTML = dict[key];
+    else el.textContent = dict[key];
+  });
+})();
+</script>
+</body>
+</html>

@@ -674,84 +674,7 @@ footer a{
     <h2 class="category-title" id="categoryTitle" data-i18n="nav.work">作品</h2>
 
     <div class="project-list" id="projectList">
-        <!-- ========== 作品 Project / work ========== -->
-        <div class="project-item" data-category="work">
-            <a href="./Res/Project/SLGWorldMap/index.html">
-                <div class="project-image-wrapper">
-                    <div class="project-tags">
-                        <span class="tag" data-i18n="tag.batching">合批优化</span>
-                        <span class="tag" data-i18n="tag.outline">描边</span>
-                    </div>
-                    <img class="project-image" src="./Res/Project/SLGWorldMap/thumb.png" alt="项目截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-i18n="proj1.title">大地图战斗渲染</h3>
-                    <p class="project-desc" data-i18n="proj1.desc">URP管线、合批优化、简单描边方案</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="project-item" data-category="work">
-            <a href="./Res/Project/AIPsd2UnityPrefab/index.html">
-                <div class="project-image-wrapper">
-                    <div class="project-tags">
-                        <span class="tag" data-i18n="tag.tool">工具</span>
-                        <span class="tag" data-i18n="tag.auto">自动化</span>
-                    </div>
-                    <img class="project-image" src="./Res/Project/AIPsd2UnityPrefab/thumb.png" alt="项目截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-i18n="proj2.title">AI-PSD到Unity UGUI预研</h3>
-                    <p class="project-desc" data-i18n="proj2.desc">PSD插件,UGUI自动生成和代码生成</p>
-                </div>
-            </a>
-        </div>
-
-        <div class="project-item" data-category="work">
-            <a href="./Res/Project/PBRRoles/index.html">
-                <div class="project-image-wrapper">
-                    <div class="project-tags">
-                        <span class="tag">PBR</span>
-                        <span class="tag">SSS</span>
-                        <span class="tag" data-i18n="tag.eyeball">眼球渲染</span>
-                    </div>
-                    <img class="project-image" src="./Res/Project/PBRRoles/thumb.png" alt="项目截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title" data-i18n="proj3.title">基于PBR 皮肤和眼球渲染</h3>
-                    <p class="project-desc" data-i18n="proj3.desc">PBR 写实角色渲染 皮肤 眼球 阴影</p>
-                </div>
-            </a>
-        </div>
-
-        <!-- <div class="project-item" data-category="work">
-            <a href="./Res/Project/CarToon/index.html">
-                <div class="project-image-wrapper">
-                    <div class="project-tags">
-                        <span class="tag">NPR</span>
-                        <span class="tag">卡通渲染</span>
-                    </div>
-                    <img class="project-image" src="./Res/Project/CarToon/" alt="项目截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">欧美卡通渲染</h3>
-                    <p class="project-desc">PBR 欧美卡通角色</p>
-                </div>
-            </a>
-        </div> -->
-
-        <!-- ========== Demo / demo ========== -->
-        <!-- <div class="project-item" data-category="demo">
-            <a href="./Res/Demo/VertexAnim/index.html">
-                <div class="project-image-wrapper">
-                    <img class="project-image" src="./Res/Demo/VertexAnim/thumb.jpg" alt="Demo截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">顶点动画Demo</h3>
-                    <p class="project-desc">GPU顶点动画、实例化渲染性能测试</p>
-                </div>
-            </a>
-        </div> -->
+        <!-- 项目将从 projects.json 动态加载 -->
     </div>
 </main>
 
@@ -798,17 +721,6 @@ const I18N = {
         "brand.sub": "/ Technical Artist & Client Developer",
         "nav.work": "Works",
         "nav.demo": "Demo",
-        "tag.batching": "Batching Optimization",
-        "tag.outline": "Outline",
-        "tag.tool": "Tool",
-        "tag.auto": "Automation",
-        "tag.eyeball": "Eye Rendering",
-        "proj1.title": "World Map Combat Rendering",
-        "proj1.desc": "URP pipeline, batching optimization, simple outline solution",
-        "proj2.title": "AI PSD-to-Unity UGUI Prototype",
-        "proj2.desc": "PSD plugin for automated UGUI and code generation",
-        "proj3.title": "PBR Skin & Eye Rendering",
-        "proj3.desc": "PBR realistic character rendering: skin, eyes, shadow",
         "footer.about": "About / Contact",
         "modal.detail": "Project Details",
         "modal.about": "About / Contact",
@@ -823,17 +735,6 @@ const I18N = {
         "brand.sub": "/ 技术美术&客户端开发",
         "nav.work": "作品",
         "nav.demo": "Demo",
-        "tag.batching": "合批优化",
-        "tag.outline": "描边",
-        "tag.tool": "工具",
-        "tag.auto": "自动化",
-        "tag.eyeball": "眼球渲染",
-        "proj1.title": "大地图战斗渲染",
-        "proj1.desc": "URP管线、合批优化、简单描边方案",
-        "proj2.title": "AI-PSD到Unity UGUI预研",
-        "proj2.desc": "PSD插件,UGUI自动生成和代码生成",
-        "proj3.title": "基于PBR 皮肤和眼球渲染",
-        "proj3.desc": "PBR 写实角色渲染 皮肤 眼球 阴影",
         "footer.about": "关于我/联系我",
         "modal.detail": "项目详情",
         "modal.about": "关于我/联系我",
@@ -845,6 +746,84 @@ const I18N = {
         "lang.desc": "请选择您偏好的语言，选择将保存在本机。"
     }
 };
+
+// ============ 项目数据加载 ============
+let projectsData = [];
+let tagTranslations = {};
+
+async function loadProjects() {
+    try {
+        const response = await fetch('./projects.json');
+        if (!response.ok) throw new Error('Failed to load projects.json');
+        const data = await response.json();
+        projectsData = data.projects;
+        tagTranslations = data.tagTranslations;
+        renderProjects();
+    } catch (error) {
+        console.error('Error loading projects:', error);
+        projectList.innerHTML = '<div class="empty-state"><h3>Failed to load projects</h3><p>Please check the console for details.</p></div>';
+    }
+}
+
+function renderProjects() {
+    projectList.innerHTML = '';
+
+    projectsData.forEach((project, index) => {
+        const projectItem = document.createElement('div');
+        projectItem.className = 'project-item';
+        projectItem.dataset.category = project.category;
+
+        // 构建标签 HTML
+        const tagsHtml = project.tags.map(tagKey => {
+            const tagText = tagTranslations[tagKey]?.[currentLang] || tagKey;
+            return `<span class="tag">${tagText}</span>`;
+        }).join('');
+
+        // 获取当前语言的标题和描述
+        const title = project.title[currentLang] || project.title.zh;
+        const desc = project.desc[currentLang] || project.desc.zh;
+
+        projectItem.innerHTML = `
+            <a href="${project.url}">
+                <div class="project-image-wrapper">
+                    <div class="project-tags">
+                        ${tagsHtml}
+                    </div>
+                    <img class="project-image" src="${project.image}" alt="项目截图">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">${title}</h3>
+                    <p class="project-desc">${desc}</p>
+                </div>
+            </a>
+        `;
+
+        projectList.appendChild(projectItem);
+
+        // 添加淡入动画
+        setTimeout(() => {
+            projectItem.classList.add('fade-in');
+        }, index * 80);
+    });
+
+    // 重新绑定点击事件
+    bindProjectClickEvents();
+}
+
+function bindProjectClickEvents() {
+    const projectItems = document.querySelectorAll('.project-item');
+    projectItems.forEach(item => {
+        const link = item.querySelector('a');
+        const titleEl = item.querySelector('.project-title');
+        const url = link.getAttribute('href');
+
+        link.onclick = (e) => {
+            e.preventDefault();
+            const title = titleEl.textContent;
+            openModal(title, url);
+        };
+    });
+}
 
 // 自动检测浏览器语言，中文浏览器默认中文，其他默认英文
 let browserLang = navigator.language || navigator.userLanguage;
@@ -867,6 +846,16 @@ function applyLang(lang) {
     titleMap.work = dict['nav.work'];
     titleMap.demo = dict['nav.demo'];
     categoryTitleEl.textContent = dict['nav.work'];
+
+    // 重新渲染项目以更新语言
+    if (projectsData.length > 0) {
+        renderProjects();
+        // 重新应用当前筛选
+        const activeFilter = document.querySelector('.nav-filter button.active');
+        if (activeFilter) {
+            filterProjects(activeFilter.dataset.filter);
+        }
+    }
 }
 
 // 映射filter和显示标题
@@ -875,7 +864,6 @@ const titleMap = {
     demo: "Demo"
 };
 const filterBtns = document.querySelectorAll('.nav-filter button');
-const projectItems = document.querySelectorAll('.project-item');
 const categoryTitleEl = document.getElementById('categoryTitle');
 const projectList = document.getElementById('projectList');
 
@@ -992,64 +980,58 @@ document.addEventListener('keydown', (e) => {
 });
 
 // 拦截项目卡片点击，改为打开模态窗口
-projectItems.forEach(item => {
-    const link = item.querySelector('a');
-    const titleEl = item.querySelector('.project-title');
-    const url = link.getAttribute('href');
+// (现在由 bindProjectClickEvents 函数处理)
 
-    link.onclick = (e) => {
-        e.preventDefault();
-        // 实时获取当前语言下的标题
-        const title = titleEl.textContent;
-        openModal(title, url);
-    };
-});
+function filterProjects(type) {
+    const projectItems = document.querySelectorAll('.project-item');
+
+    // 更新大标题
+    categoryTitleEl.style.opacity = '0';
+    setTimeout(() => {
+        categoryTitleEl.innerText = titleMap[type];
+        categoryTitleEl.style.opacity = '1';
+    }, 150);
+
+    // 先隐藏所有项目
+    projectItems.forEach(item => {
+        item.classList.remove('fade-in');
+        item.classList.add('hidden');
+    });
+
+    // 检查是否有匹配的项目
+    const visibleItems = Array.from(projectItems).filter(item => item.dataset.category === type);
+
+    // 移除之前的空状态
+    const existingEmpty = projectList.querySelector('.empty-state');
+    if (existingEmpty) {
+        existingEmpty.remove();
+    }
+
+    if (visibleItems.length === 0) {
+        // 显示空状态
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        emptyState.innerHTML = `<h3>${I18N[currentLang]['empty.title']}</h3><p>${I18N[currentLang]['empty.desc']}</p>`;
+        projectList.appendChild(emptyState);
+    } else {
+        // 延迟显示匹配的项目，带淡入动画
+        setTimeout(() => {
+            visibleItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.remove('hidden');
+                    item.classList.add('fade-in');
+                }, index * 80);
+            });
+        }, 200);
+    }
+}
 
 filterBtns.forEach(btn => {
     btn.onclick = () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const type = btn.dataset.filter;
-
-        // 更新大标题
-        categoryTitleEl.style.opacity = '0';
-        setTimeout(() => {
-            categoryTitleEl.innerText = titleMap[type];
-            categoryTitleEl.style.opacity = '1';
-        }, 150);
-
-        // 先隐藏所有项目
-        projectItems.forEach(item => {
-            item.classList.remove('fade-in');
-            item.classList.add('hidden');
-        });
-
-        // 检查是否有匹配的项目
-        const visibleItems = Array.from(projectItems).filter(item => item.dataset.category === type);
-
-        // 移除之前的空状态
-        const existingEmpty = projectList.querySelector('.empty-state');
-        if (existingEmpty) {
-            existingEmpty.remove();
-        }
-
-        if (visibleItems.length === 0) {
-            // 显示空状态
-            const emptyState = document.createElement('div');
-            emptyState.className = 'empty-state';
-            emptyState.innerHTML = `<h3>${I18N[currentLang]['empty.title']}</h3><p>${I18N[currentLang]['empty.desc']}</p>`;
-            projectList.appendChild(emptyState);
-        } else {
-            // 延迟显示匹配的项目，带淡入动画
-            setTimeout(() => {
-                visibleItems.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.classList.remove('hidden');
-                        item.classList.add('fade-in');
-                    }, index * 80);
-                });
-            }, 200);
-        }
+        filterProjects(type);
     };
 });
 
@@ -1075,6 +1057,9 @@ langModal.querySelectorAll('button').forEach(btn => {
 
 // 初始化：直接应用语言设置
 applyLang(currentLang);
+
+// 加载项目数据
+loadProjects();
 </script>
 </body>
 </html>

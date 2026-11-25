@@ -1,0 +1,99 @@
+{
+  "tagTranslations": {
+    "batching": {
+      "en": "Batching Optimization",
+      "zh": "合批优化"
+    },
+    "outline": {
+      "en": "Outline",
+      "zh": "描边"
+    },
+    "tool": {
+      "en": "Tool",
+      "zh": "工具"
+    },
+    "auto": {
+      "en": "Automation",
+      "zh": "自动化"
+    },
+    "pbr": {
+      "en": "PBR",
+      "zh": "PBR"
+    },
+    "sss": {
+      "en": "SSS",
+      "zh": "SSS"
+    },
+    "eyeball": {
+      "en": "Eye Rendering",
+      "zh": "眼球渲染"
+    },
+    "fog": {
+      "en": "Fog",
+      "zh": "迷雾"
+    },
+    "env": {
+      "en": "Environment",
+      "zh": "环境"
+    }
+    
+  },
+  "projects": [
+    {
+      "category": "work",
+      "url": "./Res/Project/PBRRoles/index.html",
+      "image": "./Res/Project/PBRRoles/thumb.png",
+      "tags": ["pbr", "sss", "eyeball"],
+      "title": {
+        "en": "PBR Skin & Eye Rendering",
+        "zh": "基于PBR 皮肤和眼球渲染"
+      },
+      "desc": {
+        "en": "PBR realistic character rendering: skin, eyes, shadow",
+        "zh": "PBR 写实角色渲染 皮肤 眼球 阴影"
+      }
+    },
+    {
+      "category": "work",
+      "url": "./Res/Project/SLGWorldMap/index.html",
+      "image": "./Res/Project/SLGWorldMap/thumb.png",
+      "tags": ["batching", "outline"],
+      "title": {
+        "en": "World Map Combat Rendering",
+        "zh": "大地图战斗渲染"
+      },
+      "desc": {
+        "en": "URP pipeline, batching optimization, simple outline solution",
+        "zh": "URP管线、合批优化、简单描边方案"
+      }
+    },
+    {
+      "category": "work",
+      "url": "./Res/Project/Fog/index.html",
+      "image": "./Res/Project/Fog/Plane/thumb.png",
+      "tags": ["fog", "env"],
+      "title": {
+        "en": "Fog Rendering & Tools",
+        "zh": "迷雾渲染和功能"
+      },
+      "desc": {
+        "en": "Plane Fog, Volumetric Fog, Fog Tool",
+        "zh": "迷雾渲染、体积雾、迷雾工具"
+      }
+    },
+    {
+      "category": "work",
+      "url": "./Res/Project/AIPsd2UnityPrefab/index.html",
+      "image": "./Res/Project/AIPsd2UnityPrefab/thumb.png",
+      "tags": ["tool", "auto"],
+      "title": {
+        "en": "AI PSD-to-Unity UGUI Prototype",
+        "zh": "AI-PSD到Unity UGUI预研"
+      },
+      "desc": {
+        "en": "PSD plugin for automated UGUI and code generation",
+        "zh": "PSD插件,UGUI自动生成和代码生成"
+      }
+    }
+  ]
+}
