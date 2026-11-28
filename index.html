@@ -119,6 +119,9 @@ nav{
     color:var(--text);
     background:var(--accent);
 }
+.nav-filter button:active{
+    transform: scale(0.95);
+}
 /* 语言切换按钮 */
 .lang-switch{
     display:flex;
@@ -145,6 +148,9 @@ nav{
 .lang-switch button.active{
     color:var(--text);
     background:var(--accent);
+}
+.lang-switch button:active{
+    transform: scale(0.95);
 }
 .nav-right{
     display:flex;
@@ -370,10 +376,71 @@ nav{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    display: block;
+    background: #0d1117;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
-.project-item:hover .project-image {
-    transform: scale(1.05);
+.project-image.img-ready {
+    opacity: 1;
+}
+/* 多图网格（始终位于 .project-image-wrapper 内，16:10 不变） */
+.image-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    gap: 2px;
+    background: #0d1117;
+}
+.image-grid.grid-1 {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+.image-grid.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+}
+.image-grid.grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+.image-grid.grid-9 {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+/* 网格单元格 */
+.project-image-cell {
+    position: relative;
+    overflow: hidden;
+    background: #0d1117;
+    transform-origin: center center;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.project-image-cell.empty {
+    background: #0d1117;
+}
+/* 延时平滑放大：悬停格在原位连续缩放铺满图区（低于标签层 z-index:2），移开连续缩回 */
+.project-image-cell.zoomed {
+    z-index: 1;
+}
+/* 悬停放大覆盖层：以 wrapper 为基准显示完整图片（z-index 低于标签层的 2）*/
+.zoom-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+.zoom-overlay.active {
+    opacity: 1;
+    pointer-events: auto;   /* 激活后捕获鼠标，防止穿透到底层格子切图 */
+}
+.zoom-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 .project-content {
     flex: 1;
@@ -620,6 +687,110 @@ nav{
     transition: width 0.1s ease;
 }
 
+/* 分页栏 */
+.pagination {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding: 0.4rem 0.75rem;
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+/* show: allocate layout space (display:flex) but still transparent */
+.pagination.show {
+    display: flex;
+}
+/* visible: fade + slide in */
+.pagination.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.pagination button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.pagination button:hover:not(:disabled) {
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+}
+.pagination button.go-btn:hover:not(:disabled) {
+    color: #0f1117;
+    background: var(--accent);
+}
+.pagination button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+.pagination button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+.page-info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+.page-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.4rem 0.5rem;
+    border-radius: 8px;
+    width: 3.5rem;
+    text-align: center;
+    -moz-appearance: textfield;
+    transition: border-color 0.2s ease;
+}
+.page-input::-webkit-outer-spin-button,
+.page-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.page-input:focus {
+    outline: none;
+    border-color: rgba(56,189,248,0.4);
+}
+/* 翻页进度条 */
+.page-progress {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: transparent;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.page-progress.visible { opacity: 1; }
+.page-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(56,189,248,0.6), rgba(56,189,248,0.9));
+    width: 0%;
+    transition: width 0.8s ease;
+    box-shadow: 0 0 8px rgba(56,189,248,0.5);
+}
+.page-progress-bar.instant {
+    transition: width 0.15s ease;
+}
 /* 响应式：单列布局 + 模态窗口适配 */
 @media (max-width: 768px) {
     .project-list {
@@ -687,6 +858,17 @@ footer a{
     <div class="project-list" id="projectList">
         <!-- 项目将从 projects.json 动态加载 -->
     </div>
+    <!-- 分页栏 -->
+    <div class="pagination" id="pagination">
+        <button id="pagePrev" data-i18n="page.prev">← Prev</button>
+        <div class="page-info">
+            <input class="page-input" id="pageInput" type="number" value="1" min="1">
+            <span>/</span>
+            <span id="pageTotalEl">1</span>
+        </div>
+        <button class="go-btn" id="pageGo" data-i18n="page.go">Go</button>
+        <button id="pageNext" data-i18n="page.next">Next →</button>
+    </div>
 </main>
 
 <footer>
@@ -711,6 +893,11 @@ footer a{
             <iframe id="modalIframe" src=""></iframe>
         </div>
     </div>
+</div>
+
+<!-- 翻页线状进度条 -->
+<div class="page-progress" id="pageProgress">
+    <div class="page-progress-bar" id="pageProgressBar"></div>
 </div>
 
 <!-- 首次访问语言选择弹窗 -->
@@ -740,7 +927,10 @@ const I18N = {
         "loading": "Loading...",
         "loadfail": "Failed to load",
         "lang.title": "Choose Language",
-        "lang.desc": "Please select your preferred language. Your choice will be saved on this device."
+        "lang.desc": "Please select your preferred language. Your choice will be saved on this device.",
+        "page.prev": "← Prev",
+        "page.next": "Next →",
+        "page.go": "Go"
     },
     zh: {
         "brand.sub": "/ 技术美术&客户端开发",
@@ -754,86 +944,148 @@ const I18N = {
         "loading": "加载中...",
         "loadfail": "加载失败",
         "lang.title": "选择语言",
-        "lang.desc": "请选择您偏好的语言，选择将保存在本机。"
+        "lang.desc": "请选择您偏好的语言，选择将保存在本机。",
+        "page.prev": "← 上一页",
+        "page.next": "下一页 →",
+        "page.go": "跳转"
     }
 };
 
 // ============ 项目数据加载 ============
 let projectsData = [];
 let tagTranslations = {};
+let loadController = null;
+let renderGen = 0;
+let pageSize = 10;
+let currentFilter = 'work';
+let currentPages = { work: 1, demo: 1 };
 
 async function loadProjects() {
+    if (loadController) loadController.abort();
+    const controller = new AbortController();
+    loadController = controller;
     try {
-        const response = await fetch('./projects.json');
+        const response = await fetch('./projects.json', { signal: controller.signal });
         if (!response.ok) throw new Error('Failed to load projects.json');
         const data = await response.json();
         projectsData = data.projects;
         tagTranslations = data.tagTranslations;
-        renderProjects();
+        pageSize = (data.config && typeof data.config.pageSize === 'number' && data.config.pageSize > 0)
+            ? data.config.pageSize : 10;
+        renderPage(currentFilter, 1);
     } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Error loading projects:', error);
         projectList.innerHTML = '<div class="empty-state"><h3>Failed to load projects</h3><p>Please check the console for details.</p></div>';
     }
 }
 
-function renderProjects() {
-    projectList.innerHTML = '';
+// 构建单个项目卡片元素并返回（不插入 DOM）
+function buildProjectItem(project) {
+    const item = document.createElement('div');
+    item.className = 'project-item hidden';
+    item.dataset.category = project.category;
 
-    projectsData.forEach((project, index) => {
-        const projectItem = document.createElement('div');
-        projectItem.className = 'project-item';
-        projectItem.dataset.category = project.category;
+    const tagsHtml = project.tags.map(tagKey => {
+        const tagText = tagTranslations[tagKey]?.[currentLang] || tagKey;
+        return `<span class="tag">${tagText}</span>`;
+    }).join('');
 
-        // 构建标签 HTML
-        const tagsHtml = project.tags.map(tagKey => {
-            const tagText = tagTranslations[tagKey]?.[currentLang] || tagKey;
-            return `<span class="tag">${tagText}</span>`;
-        }).join('');
+    const title = project.title[currentLang] || project.title.zh;
+    const desc = project.desc[currentLang] || project.desc.zh;
 
-        // 获取当前语言的标题和描述
-        const title = project.title[currentLang] || project.title.zh;
-        const desc = project.desc[currentLang] || project.desc.zh;
+    const images = Array.isArray(project.images) && project.images.length > 0
+        ? project.images.slice(0, 9) : [project.image];
+    const n = images.length;
+    const gridClass = n === 1 ? 'grid-1' : n === 2 ? 'grid-2' : n <= 4 ? 'grid-4' : 'grid-9';
+    const gridCapacity = n === 1 ? 1 : n === 2 ? 2 : n <= 4 ? 4 : 9;
+    const cellsHtml = images.map(src =>
+        `<div class="project-image-cell"><img class="project-image" loading="lazy" src="${src}" alt="项目截图"></div>`
+    ).join('');
+    const placeholders = Array.from({ length: gridCapacity - n }, () =>
+        `<div class="project-image-cell empty"></div>`
+    ).join('');
 
-        projectItem.innerHTML = `
-            <a href="${project.url}">
-                <div class="project-image-wrapper">
-                    <div class="project-tags">
-                        ${tagsHtml}
-                    </div>
-                    <img class="project-image" src="${project.image}" alt="项目截图">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">${title}</h3>
-                    <p class="project-desc">${desc}</p>
-                </div>
-            </a>
-        `;
+    const zoomDelay = (typeof project.zoomDelay === 'number' && project.zoomDelay >= 0)
+        ? project.zoomDelay : 0.5;
+    item.dataset.zoomDelay = zoomDelay;
 
-        projectList.appendChild(projectItem);
+    // 单图卡片不需要放大覆盖层（本身已铺满），多图卡片加 overlay 供悬停放大
+    const overlayHtml = n > 1 ? '<div class="zoom-overlay"><img class="zoom-overlay-img" /></div>' : '';
 
-        // 添加淡入动画
-        setTimeout(() => {
-            projectItem.classList.add('fade-in');
-        }, index * 80);
+    item.innerHTML = `
+        <a href="${project.url}">
+            <div class="project-image-wrapper">
+                <div class="project-tags">${tagsHtml}</div>
+                <div class="image-grid ${gridClass}">${cellsHtml}${placeholders}</div>
+                ${overlayHtml}
+            </div>
+            <div class="project-content">
+                <h3 class="project-title">${title}</h3>
+                <p class="project-desc">${desc}</p>
+            </div>
+        </a>
+    `;
+
+    item.querySelectorAll('.image-grid img').forEach(img => {
+        const markReady = () => img.classList.add('img-ready');
+        if (img.complete && img.naturalWidth > 0) {
+            markReady();
+        } else {
+            img.addEventListener('load', markReady, { once: true });
+            img.addEventListener('error', () => {
+                const retry = new Image();
+                retry.onload = () => { img.src = img.src; markReady(); };
+                retry.onerror = () => markReady();
+                retry.src = img.src;
+                setTimeout(markReady, 2000);
+            }, { once: true });
+        }
+        if (img.decode) img.decode().catch(() => {});
     });
 
-    // 重新绑定点击事件
-    bindProjectClickEvents();
+    bindHoverZoom(item, zoomDelay);
+    return item;
 }
 
-function bindProjectClickEvents() {
-    const projectItems = document.querySelectorAll('.project-item');
-    projectItems.forEach(item => {
-        const link = item.querySelector('a');
-        const titleEl = item.querySelector('.project-title');
-        const url = link.getAttribute('href');
+// 每卡片独立的延时悬停放大：
+// 停在某格 zoomDelay 秒后，wrapper 上的覆盖层 fade in 显示该格完整图片；
+// 切换格时若已放大则立即换图（无需重新等待）；移出卡片则 fade out。
+// 空格（.empty）不绑定事件。
+function bindHoverZoom(item, zoomDelay) {
+    const wrapper = item.querySelector('.project-image-wrapper');
+    const overlay = wrapper.querySelector('.zoom-overlay');
+    // 单图卡片无 overlay，直接跳过
+    if (!overlay) return;
+    const overlayImg = overlay.querySelector('.zoom-overlay-img');
+    let timer = null;
 
-        link.onclick = (e) => {
-            e.preventDefault();
-            const title = titleEl.textContent;
-            openModal(title, url);
-        };
+    const clearZoom = () => {
+        if (timer !== null) { clearTimeout(timer); timer = null; }
+        overlay.classList.remove('active');
+    };
+
+    // 只对有图片的格绑定，空格排除
+    const cells = item.querySelectorAll('.project-image-cell:not(.empty)');
+    cells.forEach(cell => {
+        const cellImg = cell.querySelector('img');
+        cell.addEventListener('mouseenter', () => {
+            if (timer !== null) { clearTimeout(timer); timer = null; }
+            if (overlay.classList.contains('active')) {
+                // 已在放大状态，直接切换图片，无需重新等待
+                if (cellImg) overlayImg.src = cellImg.src;
+            } else {
+                // 重新计时，停留够 zoomDelay 才放大
+                timer = setTimeout(() => {
+                    if (cellImg) overlayImg.src = cellImg.src;
+                    overlay.classList.add('active');
+                    timer = null;
+                }, zoomDelay * 1000);
+            }
+        });
     });
+
+    item.addEventListener('mouseleave', clearZoom);
 }
 
 // 自动检测浏览器语言，中文浏览器默认中文，其他默认英文
@@ -841,6 +1093,8 @@ let browserLang = navigator.language || navigator.userLanguage;
 let currentLang = localStorage.getItem('lang') || (browserLang.startsWith('zh') ? 'zh' : 'en');
 
 function applyLang(lang) {
+    // UX1：已在该语言时再点不触发重渲染，仅保留按压动效（初始化调用不受影响：此时数据未加载）
+    if (projectsData.length > 0 && currentLang === lang) return;
     currentLang = lang;
     localStorage.setItem('lang', lang);
     document.documentElement.lang = lang;
@@ -858,14 +1112,13 @@ function applyLang(lang) {
     titleMap.demo = dict['nav.demo'];
     categoryTitleEl.textContent = dict['nav.work'];
 
-    // 重新渲染项目以更新语言
+    // UX2：打断在途的旧批次——作废所有待揭示回调与旧渲染代际，先清场再按新选择重建
+    renderGen++;
+    clearRevealTimers();
+    filterGen++;
+
     if (projectsData.length > 0) {
-        renderProjects();
-        // 重新应用当前筛选
-        const activeFilter = document.querySelector('.nav-filter button.active');
-        if (activeFilter) {
-            filterProjects(activeFilter.dataset.filter);
-        }
+        renderPage(currentFilter, currentPages[currentFilter]);
     }
 }
 
@@ -990,60 +1243,180 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// 拦截项目卡片点击，改为打开模态窗口
-// (现在由 bindProjectClickEvents 函数处理)
+// 筛选代际与集中定时器
+let filterGen = 0;
+let revealTimers = [];
 
-function filterProjects(type) {
-    const projectItems = document.querySelectorAll('.project-item');
+function clearRevealTimers() {
+    revealTimers.forEach(t => clearTimeout(t));
+    revealTimers = [];
+}
 
-    // 更新大标题
-    categoryTitleEl.style.opacity = '0';
-    setTimeout(() => {
-        categoryTitleEl.innerText = titleMap[type];
-        categoryTitleEl.style.opacity = '1';
-    }, 150);
+// 翻页线状进度条
+let progressEndTimer = null;
+function showPageProgress() {
+    if (progressEndTimer) { clearTimeout(progressEndTimer); progressEndTimer = null; }
+    const bar = document.getElementById('pageProgressBar');
+    const wrap = document.getElementById('pageProgress');
+    bar.classList.remove('instant');
+    bar.style.width = '0%';
+    wrap.classList.add('visible');
+    requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = '75%'; }));
+}
+function hidePageProgress() {
+    const bar = document.getElementById('pageProgressBar');
+    const wrap = document.getElementById('pageProgress');
+    bar.classList.add('instant');
+    bar.style.width = '100%';
+    progressEndTimer = setTimeout(() => {
+        wrap.classList.remove('visible');
+        setTimeout(() => { bar.classList.remove('instant'); bar.style.width = '0%'; }, 300);
+        progressEndTimer = null;
+    }, 200);
+}
 
-    // 先隐藏所有项目
-    projectItems.forEach(item => {
-        item.classList.remove('fade-in');
-        item.classList.add('hidden');
-    });
+// 分页栏显示/隐藏
+let paginationHideTimer = null;
+function hidePagination() {
+    if (paginationHideTimer) { clearTimeout(paginationHideTimer); paginationHideTimer = null; }
+    const el = document.getElementById('pagination');
+    // 和卡片一样立即消失，不做淡出过渡
+    el.classList.remove('visible');
+    el.classList.remove('show');
+}
+function showPaginationFadeIn() {
+    if (paginationHideTimer) { clearTimeout(paginationHideTimer); paginationHideTimer = null; }
+    const el = document.getElementById('pagination');
+    el.classList.remove('visible');
+    el.classList.add('show');
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+}
 
-    // 检查是否有匹配的项目
-    const visibleItems = Array.from(projectItems).filter(item => item.dataset.category === type);
+// 更新分页 UI（只更新数据和按钮状态，不控制可见性）
+function updatePaginationUI(page, totalPages) {
+    document.getElementById('pageInput').value = page;
+    document.getElementById('pageTotalEl').textContent = totalPages;
+    document.getElementById('pagePrev').disabled = page <= 1;
+    document.getElementById('pageNext').disabled = page >= totalPages;
+    // 同步分页按钮 i18n 文字
+    document.getElementById('pagePrev').textContent = I18N[currentLang]['page.prev'];
+    document.getElementById('pageNext').textContent = I18N[currentLang]['page.next'];
+    document.getElementById('pageGo').textContent  = I18N[currentLang]['page.go'];
+}
 
-    // 移除之前的空状态
-    const existingEmpty = projectList.querySelector('.empty-state');
-    if (existingEmpty) {
-        existingEmpty.remove();
-    }
+// 渲染指定分类的指定页
+function renderPage(type, page) {
+    renderGen++;
+    filterGen++;
+    const myGen = filterGen;
+    clearRevealTimers();
 
-    if (visibleItems.length === 0) {
-        // 显示空状态
+    const allForType = projectsData.filter(p => p.category === type);
+    const totalPages = Math.max(1, Math.ceil(allForType.length / pageSize));
+    page = Math.max(1, Math.min(page, totalPages));
+    currentPages[type] = page;
+    currentFilter = type;
+    const pageItems = allForType.slice((page - 1) * pageSize, page * pageSize);
+
+    // 数字提前更新：分页栏消失前先把新页码写入，淡入时不会跳变
+    updatePaginationUI(page, totalPages);
+    // 卡片和分页栏立即消失，之后再同步淡入
+    projectList.innerHTML = '';
+    hidePagination();
+
+    if (pageItems.length === 0) {
         const emptyState = document.createElement('div');
         emptyState.className = 'empty-state';
         emptyState.innerHTML = `<h3>${I18N[currentLang]['empty.title']}</h3><p>${I18N[currentLang]['empty.desc']}</p>`;
         projectList.appendChild(emptyState);
-    } else {
-        // 延迟显示匹配的项目，带淡入动画
-        setTimeout(() => {
-            visibleItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.classList.remove('hidden');
-                    item.classList.add('fade-in');
-                }, index * 80);
-            });
-        }, 200);
+        return;
     }
+
+    showPageProgress();
+    const fragment = document.createDocumentFragment();
+    pageItems.forEach(project => fragment.appendChild(buildProjectItem(project)));
+    projectList.appendChild(fragment);
+
+    const items = [...projectList.querySelectorAll('.project-item')];
+    let revealedCount = 0;
+    const outer = setTimeout(() => {
+        if (myGen !== filterGen) return;
+        items.forEach((item, index) => {
+            const t = setTimeout(() => {
+                if (myGen !== filterGen) return;
+                const gates = [...item.querySelectorAll('.image-grid img')].map(img => {
+                    if (img.complete && img.naturalWidth > 0) {
+                        img.classList.add('img-ready');
+                        return Promise.resolve();
+                    }
+                    return new Promise(res => {
+                        const done = () => { img.classList.add('img-ready'); res(); };
+                        img.addEventListener('load', done, { once: true });
+                        img.addEventListener('error', () => setTimeout(done, 1500), { once: true });
+                    });
+                });
+                Promise.race([
+                    Promise.all(gates),
+                    new Promise(res => setTimeout(res, 2500))
+                ]).then(() => {
+                    if (myGen !== filterGen) return;
+                    item.classList.remove('hidden');
+                    void item.offsetWidth;
+                    item.classList.add('fade-in');
+                    revealedCount++;
+                    if (revealedCount === items.length) {
+                        hidePageProgress();
+                        // 所有卡片就绪后再淡入分页栏
+                        if (totalPages > 1) showPaginationFadeIn();
+                    }
+                });
+            }, index * 80);
+            revealTimers.push(t);
+        });
+    }, 200);
+    revealTimers.push(outer);
 }
 
 filterBtns.forEach(btn => {
     btn.onclick = () => {
+        if (btn.classList.contains('active')) return;
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const type = btn.dataset.filter;
-        filterProjects(type);
+        currentPages[type] = 1;
+        renderPage(type, 1);
     };
+});
+
+// 分页按钮事件
+document.getElementById('pagePrev').onclick = () => {
+    renderPage(currentFilter, currentPages[currentFilter] - 1);
+};
+document.getElementById('pageNext').onclick = () => {
+    renderPage(currentFilter, currentPages[currentFilter] + 1);
+};
+document.getElementById('pageGo').onclick = () => {
+    const val = parseInt(document.getElementById('pageInput').value, 10);
+    const rawPage = isNaN(val) ? 1 : val;
+    const allForType = projectsData.filter(p => p.category === currentFilter);
+    const totalPages = Math.max(1, Math.ceil(allForType.length / pageSize));
+    const targetPage = Math.max(1, Math.min(rawPage, totalPages));
+    if (targetPage === currentPages[currentFilter]) return;
+    renderPage(currentFilter, rawPage);
+};
+document.getElementById('pageInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('pageGo').click();
+});
+
+// 卡片点击委托（取代逐卡 bindProjectClickEvents）
+projectList.addEventListener('click', e => {
+    const item = e.target.closest('.project-item');
+    if (!item) return;
+    e.preventDefault();
+    const link = item.querySelector('a');
+    const title = item.querySelector('.project-title').textContent;
+    const url = link.getAttribute('href');
+    openModal(title, url);
 });
 
 // 处理"关于我/联系我"链接
@@ -1056,11 +1429,17 @@ document.getElementById('aboutLink').onclick = (e) => {
 const langModal = document.getElementById('langModal');
 document.querySelectorAll('.lang-switch button').forEach(btn => {
     btn.onclick = () => {
+        // UX1：已是当前语言则不重渲染
+        if (currentLang === btn.dataset.lang) return;
         applyLang(btn.dataset.lang);
     };
 });
 langModal.querySelectorAll('button').forEach(btn => {
     btn.onclick = () => {
+        if (currentLang === btn.dataset.lang) {
+            langModal.classList.remove('active');
+            return;
+        }
         applyLang(btn.dataset.lang);
         langModal.classList.remove('active');
     };
