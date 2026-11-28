@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="85691afd-5bef-4072-b689-1de2db898e58"></script>
+<script>
+// 本地（127.0.0.1 / localhost / file://，hostname 为空）不加载访问统计，线上环境正常加载
+if (location.hostname !== '127.0.0.1' && location.hostname !== 'localhost' && location.hostname !== '') {
+    const s = document.createElement('script');
+    s.defer = true;
+    s.src = 'https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id', '85691afd-5bef-4072-b689-1de2db898e58');
+    s.setAttribute('data-domains', 'gamecat233.github.io');
+    document.head.appendChild(s);
+}
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wayne | Technical Artist</title>
